@@ -1,0 +1,62 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Admin {
+  id            String   @id @default(cuid())
+  email         String   @unique
+  passwordHash  String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  @@index([email])
+}
+
+model Category {
+  id          String       @id @default(cuid())
+  name        String       @unique
+  description String?
+  icon        String?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  
+  guides      Guide[]
+  
+  @@index([name])
+}
+
+model Guide {
+  id            String   @id @default(cuid())
+  title         String
+  description   String?
+  price         Decimal  @db.Decimal(10, 2)
+  categoryId    String
+  pdfUrl        String
+  thumbnailUrl  String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  category      Category    @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  purchases     Purchase[]
+  
+  @@index([categoryId])
+  @@index([title])
+}
+
+model Purchase {
+  id        String   @id @default(cuid())
+  guideId   String
+  buyerName String
+  buyerEmail String
+  purchasedAt DateTime @default(now())
+  
+  guide     Guide @relation(fields: [guideId], references: [id], onDelete: Cascade)
+  
+  @@index([guideId])
+  @@index([buyerEmail])
+}
