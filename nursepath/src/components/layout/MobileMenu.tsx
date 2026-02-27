@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { X, LayoutDashboard, LogOut, ShieldCheck } from 'lucide-react';
+import { X, LayoutDashboard, LogOut } from 'lucide-react';
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -89,22 +89,20 @@ export default function MobileMenu({
             <Link
               to="/admin/login"
               onClick={onClose}
-              className="flex items-center gap-3 px-4 py-3 rounded-lg text-base font-medium text-gray-700 hover:text-primary-600 hover:bg-gray-50 transition-colors"
+              className="flex items-center justify-center px-4 py-3 rounded-lg text-base font-semibold text-white bg-slate-900 hover:bg-black transition-colors"
             >
-              <ShieldCheck className="w-5 h-5" />
-              Admin Login
+              Log In
             </Link>
           )}
 
           {/* CTA Button */}
           <div className="mt-6">
-            <Link
-              to="/services"
-              onClick={onClose}
-              className="block w-full bg-primary-600 text-white px-6 py-3 rounded-lg font-semibold text-center hover:bg-primary-700 transition-colors shadow-md"
+            <button
+              type="button"
+              className="block w-full bg-blue-600 text-white px-6 py-3 rounded-full font-extrabold text-xs tracking-wide uppercase text-center hover:bg-blue-700 transition-colors shadow-md"
             >
-              Get Started
-            </Link>
+              Get Exam Help
+            </button>
           </div>
         </div>
       </div>

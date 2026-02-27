@@ -4,13 +4,30 @@ import { AdminRequest } from '../types/express';
 import { guideService } from '../services/guideService';
 import { asyncHandler, ApiError } from '../middleware/errorHandler';
 
+const createFileUrlSchema = (prefix: string, errorMessage: string) =>
+  z.string().refine((value) => {
+    if (value.startsWith(prefix)) {
+      return true;
+    }
+
+    try {
+      new URL(value);
+      return true;
+    } catch {
+      return false;
+    }
+  }, errorMessage);
+
+const thumbnailUrlSchema = createFileUrlSchema('/api/guides/thumbnail/', 'Invalid thumbnail URL');
+const pdfUrlSchema = createFileUrlSchema('/api/guides/pdf/', 'Invalid PDF URL');
+
 const createGuideSchema = z.object({
   title: z.string().min(1).max(255),
   description: z.string().optional(),
   price: z.number().positive(),
   categoryId: z.string().min(1),
-  pdfUrl: z.string().url(),
-  thumbnailUrl: z.string().url().optional(),
+  pdfUrl: pdfUrlSchema,
+  thumbnailUrl: thumbnailUrlSchema.optional(),
 });
 
 const updateGuideSchema = createGuideSchema.partial();
@@ -100,6 +117,40 @@ export class GuideController {
     res.json({
       success: true,
       message: 'Guide deleted',
+    });
+  });
+
+  uploadThumbnail = asyncHandler(async (req: AdminRequest, res: Response) => {
+    if (!req.admin) {
+      throw new ApiError(401, 'Not authenticated');
+    }
+
+    if (!req.file) {
+      throw new ApiError(400, 'Thumbnail file is required');
+    }
+
+    const thumbnailUrl = `/api/guides/thumbnail/${encodeURIComponent(req.file.filename)}`;
+
+    res.status(201).json({
+      success: true,
+      data: { thumbnailUrl },
+    });
+  });
+
+  uploadPdf = asyncHandler(async (req: AdminRequest, res: Response) => {
+    if (!req.admin) {
+      throw new ApiError(401, 'Not authenticated');
+    }
+
+    if (!req.file) {
+      throw new ApiError(400, 'PDF file is required');
+    }
+
+    const pdfUrl = `/api/guides/pdf/${encodeURIComponent(req.file.filename)}`;
+
+    res.status(201).json({
+      success: true,
+      data: { pdfUrl },
     });
   });
 }

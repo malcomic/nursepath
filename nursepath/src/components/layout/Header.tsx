@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, BookOpen, LayoutDashboard, LogOut, ShieldCheck } from 'lucide-react';
+import { Menu, X, BookOpen, LayoutDashboard, LogOut } from 'lucide-react';
 import { api } from '../../api';
 import MobileMenu from './MobileMenu';
 
@@ -16,40 +16,33 @@ export default function Header() {
 
   const navLinks = [
     { path: '/', label: 'Home' },
-    { path: '/services', label: 'Services' },
-    { path: '/pricing', label: 'Pricing' },
-    { path: '/about', label: 'About' },
-    { path: '/blog', label: 'Blog' },
-    { path: '/contact', label: 'Contact' },
+    { path: '/blog', label: 'Student Reviews' },
   ];
 
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <header className="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-20">
+    <header className="bg-[#f4f4f5] border-b border-slate-200 sticky top-0 z-50">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3 group">
-            <div className="bg-primary-600 p-2 rounded-lg group-hover:bg-primary-700 transition-colors">
-              <BookOpen className="text-white w-6 h-6" />
+            <div className="bg-blue-600 p-1.5 rounded-md group-hover:bg-blue-700 transition-colors">
+              <BookOpen className="text-white w-4 h-4" />
             </div>
-            <div>
-              <span className="text-2xl font-bold text-gray-900 tracking-tight">ScholarWriters</span>
-              <p className="text-xs text-gray-500 -mt-1">Academic Excellence</p>
-            </div>
+            <span className="text-[30px] font-semibold text-slate-900 tracking-tight">NursePath</span>
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center gap-1">
+          <nav className="hidden lg:flex items-center gap-8">
             {navLinks.map((link) => (
               <Link
                 key={link.path}
                 to={link.path}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                className={`text-[13px] font-semibold transition-colors ${
                   isActive(link.path)
-                    ? 'text-primary-600 bg-primary-50'
-                    : 'text-gray-700 hover:text-primary-600 hover:bg-gray-50'
+                    ? 'text-slate-900'
+                    : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
                 {link.label}
@@ -77,20 +70,21 @@ export default function Header() {
                 </button>
               </>
             ) : (
-              <Link
-                to="/admin/login"
-                className="flex items-center gap-2 text-sm font-medium text-gray-700 hover:text-primary-600 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors"
-              >
-                <ShieldCheck className="w-4 h-4" />
-                Admin
-              </Link>
+              <>
+                <button
+                  type="button"
+                  className="bg-blue-600 text-white px-5 py-2 rounded-full text-xs font-extrabold tracking-wide uppercase shadow-md hover:bg-blue-700 transition-colors"
+                >
+                  Get Exam Help
+                </button>
+                <Link
+                  to="/admin/login"
+                  className="bg-slate-900 text-white px-5 py-2 rounded-xl text-sm font-semibold hover:bg-black transition-colors"
+                >
+                  Log In
+                </Link>
+              </>
             )}
-            <Link
-              to="/services"
-              className="bg-primary-600 text-white px-6 py-2.5 rounded-lg font-semibold text-sm hover:bg-primary-700 transition-colors shadow-md hover:shadow-lg"
-            >
-              Get Started
-            </Link>
           </div>
 
           {/* Mobile Menu Button */}

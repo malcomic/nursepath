@@ -4,15 +4,17 @@ dotenv.config();
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
+import fs from 'fs';
+import path from 'path';
 import { config, validateConfig } from './config/env';
 import { logger } from './config/logger';
 import { errorHandler } from './middleware/errorHandler';
-import { authMiddleware } from './middleware/auth';
 import { prisma } from './lib/prisma';
 import adminRoutes from './routes/adminRoutes';
 import categoryRoutes from './routes/categoryRoutes';
 import guideRoutes from './routes/guideRoutes';
 import purchaseRoutes from './routes/purchaseRoutes';
+import settingsRoutes from './routes/settingsRoutes';
 
 // Validate config
 try {
@@ -30,8 +32,16 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+const thumbnailsDir = path.resolve(process.cwd(), 'uploads', 'thumbnails');
+const pdfsDir = path.resolve(process.cwd(), 'uploads', 'pdfs');
+fs.mkdirSync(thumbnailsDir, { recursive: true });
+fs.mkdirSync(pdfsDir, { recursive: true });
+app.use('/api/guides/thumbnail', express.static(thumbnailsDir));
+app.use('/api/guides/pdf', express.static(pdfsDir));
+
 // API Routes
 app.use('/api/admin', adminRoutes);
+app.use('/api/admin/settings', settingsRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/guides', guideRoutes);
 app.use('/api/purchases', purchaseRoutes);
