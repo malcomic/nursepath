@@ -7,56 +7,99 @@ datasource db {
   provider = "postgresql"
 }
 
+enum PaymentStatus {
+  PAID
+  PENDING
+  FAILED
+  REFUNDED
+}
+
 model Admin {
-  id            String   @id @default(cuid())
-  email         String   @unique
-  passwordHash  String
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
   @@index([email])
 }
 
 model Category {
-  id          String       @id @default(cuid())
-  name        String       @unique
+  id          String   @id @default(cuid())
+  name        String   @unique
   description String?
   icon        String?
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
-  
-  guides      Guide[]
-  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  guides Guide[]
+
   @@index([name])
 }
 
 model Guide {
-  id            String   @id @default(cuid())
-  title         String
-  description   String?
-  price         Decimal  @db.Decimal(10, 2)
-  categoryId    String
-  pdfUrl        String
-  thumbnailUrl  String?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  
-  category      Category    @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-  purchases     Purchase[]
-  
+  id           String   @id @default(cuid())
+  title        String
+  description  String?
+  price        Decimal  @db.Decimal(10, 2)
+  categoryId   String
+  pdfUrl       String
+  thumbnailUrl String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  category  Category   @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  purchases Purchase[]
+  orders    Order[]
+
   @@index([categoryId])
   @@index([title])
 }
 
 model Purchase {
-  id        String   @id @default(cuid())
-  guideId   String
-  buyerName String
-  buyerEmail String
+  id          String   @id @default(cuid())
+  guideId     String
+  buyerName   String
+  buyerEmail  String
   purchasedAt DateTime @default(now())
-  
-  guide     Guide @relation(fields: [guideId], references: [id], onDelete: Cascade)
-  
+
+  guide Guide @relation(fields: [guideId], references: [id], onDelete: Cascade)
+
   @@index([guideId])
   @@index([buyerEmail])
+}
+
+model Order {
+  id                String        @id @default(cuid())
+  customerName      String
+  customerEmail     String
+  customerPhone     String?
+  guideId           String
+  price             Decimal       @db.Decimal(10, 2)
+  paymentStatus     PaymentStatus
+  downloadToken     String        @unique
+  downloadExpiresAt DateTime
+  downloadCount     Int           @default(0)
+  maxDownloads      Int           @default(3)
+  paymentReference  String?
+  paymentProvider   String?
+  ipAddress         String?
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+
+  guide Guide @relation(fields: [guideId], references: [id], onDelete: Cascade)
+
+  @@index([customerEmail])
+  @@index([createdAt])
+  @@index([paymentStatus])
+}
+
+model Settings {
+  id                  String  @id @default("global")
+  downloadExpiryHours Int     @default(48)
+  maxDownloads        Int     @default(3)
+  supportEmail        String  @default("support@scholarwriters.com")
+  currency            String  @default("USD")
+  paymentProvider     String?
+  paymentApiKey       String?
 }

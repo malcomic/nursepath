@@ -1,23 +1,67 @@
-import express from 'express';
-import cors from 'cors';
-const app = express();
-const PORT = process.env.PORT || 5000;
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
+const express_1 = __importDefault(require("express"));
+const cors_1 = __importDefault(require("cors"));
+const helmet_1 = __importDefault(require("helmet"));
+const env_1 = require("./config/env");
+const logger_1 = require("./config/logger");
+const errorHandler_1 = require("./middleware/errorHandler");
+const prisma_1 = require("./lib/prisma");
+const adminRoutes_1 = __importDefault(require("./routes/adminRoutes"));
+const categoryRoutes_1 = __importDefault(require("./routes/categoryRoutes"));
+const guideRoutes_1 = __importDefault(require("./routes/guideRoutes"));
+const purchaseRoutes_1 = __importDefault(require("./routes/purchaseRoutes"));
+// Validate config
+try {
+    (0, env_1.validateConfig)();
+}
+catch (error) {
+    logger_1.logger.error(error);
+    process.exit(1);
+}
+const app = (0, express_1.default)();
 // Middleware
-app.use(cors());
-app.use(express.json());
-// Routes
+app.use((0, helmet_1.default)());
+app.use((0, cors_1.default)());
+app.use(express_1.default.json());
+app.use(express_1.default.urlencoded({ extended: true }));
+// API Routes
+app.use('/api/admin', adminRoutes_1.default);
+app.use('/api/categories', categoryRoutes_1.default);
+app.use('/api/guides', guideRoutes_1.default);
+app.use('/api/purchases', purchaseRoutes_1.default);
+// Health check
 app.get('/api/health', (req, res) => {
-    res.json({ message: 'Backend is running!' });
+    res.json({ success: true, message: 'Backend is running!' });
 });
-// Example API route
-app.get('/api/data', (req, res) => {
-    res.json({
-        data: 'Sample data from backend',
-        timestamp: new Date().toISOString()
-    });
-});
+// Error handler (must be last)
+app.use(errorHandler_1.errorHandler);
 // Start server
-app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
+const PORT = env_1.config.port;
+const startServer = async () => {
+    try {
+        await prisma_1.prisma.$connect();
+        logger_1.logger.info('Connected to database');
+        app.listen(PORT, () => {
+            logger_1.logger.info(`Server running on http://localhost:${PORT}`);
+            logger_1.logger.info(`Environment: ${env_1.config.nodeEnv}`);
+        });
+    }
+    catch (error) {
+        logger_1.logger.error(`Failed to start server: ${error instanceof Error ? error.message : String(error)}`);
+        process.exit(1);
+    }
+};
+startServer();
+// Graceful shutdown
+process.on('SIGINT', async () => {
+    logger_1.logger.info('Shutting down gracefully...');
+    await prisma_1.prisma.$disconnect();
+    process.exit(0);
 });
 //# sourceMappingURL=index.js.map

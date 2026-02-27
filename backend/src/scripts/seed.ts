@@ -120,6 +120,26 @@ const seed = async () => {
       }
     }
 
+    // Seed global settings
+    const existingSettings = await prisma.settings.findUnique({
+      where: { id: 'global' },
+    });
+
+    if (!existingSettings) {
+      await prisma.settings.create({
+        data: {
+          // Defaults are also enforced by Prisma schema, but we set them explicitly here
+          downloadExpiryHours: 48,
+          maxDownloads: 3,
+          supportEmail: 'support@scholarwriters.com',
+          currency: 'USD',
+        },
+      });
+      console.log('✅ Global settings created');
+    } else {
+      console.log('ℹ️  Global settings already exist');
+    }
+
     console.log('\n✅ Database seeding completed!');
   } catch (error) {
     console.error('Error seeding database:', error);
