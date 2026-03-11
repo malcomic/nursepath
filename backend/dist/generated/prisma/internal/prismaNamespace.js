@@ -48,7 +48,7 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.defineExtension = exports.NullsOrder = exports.QueryMode = exports.SortOrder = exports.PurchaseScalarFieldEnum = exports.GuideScalarFieldEnum = exports.CategoryScalarFieldEnum = exports.AdminScalarFieldEnum = exports.TransactionIsolationLevel = exports.ModelName = exports.AnyNull = exports.JsonNull = exports.DbNull = exports.NullTypes = exports.prismaVersion = exports.getExtensionContext = exports.Decimal = exports.Sql = exports.raw = exports.join = exports.empty = exports.sql = exports.PrismaClientValidationError = exports.PrismaClientInitializationError = exports.PrismaClientRustPanicError = exports.PrismaClientUnknownRequestError = exports.PrismaClientKnownRequestError = void 0;
+exports.defineExtension = exports.NullsOrder = exports.QueryMode = exports.SortOrder = exports.ReviewScalarFieldEnum = exports.SettingsScalarFieldEnum = exports.OrderScalarFieldEnum = exports.PurchaseScalarFieldEnum = exports.GuideScalarFieldEnum = exports.CategoryScalarFieldEnum = exports.AdminScalarFieldEnum = exports.TransactionIsolationLevel = exports.ModelName = exports.AnyNull = exports.JsonNull = exports.DbNull = exports.NullTypes = exports.prismaVersion = exports.getExtensionContext = exports.Decimal = exports.Sql = exports.raw = exports.join = exports.empty = exports.sql = exports.PrismaClientValidationError = exports.PrismaClientInitializationError = exports.PrismaClientRustPanicError = exports.PrismaClientUnknownRequestError = exports.PrismaClientKnownRequestError = void 0;
 const runtime = __importStar(require("@prisma/client/runtime/client"));
 /**
  * Prisma Errors
@@ -106,7 +106,10 @@ exports.ModelName = {
     Admin: 'Admin',
     Category: 'Category',
     Guide: 'Guide',
-    Purchase: 'Purchase'
+    Purchase: 'Purchase',
+    Order: 'Order',
+    Settings: 'Settings',
+    Review: 'Review'
 };
 /**
  * Enums
@@ -137,6 +140,7 @@ exports.GuideScalarFieldEnum = {
     title: 'title',
     description: 'description',
     price: 'price',
+    stripePriceId: 'stripePriceId',
     categoryId: 'categoryId',
     pdfUrl: 'pdfUrl',
     thumbnailUrl: 'thumbnailUrl',
@@ -149,6 +153,46 @@ exports.PurchaseScalarFieldEnum = {
     buyerName: 'buyerName',
     buyerEmail: 'buyerEmail',
     purchasedAt: 'purchasedAt'
+};
+exports.OrderScalarFieldEnum = {
+    id: 'id',
+    customerName: 'customerName',
+    customerEmail: 'customerEmail',
+    customerPhone: 'customerPhone',
+    guideId: 'guideId',
+    price: 'price',
+    paymentStatus: 'paymentStatus',
+    downloadToken: 'downloadToken',
+    downloadExpiresAt: 'downloadExpiresAt',
+    downloadCount: 'downloadCount',
+    maxDownloads: 'maxDownloads',
+    paymentReference: 'paymentReference',
+    paymentProvider: 'paymentProvider',
+    ipAddress: 'ipAddress',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+};
+exports.SettingsScalarFieldEnum = {
+    id: 'id',
+    downloadExpiryHours: 'downloadExpiryHours',
+    maxDownloads: 'maxDownloads',
+    supportEmail: 'supportEmail',
+    currency: 'currency',
+    paymentProvider: 'paymentProvider',
+    paymentApiKey: 'paymentApiKey'
+};
+exports.ReviewScalarFieldEnum = {
+    id: 'id',
+    name: 'name',
+    school: 'school',
+    exam_type: 'exam_type',
+    rating: 'rating',
+    message: 'message',
+    verification_type: 'verification_type',
+    screenshot_url: 'screenshot_url',
+    status: 'status',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
 };
 exports.SortOrder = {
     asc: 'asc',

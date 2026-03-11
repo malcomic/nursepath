@@ -12,6 +12,7 @@ export declare class GuideService {
         title: string;
         description?: string;
         price: number;
+        stripePriceId?: string;
         categoryId: string;
         pdfUrl: string;
         thumbnailUrl?: string;
@@ -20,6 +21,7 @@ export declare class GuideService {
         title?: string;
         description?: string;
         price?: number;
+        stripePriceId?: string;
         categoryId?: string;
         pdfUrl?: string;
         thumbnailUrl?: string;

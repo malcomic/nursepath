@@ -17,19 +17,10 @@ export class PurchaseService {
   }
 
   async createPurchase(guideId: string, buyerName: string, buyerEmail: string) {
-    // Verify guide exists
-    const guide = await guideRepository.findById(guideId);
-    if (!guide) {
-      throw new ApiError(404, 'Guide not found');
-    }
-
-    // Create purchase
-    const purchase = await purchaseRepository.create(guideId, buyerName, buyerEmail);
-
-    return {
-      purchase,
-      downloadUrl: guide.pdfUrl,
-    };
+    throw new ApiError(
+      410,
+      'Direct purchases are disabled. Please use Stripe checkout to purchase guides.'
+    );
   }
 }
 

@@ -22,4 +22,19 @@ export type Guide = Prisma.GuideModel;
  *
  */
 export type Purchase = Prisma.PurchaseModel;
+/**
+ * Model Order
+ *
+ */
+export type Order = Prisma.OrderModel;
+/**
+ * Model Settings
+ *
+ */
+export type Settings = Prisma.SettingsModel;
+/**
+ * Model Review
+ *
+ */
+export type Review = Prisma.ReviewModel;
 //# sourceMappingURL=browser.d.ts.map

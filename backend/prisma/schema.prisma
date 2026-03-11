@@ -42,6 +42,7 @@ model Guide {
   title        String
   description  String?
   price        Decimal  @db.Decimal(10, 2)
+  stripePriceId String?
   categoryId   String
   pdfUrl       String
   thumbnailUrl String?
@@ -102,4 +103,27 @@ model Settings {
   currency            String  @default("USD")
   paymentProvider     String?
   paymentApiKey       String?
+}
+
+enum ReviewStatus {
+  pending
+  approved
+  rejected
+}
+
+model Review {
+  id                String       @id @default(cuid())
+  name              String
+  school            String?
+  exam_type         String       @default("Other")
+  rating            Int
+  message           String
+  verification_type String?
+  screenshot_url    String?
+  status            ReviewStatus @default(pending)
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+
+  @@index([status])
+  @@index([createdAt])
 }

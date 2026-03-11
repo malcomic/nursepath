@@ -26,6 +26,7 @@ class GuideService {
             title: data.title,
             description: data.description ?? null,
             price: data.price,
+            stripePriceId: data.stripePriceId ?? null,
             categoryId: data.categoryId,
             pdfUrl: data.pdfUrl,
             thumbnailUrl: data.thumbnailUrl ?? null,

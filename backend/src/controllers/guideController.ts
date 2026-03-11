@@ -25,6 +25,13 @@ const createGuideSchema = z.object({
   title: z.string().min(1).max(255),
   description: z.string().optional(),
   price: z.number().positive(),
+  stripePriceId: z
+    .string()
+    .trim()
+    .min(1)
+    .max(255)
+    .optional()
+    .or(z.literal('').transform(() => undefined)),
   categoryId: z.string().min(1),
   pdfUrl: pdfUrlSchema,
   thumbnailUrl: thumbnailUrlSchema.optional(),

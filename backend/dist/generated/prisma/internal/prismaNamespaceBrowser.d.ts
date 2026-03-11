@@ -30,6 +30,9 @@ export declare const ModelName: {
     readonly Category: "Category";
     readonly Guide: "Guide";
     readonly Purchase: "Purchase";
+    readonly Order: "Order";
+    readonly Settings: "Settings";
+    readonly Review: "Review";
 };
 export type ModelName = (typeof ModelName)[keyof typeof ModelName];
 export declare const TransactionIsolationLevel: {
@@ -61,6 +64,7 @@ export declare const GuideScalarFieldEnum: {
     readonly title: "title";
     readonly description: "description";
     readonly price: "price";
+    readonly stripePriceId: "stripePriceId";
     readonly categoryId: "categoryId";
     readonly pdfUrl: "pdfUrl";
     readonly thumbnailUrl: "thumbnailUrl";
@@ -76,6 +80,49 @@ export declare const PurchaseScalarFieldEnum: {
     readonly purchasedAt: "purchasedAt";
 };
 export type PurchaseScalarFieldEnum = (typeof PurchaseScalarFieldEnum)[keyof typeof PurchaseScalarFieldEnum];
+export declare const OrderScalarFieldEnum: {
+    readonly id: "id";
+    readonly customerName: "customerName";
+    readonly customerEmail: "customerEmail";
+    readonly customerPhone: "customerPhone";
+    readonly guideId: "guideId";
+    readonly price: "price";
+    readonly paymentStatus: "paymentStatus";
+    readonly downloadToken: "downloadToken";
+    readonly downloadExpiresAt: "downloadExpiresAt";
+    readonly downloadCount: "downloadCount";
+    readonly maxDownloads: "maxDownloads";
+    readonly paymentReference: "paymentReference";
+    readonly paymentProvider: "paymentProvider";
+    readonly ipAddress: "ipAddress";
+    readonly createdAt: "createdAt";
+    readonly updatedAt: "updatedAt";
+};
+export type OrderScalarFieldEnum = (typeof OrderScalarFieldEnum)[keyof typeof OrderScalarFieldEnum];
+export declare const SettingsScalarFieldEnum: {
+    readonly id: "id";
+    readonly downloadExpiryHours: "downloadExpiryHours";
+    readonly maxDownloads: "maxDownloads";
+    readonly supportEmail: "supportEmail";
+    readonly currency: "currency";
+    readonly paymentProvider: "paymentProvider";
+    readonly paymentApiKey: "paymentApiKey";
+};
+export type SettingsScalarFieldEnum = (typeof SettingsScalarFieldEnum)[keyof typeof SettingsScalarFieldEnum];
+export declare const ReviewScalarFieldEnum: {
+    readonly id: "id";
+    readonly name: "name";
+    readonly school: "school";
+    readonly exam_type: "exam_type";
+    readonly rating: "rating";
+    readonly message: "message";
+    readonly verification_type: "verification_type";
+    readonly screenshot_url: "screenshot_url";
+    readonly status: "status";
+    readonly createdAt: "createdAt";
+    readonly updatedAt: "updatedAt";
+};
+export type ReviewScalarFieldEnum = (typeof ReviewScalarFieldEnum)[keyof typeof ReviewScalarFieldEnum];
 export declare const SortOrder: {
     readonly asc: "asc";
     readonly desc: "desc";

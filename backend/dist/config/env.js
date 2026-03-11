@@ -13,6 +13,9 @@ exports.config = {
     jwtExpiry: process.env.JWT_EXPIRY || '24h',
     nodeEnv: process.env.NODE_ENV || 'development',
     uploadDir: process.env.UPLOAD_DIR || './uploads',
+    publicAppUrl: process.env.PUBLIC_APP_URL,
+    stripeSecretKey: process.env.STRIPE_SECRET_KEY,
+    stripeWebhookSecret: process.env.STRIPE_WEBHOOK_SECRET,
 };
 const validateConfig = () => {
     if (!exports.config.databaseUrl) {
@@ -20,6 +23,15 @@ const validateConfig = () => {
     }
     if (!exports.config.jwtSecret) {
         throw new Error('JWT_SECRET is required');
+    }
+    if (!exports.config.publicAppUrl) {
+        throw new Error('PUBLIC_APP_URL is required (e.g. http://localhost:5173)');
+    }
+    if (!exports.config.stripeSecretKey) {
+        throw new Error('STRIPE_SECRET_KEY is required');
+    }
+    if (!exports.config.stripeWebhookSecret) {
+        throw new Error('STRIPE_WEBHOOK_SECRET is required');
     }
 };
 exports.validateConfig = validateConfig;

@@ -9,4 +9,16 @@
 * 🟢 You can import this file directly.
 */
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.ReviewStatus = exports.PaymentStatus = void 0;
+exports.PaymentStatus = {
+    PAID: 'PAID',
+    PENDING: 'PENDING',
+    FAILED: 'FAILED',
+    REFUNDED: 'REFUNDED'
+};
+exports.ReviewStatus = {
+    pending: 'pending',
+    approved: 'approved',
+    rejected: 'rejected'
+};
 //# sourceMappingURL=enums.js.map

@@ -1,6 +1,6 @@
 import { type ReactNode } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, BookOpen, Tags, FileText, Settings, LogOut } from 'lucide-react';
+import { LayoutDashboard, BookOpen, Tags, FileText, MessageSquare, Settings, LogOut } from 'lucide-react';
 import { api } from '../../api';
 
 interface AdminLayoutProps {
@@ -21,6 +21,7 @@ export default function AdminLayout({ title, children }: AdminLayoutProps) {
     { to: '/admin/guides', label: 'Guides', icon: BookOpen },
     { to: '/admin/categories', label: 'Categories', icon: Tags },
     { to: '/admin/orders', label: 'Orders', icon: FileText },
+    { to: '/admin/reviews', label: 'Reviews', icon: MessageSquare },
     { to: '/admin/settings', label: 'Settings', icon: Settings },
   ];
 

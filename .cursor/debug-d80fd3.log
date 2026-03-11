@@ -1,0 +1,20 @@
+{"sessionId":"d80fd3","location":"api.ts:get","message":"get request","data":{"url":"/api/guides","includeAuth":false},"timestamp":1773205524221,"hypothesisId":"A"}
+{"sessionId":"d80fd3","location":"api.ts:get","message":"get request","data":{"url":"/api/categories","includeAuth":false},"timestamp":1773205524231,"hypothesisId":"A"}
+{"sessionId":"d80fd3","location":"api.ts:get","message":"get request","data":{"url":"/api/guides","includeAuth":false},"timestamp":1773205524230,"hypothesisId":"A"}
+{"sessionId":"d80fd3","location":"api.ts:get","message":"get request","data":{"url":"/api/categories","includeAuth":false},"timestamp":1773205524222,"hypothesisId":"A"}
+{"sessionId":"d80fd3","location":"api.ts:handleResponse","message":"response received","data":{"status":200,"ok":true,"url":"http://localhost:5173/api/categories"},"timestamp":1773205524693,"hypothesisId":"B"}
+{"sessionId":"d80fd3","location":"api.ts:handleResponse","message":"response received","data":{"status":200,"ok":true,"url":"http://localhost:5173/api/guides"},"timestamp":1773205524710,"hypothesisId":"B"}
+{"sessionId":"d80fd3","location":"api.ts:handleResponse","message":"response received","data":{"status":200,"ok":true,"url":"http://localhost:5173/api/categories"},"timestamp":1773205524863,"hypothesisId":"B"}
+{"sessionId":"d80fd3","location":"api.ts:handleResponse","message":"response received","data":{"status":200,"ok":true,"url":"http://localhost:5173/api/guides"},"timestamp":1773205524864,"hypothesisId":"B"}
+{"sessionId":"d80fd3","location":"api.ts:handleResponse","message":"response received","data":{"status":200,"ok":true,"url":"http://localhost:5173/api/admin/login"},"timestamp":1773205532692,"hypothesisId":"B"}
+{"sessionId":"d80fd3","location":"api.ts:handleResponse","message":"response received","data":{"status":200,"ok":true,"url":"http://localhost:5173/api/admin/login"},"timestamp":1773205537903,"hypothesisId":"B"}
+{"sessionId":"d80fd3","location":"AdminReviewsPage.tsx:fetchReviews","message":"fetchReviews start","data":{"endpoint":"/admin/reviews"},"timestamp":1773205539652,"hypothesisId":"A"}
+{"sessionId":"d80fd3","location":"AdminReviewsPage.tsx:fetchReviews","message":"fetchReviews start","data":{"endpoint":"/admin/reviews"},"timestamp":1773205539654,"hypothesisId":"A"}
+{"sessionId":"d80fd3","location":"api.ts:get","message":"get request","data":{"url":"/api/admin/reviews","includeAuth":true},"timestamp":1773205539655,"hypothesisId":"A"}
+{"sessionId":"d80fd3","location":"api.ts:get","message":"get request","data":{"url":"/api/admin/reviews","includeAuth":true},"timestamp":1773205539653,"hypothesisId":"A"}
+{"sessionId":"d80fd3","location":"api.ts:handleResponse","message":"response received","data":{"status":200,"ok":true,"url":"http://localhost:5173/api/admin/reviews"},"timestamp":1773205539705,"hypothesisId":"B"}
+{"sessionId":"d80fd3","location":"api.ts:handleResponse","message":"response received","data":{"status":200,"ok":true,"url":"http://localhost:5173/api/admin/reviews"},"timestamp":1773205539732,"hypothesisId":"B"}
+{"sessionId":"d80fd3","location":"api.ts:handleResponse","message":"non-json error body","data":{"status":404,"bodyPreview":"<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/reviews</pre>\n</body>\n</html>\n"},"timestamp":1773205552141,"hypothesisId":"C"}
+{"sessionId":"d80fd3","location":"api.ts:handleResponse","message":"response received","data":{"status":404,"ok":false,"url":"http://localhost:5173/api/reviews"},"timestamp":1773205552139,"hypothesisId":"B"}
+{"sessionId":"d80fd3","location":"api.ts:handleResponse","message":"response received","data":{"status":404,"ok":false,"url":"http://localhost:5173/api/reviews"},"timestamp":1773205553911,"hypothesisId":"B"}
+{"sessionId":"d80fd3","location":"api.ts:handleResponse","message":"non-json error body","data":{"status":404,"bodyPreview":"<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/reviews</pre>\n</body>\n</html>\n"},"timestamp":1773205553912,"hypothesisId":"C"}

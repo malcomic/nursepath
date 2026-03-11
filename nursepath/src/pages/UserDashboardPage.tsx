@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Download, FileText, Calendar, Search } from 'lucide-react';
+import { FileText, Calendar, Search, ExternalLink } from 'lucide-react';
 import { api } from '../api';
 import Header from '../components/layout/Header';
 import Footer from '../components/layout/Footer';
@@ -8,25 +8,22 @@ import Card from '../components/ui/Card';
 import Button from '../components/ui/Button';
 import Input from '../components/ui/Input';
 
-interface Purchase {
+interface Order {
   id: string;
-  guideId: string;
-  buyerName: string;
-  buyerEmail: string;
-  purchasedAt: string;
+  paymentStatus: 'PAID' | 'PENDING' | 'FAILED' | 'REFUNDED';
+  createdAt: string;
   guide?: {
     id: string;
     title: string;
     description?: string | null;
     price: number;
-    pdfUrl: string;
     thumbnailUrl?: string | null;
   };
 }
 
 export default function UserDashboardPage() {
-  const [purchases, setPurchases] = useState<Purchase[]>([]);
-  const [filteredPurchases, setFilteredPurchases] = useState<Purchase[]>([]);
+  const [purchases, setPurchases] = useState<Order[]>([]);
+  const [filteredPurchases, setFilteredPurchases] = useState<Order[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(true);
 
@@ -52,8 +49,8 @@ export default function UserDashboardPage() {
       // For now, we'll use a mock or empty array
       const email = localStorage.getItem('userEmail');
       if (email) {
-        // Fetch purchases for this user
-        const res = await api.get(`/purchases?email=${email}`);
+        // Fetch paid orders for this user (download link is shown on the success page).
+        const res = await api.get(`/orders/by-email?email=${encodeURIComponent(email)}`);
         setPurchases(res.data || []);
         setFilteredPurchases(res.data || []);
       }
@@ -62,16 +59,6 @@ export default function UserDashboardPage() {
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleDownload = (pdfUrl: string, title: string) => {
-    // Create a temporary link to download the PDF
-    const link = document.createElement('a');
-    link.href = pdfUrl;
-    link.download = `${title}.pdf`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
   };
 
   return (
@@ -140,20 +127,16 @@ export default function UserDashboardPage() {
                   <div className="flex items-center gap-2 text-sm text-gray-500 mb-4">
                     <Calendar className="w-4 h-4" />
                     <span>
-                      Purchased {new Date(purchase.purchasedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                      Purchased {new Date(purchase.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                     </span>
                   </div>
 
-                  {purchase.guide?.pdfUrl && (
-                    <Button
-                      fullWidth
-                      onClick={() => handleDownload(purchase.guide!.pdfUrl, purchase.guide!.title)}
-                      className="group"
-                    >
-                      <Download className="w-5 h-5 mr-2 group-hover:translate-y-1 transition-transform" />
-                      Download PDF
+                  <Link to={`/payment-success?order_id=${encodeURIComponent(purchase.id)}`}>
+                    <Button fullWidth className="group">
+                      <ExternalLink className="w-5 h-5 mr-2" />
+                      View download link
                     </Button>
-                  )}
+                  </Link>
                 </Card>
               ))}
             </div>

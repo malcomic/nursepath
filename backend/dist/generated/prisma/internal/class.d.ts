@@ -155,6 +155,39 @@ export interface PrismaClient<in LogOpts extends Prisma.LogLevel = never, in out
     get purchase(): Prisma.PurchaseDelegate<ExtArgs, {
         omit: OmitOpts;
     }>;
+    /**
+     * `prisma.order`: Exposes CRUD operations for the **Order** model.
+      * Example usage:
+      * ```ts
+      * // Fetch zero or more Orders
+      * const orders = await prisma.order.findMany()
+      * ```
+      */
+    get order(): Prisma.OrderDelegate<ExtArgs, {
+        omit: OmitOpts;
+    }>;
+    /**
+     * `prisma.settings`: Exposes CRUD operations for the **Settings** model.
+      * Example usage:
+      * ```ts
+      * // Fetch zero or more Settings
+      * const settings = await prisma.settings.findMany()
+      * ```
+      */
+    get settings(): Prisma.SettingsDelegate<ExtArgs, {
+        omit: OmitOpts;
+    }>;
+    /**
+     * `prisma.review`: Exposes CRUD operations for the **Review** model.
+      * Example usage:
+      * ```ts
+      * // Fetch zero or more Reviews
+      * const reviews = await prisma.review.findMany()
+      * ```
+      */
+    get review(): Prisma.ReviewDelegate<ExtArgs, {
+        omit: OmitOpts;
+    }>;
 }
 export declare function getPrismaClientClass(): PrismaClientConstructor;
 //# sourceMappingURL=class.d.ts.map

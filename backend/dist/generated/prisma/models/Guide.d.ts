@@ -23,6 +23,7 @@ export type GuideMinAggregateOutputType = {
     title: string | null;
     description: string | null;
     price: runtime.Decimal | null;
+    stripePriceId: string | null;
     categoryId: string | null;
     pdfUrl: string | null;
     thumbnailUrl: string | null;
@@ -34,6 +35,7 @@ export type GuideMaxAggregateOutputType = {
     title: string | null;
     description: string | null;
     price: runtime.Decimal | null;
+    stripePriceId: string | null;
     categoryId: string | null;
     pdfUrl: string | null;
     thumbnailUrl: string | null;
@@ -45,6 +47,7 @@ export type GuideCountAggregateOutputType = {
     title: number;
     description: number;
     price: number;
+    stripePriceId: number;
     categoryId: number;
     pdfUrl: number;
     thumbnailUrl: number;
@@ -63,6 +66,7 @@ export type GuideMinAggregateInputType = {
     title?: true;
     description?: true;
     price?: true;
+    stripePriceId?: true;
     categoryId?: true;
     pdfUrl?: true;
     thumbnailUrl?: true;
@@ -74,6 +78,7 @@ export type GuideMaxAggregateInputType = {
     title?: true;
     description?: true;
     price?: true;
+    stripePriceId?: true;
     categoryId?: true;
     pdfUrl?: true;
     thumbnailUrl?: true;
@@ -85,6 +90,7 @@ export type GuideCountAggregateInputType = {
     title?: true;
     description?: true;
     price?: true;
+    stripePriceId?: true;
     categoryId?: true;
     pdfUrl?: true;
     thumbnailUrl?: true;
@@ -173,6 +179,7 @@ export type GuideGroupByOutputType = {
     title: string;
     description: string | null;
     price: runtime.Decimal;
+    stripePriceId: string | null;
     categoryId: string;
     pdfUrl: string;
     thumbnailUrl: string | null;
@@ -195,6 +202,7 @@ export type GuideWhereInput = {
     title?: Prisma.StringFilter<"Guide"> | string;
     description?: Prisma.StringNullableFilter<"Guide"> | string | null;
     price?: Prisma.DecimalFilter<"Guide"> | runtime.Decimal | runtime.DecimalJsLike | number | string;
+    stripePriceId?: Prisma.StringNullableFilter<"Guide"> | string | null;
     categoryId?: Prisma.StringFilter<"Guide"> | string;
     pdfUrl?: Prisma.StringFilter<"Guide"> | string;
     thumbnailUrl?: Prisma.StringNullableFilter<"Guide"> | string | null;
@@ -202,12 +210,14 @@ export type GuideWhereInput = {
     updatedAt?: Prisma.DateTimeFilter<"Guide"> | Date | string;
     category?: Prisma.XOR<Prisma.CategoryScalarRelationFilter, Prisma.CategoryWhereInput>;
     purchases?: Prisma.PurchaseListRelationFilter;
+    orders?: Prisma.OrderListRelationFilter;
 };
 export type GuideOrderByWithRelationInput = {
     id?: Prisma.SortOrder;
     title?: Prisma.SortOrder;
     description?: Prisma.SortOrderInput | Prisma.SortOrder;
     price?: Prisma.SortOrder;
+    stripePriceId?: Prisma.SortOrderInput | Prisma.SortOrder;
     categoryId?: Prisma.SortOrder;
     pdfUrl?: Prisma.SortOrder;
     thumbnailUrl?: Prisma.SortOrderInput | Prisma.SortOrder;
@@ -215,6 +225,7 @@ export type GuideOrderByWithRelationInput = {
     updatedAt?: Prisma.SortOrder;
     category?: Prisma.CategoryOrderByWithRelationInput;
     purchases?: Prisma.PurchaseOrderByRelationAggregateInput;
+    orders?: Prisma.OrderOrderByRelationAggregateInput;
 };
 export type GuideWhereUniqueInput = Prisma.AtLeast<{
     id?: string;
@@ -224,6 +235,7 @@ export type GuideWhereUniqueInput = Prisma.AtLeast<{
     title?: Prisma.StringFilter<"Guide"> | string;
     description?: Prisma.StringNullableFilter<"Guide"> | string | null;
     price?: Prisma.DecimalFilter<"Guide"> | runtime.Decimal | runtime.DecimalJsLike | number | string;
+    stripePriceId?: Prisma.StringNullableFilter<"Guide"> | string | null;
     categoryId?: Prisma.StringFilter<"Guide"> | string;
     pdfUrl?: Prisma.StringFilter<"Guide"> | string;
     thumbnailUrl?: Prisma.StringNullableFilter<"Guide"> | string | null;
@@ -231,12 +243,14 @@ export type GuideWhereUniqueInput = Prisma.AtLeast<{
     updatedAt?: Prisma.DateTimeFilter<"Guide"> | Date | string;
     category?: Prisma.XOR<Prisma.CategoryScalarRelationFilter, Prisma.CategoryWhereInput>;
     purchases?: Prisma.PurchaseListRelationFilter;
+    orders?: Prisma.OrderListRelationFilter;
 }, "id">;
 export type GuideOrderByWithAggregationInput = {
     id?: Prisma.SortOrder;
     title?: Prisma.SortOrder;
     description?: Prisma.SortOrderInput | Prisma.SortOrder;
     price?: Prisma.SortOrder;
+    stripePriceId?: Prisma.SortOrderInput | Prisma.SortOrder;
     categoryId?: Prisma.SortOrder;
     pdfUrl?: Prisma.SortOrder;
     thumbnailUrl?: Prisma.SortOrderInput | Prisma.SortOrder;
@@ -256,6 +270,7 @@ export type GuideScalarWhereWithAggregatesInput = {
     title?: Prisma.StringWithAggregatesFilter<"Guide"> | string;
     description?: Prisma.StringNullableWithAggregatesFilter<"Guide"> | string | null;
     price?: Prisma.DecimalWithAggregatesFilter<"Guide"> | runtime.Decimal | runtime.DecimalJsLike | number | string;
+    stripePriceId?: Prisma.StringNullableWithAggregatesFilter<"Guide"> | string | null;
     categoryId?: Prisma.StringWithAggregatesFilter<"Guide"> | string;
     pdfUrl?: Prisma.StringWithAggregatesFilter<"Guide"> | string;
     thumbnailUrl?: Prisma.StringNullableWithAggregatesFilter<"Guide"> | string | null;
@@ -267,54 +282,63 @@ export type GuideCreateInput = {
     title: string;
     description?: string | null;
     price: runtime.Decimal | runtime.DecimalJsLike | number | string;
+    stripePriceId?: string | null;
     pdfUrl: string;
     thumbnailUrl?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     category: Prisma.CategoryCreateNestedOneWithoutGuidesInput;
     purchases?: Prisma.PurchaseCreateNestedManyWithoutGuideInput;
+    orders?: Prisma.OrderCreateNestedManyWithoutGuideInput;
 };
 export type GuideUncheckedCreateInput = {
     id?: string;
     title: string;
     description?: string | null;
     price: runtime.Decimal | runtime.DecimalJsLike | number | string;
+    stripePriceId?: string | null;
     categoryId: string;
     pdfUrl: string;
     thumbnailUrl?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     purchases?: Prisma.PurchaseUncheckedCreateNestedManyWithoutGuideInput;
+    orders?: Prisma.OrderUncheckedCreateNestedManyWithoutGuideInput;
 };
 export type GuideUpdateInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
     title?: Prisma.StringFieldUpdateOperationsInput | string;
     description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string;
+    stripePriceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     pdfUrl?: Prisma.StringFieldUpdateOperationsInput | string;
     thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     category?: Prisma.CategoryUpdateOneRequiredWithoutGuidesNestedInput;
     purchases?: Prisma.PurchaseUpdateManyWithoutGuideNestedInput;
+    orders?: Prisma.OrderUpdateManyWithoutGuideNestedInput;
 };
 export type GuideUncheckedUpdateInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
     title?: Prisma.StringFieldUpdateOperationsInput | string;
     description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string;
+    stripePriceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     categoryId?: Prisma.StringFieldUpdateOperationsInput | string;
     pdfUrl?: Prisma.StringFieldUpdateOperationsInput | string;
     thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     purchases?: Prisma.PurchaseUncheckedUpdateManyWithoutGuideNestedInput;
+    orders?: Prisma.OrderUncheckedUpdateManyWithoutGuideNestedInput;
 };
 export type GuideCreateManyInput = {
     id?: string;
     title: string;
     description?: string | null;
     price: runtime.Decimal | runtime.DecimalJsLike | number | string;
+    stripePriceId?: string | null;
     categoryId: string;
     pdfUrl: string;
     thumbnailUrl?: string | null;
@@ -326,6 +350,7 @@ export type GuideUpdateManyMutationInput = {
     title?: Prisma.StringFieldUpdateOperationsInput | string;
     description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string;
+    stripePriceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     pdfUrl?: Prisma.StringFieldUpdateOperationsInput | string;
     thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -336,6 +361,7 @@ export type GuideUncheckedUpdateManyInput = {
     title?: Prisma.StringFieldUpdateOperationsInput | string;
     description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string;
+    stripePriceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     categoryId?: Prisma.StringFieldUpdateOperationsInput | string;
     pdfUrl?: Prisma.StringFieldUpdateOperationsInput | string;
     thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
@@ -355,6 +381,7 @@ export type GuideCountOrderByAggregateInput = {
     title?: Prisma.SortOrder;
     description?: Prisma.SortOrder;
     price?: Prisma.SortOrder;
+    stripePriceId?: Prisma.SortOrder;
     categoryId?: Prisma.SortOrder;
     pdfUrl?: Prisma.SortOrder;
     thumbnailUrl?: Prisma.SortOrder;
@@ -369,6 +396,7 @@ export type GuideMaxOrderByAggregateInput = {
     title?: Prisma.SortOrder;
     description?: Prisma.SortOrder;
     price?: Prisma.SortOrder;
+    stripePriceId?: Prisma.SortOrder;
     categoryId?: Prisma.SortOrder;
     pdfUrl?: Prisma.SortOrder;
     thumbnailUrl?: Prisma.SortOrder;
@@ -380,6 +408,7 @@ export type GuideMinOrderByAggregateInput = {
     title?: Prisma.SortOrder;
     description?: Prisma.SortOrder;
     price?: Prisma.SortOrder;
+    stripePriceId?: Prisma.SortOrder;
     categoryId?: Prisma.SortOrder;
     pdfUrl?: Prisma.SortOrder;
     thumbnailUrl?: Prisma.SortOrder;
@@ -450,27 +479,43 @@ export type GuideUpdateOneRequiredWithoutPurchasesNestedInput = {
     connect?: Prisma.GuideWhereUniqueInput;
     update?: Prisma.XOR<Prisma.XOR<Prisma.GuideUpdateToOneWithWhereWithoutPurchasesInput, Prisma.GuideUpdateWithoutPurchasesInput>, Prisma.GuideUncheckedUpdateWithoutPurchasesInput>;
 };
+export type GuideCreateNestedOneWithoutOrdersInput = {
+    create?: Prisma.XOR<Prisma.GuideCreateWithoutOrdersInput, Prisma.GuideUncheckedCreateWithoutOrdersInput>;
+    connectOrCreate?: Prisma.GuideCreateOrConnectWithoutOrdersInput;
+    connect?: Prisma.GuideWhereUniqueInput;
+};
+export type GuideUpdateOneRequiredWithoutOrdersNestedInput = {
+    create?: Prisma.XOR<Prisma.GuideCreateWithoutOrdersInput, Prisma.GuideUncheckedCreateWithoutOrdersInput>;
+    connectOrCreate?: Prisma.GuideCreateOrConnectWithoutOrdersInput;
+    upsert?: Prisma.GuideUpsertWithoutOrdersInput;
+    connect?: Prisma.GuideWhereUniqueInput;
+    update?: Prisma.XOR<Prisma.XOR<Prisma.GuideUpdateToOneWithWhereWithoutOrdersInput, Prisma.GuideUpdateWithoutOrdersInput>, Prisma.GuideUncheckedUpdateWithoutOrdersInput>;
+};
 export type GuideCreateWithoutCategoryInput = {
     id?: string;
     title: string;
     description?: string | null;
     price: runtime.Decimal | runtime.DecimalJsLike | number | string;
+    stripePriceId?: string | null;
     pdfUrl: string;
     thumbnailUrl?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     purchases?: Prisma.PurchaseCreateNestedManyWithoutGuideInput;
+    orders?: Prisma.OrderCreateNestedManyWithoutGuideInput;
 };
 export type GuideUncheckedCreateWithoutCategoryInput = {
     id?: string;
     title: string;
     description?: string | null;
     price: runtime.Decimal | runtime.DecimalJsLike | number | string;
+    stripePriceId?: string | null;
     pdfUrl: string;
     thumbnailUrl?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     purchases?: Prisma.PurchaseUncheckedCreateNestedManyWithoutGuideInput;
+    orders?: Prisma.OrderUncheckedCreateNestedManyWithoutGuideInput;
 };
 export type GuideCreateOrConnectWithoutCategoryInput = {
     where: Prisma.GuideWhereUniqueInput;
@@ -501,6 +546,7 @@ export type GuideScalarWhereInput = {
     title?: Prisma.StringFilter<"Guide"> | string;
     description?: Prisma.StringNullableFilter<"Guide"> | string | null;
     price?: Prisma.DecimalFilter<"Guide"> | runtime.Decimal | runtime.DecimalJsLike | number | string;
+    stripePriceId?: Prisma.StringNullableFilter<"Guide"> | string | null;
     categoryId?: Prisma.StringFilter<"Guide"> | string;
     pdfUrl?: Prisma.StringFilter<"Guide"> | string;
     thumbnailUrl?: Prisma.StringNullableFilter<"Guide"> | string | null;
@@ -512,22 +558,26 @@ export type GuideCreateWithoutPurchasesInput = {
     title: string;
     description?: string | null;
     price: runtime.Decimal | runtime.DecimalJsLike | number | string;
+    stripePriceId?: string | null;
     pdfUrl: string;
     thumbnailUrl?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     category: Prisma.CategoryCreateNestedOneWithoutGuidesInput;
+    orders?: Prisma.OrderCreateNestedManyWithoutGuideInput;
 };
 export type GuideUncheckedCreateWithoutPurchasesInput = {
     id?: string;
     title: string;
     description?: string | null;
     price: runtime.Decimal | runtime.DecimalJsLike | number | string;
+    stripePriceId?: string | null;
     categoryId: string;
     pdfUrl: string;
     thumbnailUrl?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    orders?: Prisma.OrderUncheckedCreateNestedManyWithoutGuideInput;
 };
 export type GuideCreateOrConnectWithoutPurchasesInput = {
     where: Prisma.GuideWhereUniqueInput;
@@ -547,28 +597,98 @@ export type GuideUpdateWithoutPurchasesInput = {
     title?: Prisma.StringFieldUpdateOperationsInput | string;
     description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string;
+    stripePriceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     pdfUrl?: Prisma.StringFieldUpdateOperationsInput | string;
     thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     category?: Prisma.CategoryUpdateOneRequiredWithoutGuidesNestedInput;
+    orders?: Prisma.OrderUpdateManyWithoutGuideNestedInput;
 };
 export type GuideUncheckedUpdateWithoutPurchasesInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
     title?: Prisma.StringFieldUpdateOperationsInput | string;
     description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string;
+    stripePriceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     categoryId?: Prisma.StringFieldUpdateOperationsInput | string;
     pdfUrl?: Prisma.StringFieldUpdateOperationsInput | string;
     thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    orders?: Prisma.OrderUncheckedUpdateManyWithoutGuideNestedInput;
+};
+export type GuideCreateWithoutOrdersInput = {
+    id?: string;
+    title: string;
+    description?: string | null;
+    price: runtime.Decimal | runtime.DecimalJsLike | number | string;
+    stripePriceId?: string | null;
+    pdfUrl: string;
+    thumbnailUrl?: string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    category: Prisma.CategoryCreateNestedOneWithoutGuidesInput;
+    purchases?: Prisma.PurchaseCreateNestedManyWithoutGuideInput;
+};
+export type GuideUncheckedCreateWithoutOrdersInput = {
+    id?: string;
+    title: string;
+    description?: string | null;
+    price: runtime.Decimal | runtime.DecimalJsLike | number | string;
+    stripePriceId?: string | null;
+    categoryId: string;
+    pdfUrl: string;
+    thumbnailUrl?: string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    purchases?: Prisma.PurchaseUncheckedCreateNestedManyWithoutGuideInput;
+};
+export type GuideCreateOrConnectWithoutOrdersInput = {
+    where: Prisma.GuideWhereUniqueInput;
+    create: Prisma.XOR<Prisma.GuideCreateWithoutOrdersInput, Prisma.GuideUncheckedCreateWithoutOrdersInput>;
+};
+export type GuideUpsertWithoutOrdersInput = {
+    update: Prisma.XOR<Prisma.GuideUpdateWithoutOrdersInput, Prisma.GuideUncheckedUpdateWithoutOrdersInput>;
+    create: Prisma.XOR<Prisma.GuideCreateWithoutOrdersInput, Prisma.GuideUncheckedCreateWithoutOrdersInput>;
+    where?: Prisma.GuideWhereInput;
+};
+export type GuideUpdateToOneWithWhereWithoutOrdersInput = {
+    where?: Prisma.GuideWhereInput;
+    data: Prisma.XOR<Prisma.GuideUpdateWithoutOrdersInput, Prisma.GuideUncheckedUpdateWithoutOrdersInput>;
+};
+export type GuideUpdateWithoutOrdersInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    title?: Prisma.StringFieldUpdateOperationsInput | string;
+    description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string;
+    stripePriceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    pdfUrl?: Prisma.StringFieldUpdateOperationsInput | string;
+    thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    category?: Prisma.CategoryUpdateOneRequiredWithoutGuidesNestedInput;
+    purchases?: Prisma.PurchaseUpdateManyWithoutGuideNestedInput;
+};
+export type GuideUncheckedUpdateWithoutOrdersInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    title?: Prisma.StringFieldUpdateOperationsInput | string;
+    description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string;
+    stripePriceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    categoryId?: Prisma.StringFieldUpdateOperationsInput | string;
+    pdfUrl?: Prisma.StringFieldUpdateOperationsInput | string;
+    thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    purchases?: Prisma.PurchaseUncheckedUpdateManyWithoutGuideNestedInput;
 };
 export type GuideCreateManyCategoryInput = {
     id?: string;
     title: string;
     description?: string | null;
     price: runtime.Decimal | runtime.DecimalJsLike | number | string;
+    stripePriceId?: string | null;
     pdfUrl: string;
     thumbnailUrl?: string | null;
     createdAt?: Date | string;
@@ -579,28 +699,33 @@ export type GuideUpdateWithoutCategoryInput = {
     title?: Prisma.StringFieldUpdateOperationsInput | string;
     description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string;
+    stripePriceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     pdfUrl?: Prisma.StringFieldUpdateOperationsInput | string;
     thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     purchases?: Prisma.PurchaseUpdateManyWithoutGuideNestedInput;
+    orders?: Prisma.OrderUpdateManyWithoutGuideNestedInput;
 };
 export type GuideUncheckedUpdateWithoutCategoryInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
     title?: Prisma.StringFieldUpdateOperationsInput | string;
     description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string;
+    stripePriceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     pdfUrl?: Prisma.StringFieldUpdateOperationsInput | string;
     thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     purchases?: Prisma.PurchaseUncheckedUpdateManyWithoutGuideNestedInput;
+    orders?: Prisma.OrderUncheckedUpdateManyWithoutGuideNestedInput;
 };
 export type GuideUncheckedUpdateManyWithoutCategoryInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
     title?: Prisma.StringFieldUpdateOperationsInput | string;
     description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string;
+    stripePriceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     pdfUrl?: Prisma.StringFieldUpdateOperationsInput | string;
     thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -611,9 +736,11 @@ export type GuideUncheckedUpdateManyWithoutCategoryInput = {
  */
 export type GuideCountOutputType = {
     purchases: number;
+    orders: number;
 };
 export type GuideCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     purchases?: boolean | GuideCountOutputTypeCountPurchasesArgs;
+    orders?: boolean | GuideCountOutputTypeCountOrdersArgs;
 };
 /**
  * GuideCountOutputType without action
@@ -630,11 +757,18 @@ export type GuideCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extens
 export type GuideCountOutputTypeCountPurchasesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     where?: Prisma.PurchaseWhereInput;
 };
+/**
+ * GuideCountOutputType without action
+ */
+export type GuideCountOutputTypeCountOrdersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    where?: Prisma.OrderWhereInput;
+};
 export type GuideSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
     id?: boolean;
     title?: boolean;
     description?: boolean;
     price?: boolean;
+    stripePriceId?: boolean;
     categoryId?: boolean;
     pdfUrl?: boolean;
     thumbnailUrl?: boolean;
@@ -642,6 +776,7 @@ export type GuideSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
     updatedAt?: boolean;
     category?: boolean | Prisma.CategoryDefaultArgs<ExtArgs>;
     purchases?: boolean | Prisma.Guide$purchasesArgs<ExtArgs>;
+    orders?: boolean | Prisma.Guide$ordersArgs<ExtArgs>;
     _count?: boolean | Prisma.GuideCountOutputTypeDefaultArgs<ExtArgs>;
 }, ExtArgs["result"]["guide"]>;
 export type GuideSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -649,6 +784,7 @@ export type GuideSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
     title?: boolean;
     description?: boolean;
     price?: boolean;
+    stripePriceId?: boolean;
     categoryId?: boolean;
     pdfUrl?: boolean;
     thumbnailUrl?: boolean;
@@ -661,6 +797,7 @@ export type GuideSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
     title?: boolean;
     description?: boolean;
     price?: boolean;
+    stripePriceId?: boolean;
     categoryId?: boolean;
     pdfUrl?: boolean;
     thumbnailUrl?: boolean;
@@ -673,16 +810,18 @@ export type GuideSelectScalar = {
     title?: boolean;
     description?: boolean;
     price?: boolean;
+    stripePriceId?: boolean;
     categoryId?: boolean;
     pdfUrl?: boolean;
     thumbnailUrl?: boolean;
     createdAt?: boolean;
     updatedAt?: boolean;
 };
-export type GuideOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "description" | "price" | "categoryId" | "pdfUrl" | "thumbnailUrl" | "createdAt" | "updatedAt", ExtArgs["result"]["guide"]>;
+export type GuideOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "description" | "price" | "stripePriceId" | "categoryId" | "pdfUrl" | "thumbnailUrl" | "createdAt" | "updatedAt", ExtArgs["result"]["guide"]>;
 export type GuideInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     category?: boolean | Prisma.CategoryDefaultArgs<ExtArgs>;
     purchases?: boolean | Prisma.Guide$purchasesArgs<ExtArgs>;
+    orders?: boolean | Prisma.Guide$ordersArgs<ExtArgs>;
     _count?: boolean | Prisma.GuideCountOutputTypeDefaultArgs<ExtArgs>;
 };
 export type GuideIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -696,12 +835,14 @@ export type $GuidePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     objects: {
         category: Prisma.$CategoryPayload<ExtArgs>;
         purchases: Prisma.$PurchasePayload<ExtArgs>[];
+        orders: Prisma.$OrderPayload<ExtArgs>[];
     };
     scalars: runtime.Types.Extensions.GetPayloadResult<{
         id: string;
         title: string;
         description: string | null;
         price: runtime.Decimal;
+        stripePriceId: string | null;
         categoryId: string;
         pdfUrl: string;
         thumbnailUrl: string | null;
@@ -1038,6 +1179,7 @@ export interface Prisma__GuideClient<T, Null = never, ExtArgs extends runtime.Ty
     readonly [Symbol.toStringTag]: "PrismaPromise";
     category<T extends Prisma.CategoryDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CategoryDefaultArgs<ExtArgs>>): Prisma.Prisma__CategoryClient<runtime.Types.Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
     purchases<T extends Prisma.Guide$purchasesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Guide$purchasesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PurchasePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+    orders<T extends Prisma.Guide$ordersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Guide$ordersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1067,6 +1209,7 @@ export interface GuideFieldRefs {
     readonly title: Prisma.FieldRef<"Guide", 'String'>;
     readonly description: Prisma.FieldRef<"Guide", 'String'>;
     readonly price: Prisma.FieldRef<"Guide", 'Decimal'>;
+    readonly stripePriceId: Prisma.FieldRef<"Guide", 'String'>;
     readonly categoryId: Prisma.FieldRef<"Guide", 'String'>;
     readonly pdfUrl: Prisma.FieldRef<"Guide", 'String'>;
     readonly thumbnailUrl: Prisma.FieldRef<"Guide", 'String'>;
@@ -1472,6 +1615,29 @@ export type Guide$purchasesArgs<ExtArgs extends runtime.Types.Extensions.Interna
     take?: number;
     skip?: number;
     distinct?: Prisma.PurchaseScalarFieldEnum | Prisma.PurchaseScalarFieldEnum[];
+};
+/**
+ * Guide.orders
+ */
+export type Guide$ordersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Order
+     */
+    select?: Prisma.OrderSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Order
+     */
+    omit?: Prisma.OrderOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Prisma.OrderInclude<ExtArgs> | null;
+    where?: Prisma.OrderWhereInput;
+    orderBy?: Prisma.OrderOrderByWithRelationInput | Prisma.OrderOrderByWithRelationInput[];
+    cursor?: Prisma.OrderWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?: Prisma.OrderScalarFieldEnum | Prisma.OrderScalarFieldEnum[];
 };
 /**
  * Guide without action

@@ -15,6 +15,12 @@ import categoryRoutes from './routes/categoryRoutes';
 import guideRoutes from './routes/guideRoutes';
 import purchaseRoutes from './routes/purchaseRoutes';
 import settingsRoutes from './routes/settingsRoutes';
+import reviewRoutes from './routes/reviewRoutes';
+import downloadRoutes from './routes/downloadRoutes';
+import orderRoutes from './routes/orderRoutes';
+import stripeRoutes from './routes/stripeRoutes';
+import { stripeController } from './controllers/stripeController';
+import publicOrderRoutes from './routes/publicOrderRoutes';
 
 // Validate config
 try {
@@ -29,6 +35,8 @@ const app = express();
 // Middleware
 app.use(helmet());
 app.use(cors());
+// Stripe webhooks require the raw body for signature verification.
+app.post('/api/stripe-webhook', express.raw({ type: 'application/json' }), stripeController.webhook);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -42,9 +50,14 @@ app.use('/api/guides/pdf', express.static(pdfsDir));
 // API Routes
 app.use('/api/admin', adminRoutes);
 app.use('/api/admin/settings', settingsRoutes);
+app.use('/api/admin/reviews', reviewRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/guides', guideRoutes);
+app.use('/api/download', downloadRoutes);
 app.use('/api/purchases', purchaseRoutes);
+app.use('/api/admin/orders', orderRoutes);
+app.use('/api/orders', publicOrderRoutes);
+app.use('/api', stripeRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {

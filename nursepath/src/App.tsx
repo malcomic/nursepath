@@ -7,7 +7,7 @@ import HomePage from './pages/HomePage';
 import ServicesPage from './pages/ServicesPage';
 import GuideDetailPage from './pages/GuideDetailPage';
 import CheckoutPage from './pages/CheckoutPage';
-import OrderSuccessPage from './pages/OrderSuccessPage';
+import PaymentSuccessPage from './pages/OrderSuccessPage';
 import PricingPage from './pages/PricingPage';
 import AboutPage from './pages/AboutPage';
 import ContactPage from './pages/ContactPage';
@@ -19,6 +19,8 @@ import AdminGuidesPage from './pages/admin/AdminGuidesPage';
 import AdminCategoriesPage from './pages/admin/AdminCategoriesPage';
 import AdminOrdersPage from './pages/admin/AdminOrdersPage';
 import AdminSettingsPage from './pages/admin/AdminSettingsPage';
+import StudentReviewsPage from './pages/StudentReviewsPage';
+import AdminReviewsPage from './pages/admin/AdminReviewsPage';
 
 // Styles
 import './App.css';
@@ -84,7 +86,8 @@ function App() {
         <Route path="/about" element={<AboutPage />} />
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/blog" element={<BlogPage />} />
-        <Route path="/order-success" element={<OrderSuccessPage />} />
+        <Route path="/reviews" element={<StudentReviewsPage />} />
+        <Route path="/payment-success" element={<PaymentSuccessPage />} />
         <Route path="/dashboard" element={<UserDashboardPage />} />
 
         {/* Admin Routes */}
@@ -139,9 +142,20 @@ function App() {
             )
           }
         />
+        <Route
+          path="/admin/reviews"
+          element={
+            api.getAuthToken() ? (
+              <AdminReviewsPage />
+            ) : (
+              <Navigate to="/admin/login" replace />
+            )
+          }
+        />
 
         {/* Legacy Routes - Redirect to new routes */}
         <Route path="/catalog" element={<Navigate to="/services" replace />} />
+        <Route path="/order-success" element={<Navigate to="/payment-success" replace />} />
 
         {/* Catch-all - redirect to home */}
         <Route path="*" element={<Navigate to="/" replace />} />

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { ArrowLeft, Lock, CheckCircle, FileText } from 'lucide-react';
+import { ArrowLeft, Lock, FileText, CheckCircle } from 'lucide-react';
 import { api } from '../api';
 import Header from '../components/layout/Header';
 import Footer from '../components/layout/Footer';
@@ -25,7 +25,6 @@ export default function CheckoutPage() {
   const [buyerEmail, setBuyerEmail] = useState('');
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
-  const [purchaseComplete, setPurchaseComplete] = useState(false);
 
   useEffect(() => {
     if (!id) return;
@@ -50,20 +49,22 @@ export default function CheckoutPage() {
 
     try {
       setSubmitting(true);
-      const res = await api.post('/purchases', {
+      // Store email locally so the dashboard can show purchase history later.
+      localStorage.setItem('userEmail', buyerEmail);
+
+      const res = await api.post('/create-checkout-session', {
         guideId: id,
         buyerName,
         buyerEmail,
       });
 
-      if (res.success) {
-        setPurchaseComplete(true);
-        // Store email for dashboard access
-        localStorage.setItem('userEmail', buyerEmail);
-      }
+      const url = res?.data?.url;
+      if (!url) throw new Error('No checkout URL returned');
+
+      window.location.href = url;
     } catch (error) {
       console.error('Purchase failed:', error);
-      alert('Purchase failed. Please try again.');
+      alert(error instanceof Error ? error.message : 'Purchase failed. Please try again.');
     } finally {
       setSubmitting(false);
     }
@@ -94,39 +95,6 @@ export default function CheckoutPage() {
             <Link to="/services">
               <Button>Back to Services</Button>
             </Link>
-          </div>
-        </div>
-        <Footer />
-      </div>
-    );
-  }
-
-  if (purchaseComplete) {
-    return (
-      <div className="min-h-screen flex flex-col bg-gray-50">
-        <Header />
-        <div className="flex-grow py-20">
-          <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
-            <Card className="text-center">
-              <div className="w-20 h-20 bg-secondary-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                <CheckCircle className="w-12 h-12 text-secondary-600" />
-              </div>
-              <h1 className="text-4xl sm:text-5xl font-black text-gray-900 mb-4">
-                Purchase Successful!
-              </h1>
-              <p className="text-xl text-gray-600 mb-10 max-w-xl mx-auto leading-relaxed">
-                Thank you for your purchase of <span className="font-bold text-gray-900">"{guide.title}"</span>.
-                You can now access your study guide from your dashboard.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link to="/order-success">
-                  <Button size="lg">View Order Details</Button>
-                </Link>
-                <Link to="/dashboard">
-                  <Button variant="outline" size="lg">Go to Dashboard</Button>
-                </Link>
-              </div>
-            </Card>
           </div>
         </div>
         <Footer />
@@ -192,7 +160,7 @@ export default function CheckoutPage() {
                       className="group"
                     >
                       <Lock className="w-5 h-5 mr-2" />
-                      Complete Purchase
+                      Continue to secure checkout
                     </Button>
                     <p className="text-sm text-gray-500 mt-4 text-center">
                       Your payment is secure and encrypted

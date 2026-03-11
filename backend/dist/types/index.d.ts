@@ -18,6 +18,7 @@ export interface Guide {
     title: string;
     description: string | null;
     price: number;
+    stripePriceId?: string | null;
     categoryId: string;
     pdfUrl: string;
     thumbnailUrl: string | null;

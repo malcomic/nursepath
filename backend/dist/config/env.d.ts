@@ -5,6 +5,9 @@ export declare const config: {
     jwtExpiry: string;
     nodeEnv: string;
     uploadDir: string;
+    publicAppUrl: string | undefined;
+    stripeSecretKey: string | undefined;
+    stripeWebhookSecret: string | undefined;
 };
 export declare const validateConfig: () => void;
 //# sourceMappingURL=env.d.ts.map

@@ -30,19 +30,26 @@ const getHeaders = (includeAuth: boolean = true) => {
 const handleResponse = async (response: Response) => {
   if (!response.ok) {
     if (response.status === 401) {
-      // Clear token on auth error
       setAuthToken(null);
       window.location.href = '/admin/login';
     }
-    const error = await response.json();
+    const text = await response.text();
+    let error: { error?: string } = {};
+    try {
+      error = JSON.parse(text);
+    } catch {
+      // non-JSON body (e.g. Express HTML 404)
+    }
     throw new Error(error.error || `API error: ${response.statusText}`);
   }
+  if (response.status === 204) return {};
   return response.json();
 };
 
 export const api = {
   async get(endpoint: string, includeAuth: boolean = false) {
-    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+    const url = `${API_BASE_URL}${endpoint}`;
+    const response = await fetch(url, {
       method: 'GET',
       headers: getHeaders(includeAuth),
     });
@@ -61,6 +68,15 @@ export const api = {
   async put(endpoint: string, data: unknown, includeAuth: boolean = false) {
     const response = await fetch(`${API_BASE_URL}${endpoint}`, {
       method: 'PUT',
+      headers: getHeaders(includeAuth),
+      body: JSON.stringify(data),
+    });
+    return handleResponse(response);
+  },
+
+  async patch(endpoint: string, data: unknown = {}, includeAuth: boolean = false) {
+    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+      method: 'PATCH',
       headers: getHeaders(includeAuth),
       body: JSON.stringify(data),
     });
