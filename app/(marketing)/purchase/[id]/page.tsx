@@ -15,9 +15,10 @@ export async function generateMetadata({ params }: PurchasePageProps): Promise<M
     return {
       title: `Checkout — ${guide.title}`,
       description: `Complete your purchase of ${guide.title}`,
+      robots: { index: false, follow: false },
     };
   } catch {
-    return { title: 'Checkout' };
+    return { title: 'Checkout', robots: { index: false, follow: false } };
   }
 }
 
@@ -38,6 +39,7 @@ export default async function PurchasePage({ params }: PurchasePageProps) {
     <CheckoutForm
       guide={{
         id: guide.id,
+        slug: guide.slug,
         title: guide.title,
         description: guide.description,
         price: guide.price,

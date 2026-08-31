@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { MDXRemote } from 'next-mdx-remote/rsc';
 import { getAllSlugs, getPostBySlug } from '@/lib/blog';
 import JsonLd from '@/components/seo/JsonLd';
+import { mdxComponents } from '@/components/blog/MdxComponents';
 
 interface BlogPostPageProps {
   params: Promise<{ slug: string }>;
@@ -91,7 +92,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
         <section className="py-12 bg-white">
           <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 prose prose-lg prose-headings:font-bold prose-a:text-primary-600">
-            <MDXRemote source={post.content} />
+            <MDXRemote source={post.content} components={mdxComponents} />
           </div>
         </section>
       </article>

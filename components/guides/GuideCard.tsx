@@ -63,7 +63,7 @@ export default function GuideCard({ guide }: GuideCardProps) {
 
         <div className="grid grid-cols-2 gap-2">
           <Link
-            href={`/guides/${guide.id}`}
+            href={`/guides/${guide.slug}`}
             className="bg-primary-50 text-primary-600 py-2.5 rounded-lg font-semibold text-sm flex items-center justify-center gap-2 hover:bg-primary-100 transition-colors border border-primary-100"
           >
             <Eye className="w-4 h-4" />

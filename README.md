@@ -2,30 +2,32 @@
 
 Next.js application for NCLEX-RN study guides and nursing exam prep.
 
-## Migration status
+## Stack
 
-This repo is migrating from a legacy Vite + Express stack to Next.js App Router.
+- **Next.js App Router** at repo root — `app/`, `lib/`, `prisma/`
+- **Prisma + PostgreSQL** — migrations only under root `prisma/`
+- **Stripe** checkout, **Resend** email, **Vercel Blob** uploads
 
-- **Next.js app** (canonical): repo root — `app/`, `lib/`, `prisma/`
-- **Legacy frontend**: [`nursepath/`](nursepath/) — Vite + React (do not delete until migration is validated)
-- **Legacy backend**: [`backend/`](backend/) — Express API (do not delete until migration is validated)
+### Legacy archive
 
-### Prisma
+The pre-migration Vite frontend (`nursepath/`) and Express API (`backend/`) were removed from `main` after cutover. They are preserved on:
 
-Prisma migrations at `prisma/` are canonical for the Next.js app. `backend/prisma/` is frozen until Express decommission. **Do not run conflicting migrations against the same database from both locations.**
+- Branch: `archive/legacy-vite-express`
+- Tag: `legacy-pre-cutover` (if pushed)
+
+Restore locally: `git checkout archive/legacy-vite-express`
 
 ### Sitemap
 
-The footer links to `/sitemap`, which redirects to `/sitemap.xml` (Next.js sitemap convention).
+The footer links to `/sitemap`, which redirects to `/sitemap.xml`.
 
 ## Getting started
 
-1. Copy `.env.example` to `.env.local` and fill in values (copy `DATABASE_URL` from `backend/.env` if available).
+1. Copy `.env.example` to `.env.local` and fill in values.
 2. Install dependencies: `npm install`
 3. Generate Prisma client: `npm run db:generate`
-4. Start dev server: `npm run dev` → [http://localhost:3000](http://localhost:3000)
-
-Legacy apps run independently on ports **5173** (Vite) and **5000** (Express).
+4. Apply migrations: `npm run db:migrate`
+5. Start dev server: `npm run dev` → [http://localhost:3000](http://localhost:3000)
 
 ## Scripts
 
@@ -75,7 +77,7 @@ Each paid guide needs a `stripePriceId` in the database pointing to a Stripe Pri
 | Download email | Received via Resend (or logged if no API key) |
 | Free guide (`price === 0`) | Skips Stripe, immediate download on success page |
 | Contact form submit | Email to `CONTACT_TO_EMAIL` (or logged in dev) |
-| Cancel on Stripe | Returns to `/guides/[id]` |
+| Cancel on Stripe | Returns to `/guides/[slug]` |
 | Decline card `4000 0000 0000 0002` | Payment fails on Stripe side |
 | `npm run build` | Passes |
 
@@ -106,6 +108,70 @@ Admin auth uses an **httpOnly `admin_token` cookie** set on `POST /api/admin/log
 | Order resend / regenerate / refund | Success toasts; DB updates |
 | Save settings | Persists; masked API key on GET |
 | `npm run build` | Passes |
+
+## Phase 7: Blog, sitemap, and legal pages
+
+### Blog (MDX)
+
+Posts live in `content/blog/*.mdx`. Each file needs frontmatter:
+
+```yaml
+title: "Post title"
+description: "Meta description (150–160 chars)"
+publishedAt: "2026-03-01"
+keywords: ["keyword1", "keyword2"]
+```
+
+After adding or editing a post, redeploy — posts are statically generated at build time. Optional `<Callout>` component is available in MDX for tip/CTA boxes.
+
+### Production SEO
+
+- Set `PUBLIC_APP_URL` to your live domain (e.g. `https://nursepath.com`) so `sitemap.xml`, `robots.txt`, and Open Graph URLs are correct.
+- Submit `https://your-domain.com/sitemap.xml` in [Google Search Console](https://search.google.com/search-console).
+- Transactional routes (`/purchase/*`, `/payment-success`) are `noindex` and excluded from robots crawling.
+
+### Phase 7 smoke checklist
+
+| Test | Expected |
+|------|----------|
+| `/blog` | Lists all MDX posts |
+| `/blog/[slug]` | Styled prose, internal links work |
+| View source on blog post | `BlogPosting` JSON-LD present |
+| `/sitemap.xml` | Blog slugs, legal pages, guides, categories |
+| `/robots.txt` | Disallows admin, dashboard, api, purchase, payment-success |
+| `/privacy`, `/terms`, `/refund`, `/help` | Cross-links footer; help mentions email dashboard |
+| `PUBLIC_APP_URL` in production | Sitemap uses live domain |
+| `npm run build` | Passes |
+
+## Phase 8: Guide slugs and legacy cutover
+
+### Guide URLs
+
+- Canonical public path: `/guides/{slug}` (persisted unique `Guide.slug`)
+- Old `/guides/{cuid}` URLs **301 redirect** to the slug URL
+- Purchase/checkout still use **cuid**: `/purchase/{id}`, order FKs, Stripe metadata
+- Admin guides form includes optional **Slug** (auto from title when blank)
+- Changing the title auto-refreshes the slug unless you set an explicit slug
+
+### Redirects (static)
+
+- `/catalog` → `/services`
+- `/order-success` → `/payment-success`
+
+### Phase 8 smoke checklist
+
+| Test | Expected |
+|------|----------|
+| `/guides/{slug}` | 200 |
+| `/guides/{cuid}` | 301 → `/guides/{slug}` |
+| GuideCard / services | Links use slug |
+| `/purchase/{cuid}` | Still works |
+| Stripe cancel | Returns to `/guides/{slug}` |
+| Sitemap | Slug URLs only |
+| Admin create without slug | Auto slug from title |
+| `npm run build` | Passes |
+| `main` | No `nursepath/` or `backend/` |
+| `archive/legacy-vite-express` | Contains legacy trees |
 
 ### Stripe test cards
 

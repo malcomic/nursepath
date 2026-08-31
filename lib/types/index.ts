@@ -18,6 +18,7 @@ export interface Category {
 export interface Guide {
   id: string;
   title: string;
+  slug: string;
   description: string | null;
   price: number;
   stripePriceId?: string | null;

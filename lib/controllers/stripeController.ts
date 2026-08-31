@@ -57,7 +57,7 @@ export async function createCheckoutSession(body: unknown, ipAddress?: string) {
     config.publicAppUrl!,
     `/payment-success?order_id=${encodeURIComponent(order.id)}`
   );
-  const cancelUrl = buildAbsoluteUrl(config.publicAppUrl!, `/guides/${guide.id}`);
+  const cancelUrl = buildAbsoluteUrl(config.publicAppUrl!, `/guides/${guide.slug}`);
 
   const session = await stripe.checkout.sessions.create({
     mode: 'payment',

@@ -1,6 +1,8 @@
 import { guideRepository } from '@/lib/repositories/guideRepository';
 import { categoryRepository } from '@/lib/repositories/categoryRepository';
 import { ApiError } from '@/lib/errors/api-error';
+import { ensureUniqueGuideSlug } from '@/lib/guides/ensure-unique-slug';
+import { slugify } from '@/lib/slugify';
 
 export class GuideService {
   async getAllGuides() {
@@ -15,6 +17,17 @@ export class GuideService {
     return guide;
   }
 
+  /** Resolve by slug first, then by cuid id. */
+  async getGuideByParam(param: string) {
+    const bySlug = await guideRepository.findBySlug(param);
+    if (bySlug) return bySlug;
+
+    const byId = await guideRepository.findById(param);
+    if (byId) return byId;
+
+    throw new ApiError(404, 'Guide not found');
+  }
+
   async getGuidesByCategory(categoryId: string) {
     await categoryRepository.findById(categoryId);
     return guideRepository.findByCategory(categoryId);
@@ -22,6 +35,7 @@ export class GuideService {
 
   async createGuide(data: {
     title: string;
+    slug?: string;
     description?: string;
     price: number;
     stripePriceId?: string;
@@ -30,8 +44,10 @@ export class GuideService {
     thumbnailUrl?: string;
   }) {
     await categoryRepository.findById(data.categoryId);
+    const slug = await ensureUniqueGuideSlug(data.slug?.trim() || slugify(data.title) || data.title);
     return guideRepository.create({
       title: data.title,
+      slug,
       description: data.description ?? null,
       price: data.price,
       stripePriceId: data.stripePriceId ?? null,
@@ -45,6 +61,7 @@ export class GuideService {
     id: string,
     data: {
       title?: string;
+      slug?: string;
       description?: string;
       price?: number;
       stripePriceId?: string;
@@ -53,11 +70,22 @@ export class GuideService {
       thumbnailUrl?: string;
     }
   ) {
-    await this.getGuide(id);
+    const existing = await this.getGuide(id);
     if (data.categoryId) {
       await categoryRepository.findById(data.categoryId);
     }
-    return guideRepository.update(id, data);
+
+    let slug: string | undefined;
+    if (data.slug !== undefined && data.slug.trim() !== '') {
+      slug = await ensureUniqueGuideSlug(data.slug.trim(), id);
+    } else if (data.title !== undefined && data.title !== existing.title) {
+      slug = await ensureUniqueGuideSlug(slugify(data.title) || data.title, id);
+    }
+
+    return guideRepository.update(id, {
+      ...data,
+      ...(slug !== undefined ? { slug } : {}),
+    });
   }
 
   async deleteGuide(id: string) {

@@ -11,6 +11,7 @@ import Button from '@/components/ui/Button';
 
 export interface CheckoutGuide {
   id: string;
+  slug: string;
   title: string;
   description?: string | null;
   price: number;
@@ -106,7 +107,7 @@ export default function CheckoutForm({ guide }: CheckoutFormProps) {
               support.
             </p>
             <Link
-              href={`/guides/${guide.id}`}
+              href={`/guides/${guide.slug}`}
               className="text-primary-600 font-semibold hover:text-primary-700"
             >
               ← Back to guide details

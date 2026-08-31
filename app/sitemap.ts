@@ -1,10 +1,16 @@
 import type { MetadataRoute } from 'next';
 import { guideService } from '@/lib/services/guideService';
 import { categoryService } from '@/lib/services/categoryService';
-import { getAllSlugs } from '@/lib/blog';
+import { getAllPosts } from '@/lib/blog';
 import { slugify } from '@/lib/slugify';
 
 const baseUrl = process.env.PUBLIC_APP_URL ?? 'http://localhost:3000';
+
+if (process.env.NODE_ENV === 'production' && !process.env.PUBLIC_APP_URL) {
+  console.warn(
+    'PUBLIC_APP_URL is not set — sitemap URLs will use localhost. Set it to your production domain.'
+  );
+}
 
 const staticRoutes = [
   '',
@@ -30,14 +36,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: route === '' ? 1 : 0.8,
   }));
 
-  const [guides, categories, blogSlugs] = await Promise.all([
+  const [guides, categories, posts] = await Promise.all([
     guideService.getAllGuides(),
     categoryService.getAllCategories(),
-    Promise.resolve(getAllSlugs()),
+    Promise.resolve(getAllPosts()),
   ]);
 
   const guidePages: MetadataRoute.Sitemap = guides.map((guide) => ({
-    url: `${baseUrl}/guides/${guide.id}`,
+    url: `${baseUrl}/guides/${guide.slug}`,
     lastModified: guide.updatedAt ? new Date(guide.updatedAt) : now,
     changeFrequency: 'weekly',
     priority: 0.9,
@@ -50,9 +56,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.9,
   }));
 
-  const blogPages: MetadataRoute.Sitemap = blogSlugs.map((slug) => ({
-    url: `${baseUrl}/blog/${slug}`,
-    lastModified: now,
+  const blogPages: MetadataRoute.Sitemap = posts.map((post) => ({
+    url: `${baseUrl}/blog/${post.slug}`,
+    lastModified: new Date(post.publishedAt),
     changeFrequency: 'monthly',
     priority: 0.7,
   }));
