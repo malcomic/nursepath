@@ -1,0 +1,84 @@
+import type { Metadata } from 'next';
+import Link from 'next/link';
+import { notFound } from 'next/navigation';
+import { categoryService } from '@/lib/services/categoryService';
+import { guideService } from '@/lib/services/guideService';
+import { getCategorySeo } from '@/lib/seo/category-keywords';
+import { slugify } from '@/lib/slugify';
+import GuideGrid from '@/components/guides/GuideGrid';
+import CTA from '@/components/sections/CTA';
+
+interface CategoryPageProps {
+  params: Promise<{ slug: string }>;
+}
+
+export async function generateStaticParams() {
+  const categories = await categoryService.getAllCategories();
+  return categories.map((c) => ({ slug: slugify(c.name) }));
+}
+
+export async function generateMetadata({ params }: CategoryPageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const seo = getCategorySeo(slug);
+  const categories = await categoryService.getAllCategories();
+  const category = categories.find((c) => slugify(c.name) === slug);
+
+  return {
+    title: category ? `${category.name} Study Guides` : seo.title,
+    description: category?.description ?? seo.description,
+    openGraph: {
+      title: category ? `${category.name} Study Guides | NursePath` : seo.title,
+      description: category?.description ?? seo.description,
+    },
+  };
+}
+
+export default async function CategoryPage({ params }: CategoryPageProps) {
+  const { slug } = await params;
+  const categories = await categoryService.getAllCategories();
+  const category = categories.find((c) => slugify(c.name) === slug);
+
+  if (!category) {
+    notFound();
+  }
+
+  const guides = await guideService.getGuidesByCategory(category.id);
+  const seo = getCategorySeo(slug);
+
+  return (
+    <main>
+      <section className="bg-gradient-to-r from-primary-600 to-secondary-600 text-white py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black mb-4">{category.name}</h1>
+          <p className="text-xl text-white/90 max-w-2xl">
+            {category.description ?? seo.description}
+          </p>
+        </div>
+      </section>
+
+      <section className="py-12 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between mb-8">
+            <p className="text-gray-600">
+              {guides.length} {guides.length === 1 ? 'guide' : 'guides'} in this category
+            </p>
+            <Link
+              href={`/services?category=${category.id}`}
+              className="text-primary-600 font-semibold hover:text-primary-700 transition-colors"
+            >
+              View in catalog →
+            </Link>
+          </div>
+          <GuideGrid guides={guides} />
+        </div>
+      </section>
+
+      <CTA
+        title={`Ready to Master ${category.name}?`}
+        description="Browse our full catalog or get started with a study guide today."
+        primaryButtonText="Browse All Guides"
+        primaryButtonLink={`/services?category=${category.id}`}
+      />
+    </main>
+  );
+}

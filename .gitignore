@@ -1,0 +1,52 @@
+# Dependencies
+node_modules/
+
+# Next.js
+.next/
+out/
+
+# Environment
+.env
+.env.local
+.env*.local
+
+# Prisma generated client
+lib/generated/prisma/
+
+# Build
+dist/
+build/
+
+# Logs
+logs/
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Testing
+coverage/
+.nyc_output/
+
+# Uploads (local development)
+uploads/*
+!uploads/.gitkeep
+
+# Temporary
+temp/
+tmp/
+
+# Database
+*.sqlite
+*.db
+
+# TypeScript
+*.tsbuildinfo
