@@ -14,6 +14,7 @@ interface Category {
 interface Guide {
   id: string;
   title: string;
+  slug: string;
   description?: string;
   price: number;
   stripePriceId?: string | null;
@@ -24,6 +25,7 @@ interface Guide {
 
 interface GuideFormState {
   title: string;
+  slug: string;
   description: string;
   price: string;
   stripePriceId: string;
@@ -34,6 +36,7 @@ interface GuideFormState {
 
 const emptyForm: GuideFormState = {
   title: '',
+  slug: '',
   description: '',
   price: '',
   stripePriceId: '',
@@ -117,6 +120,7 @@ export default function AdminGuidesPage() {
     setEditingGuideId(guide.id);
     setForm({
       title: guide.title,
+      slug: guide.slug || '',
       description: guide.description || '',
       price: guide.price.toString(),
       stripePriceId: guide.stripePriceId || '',
@@ -236,6 +240,7 @@ export default function AdminGuidesPage() {
 
       const payload = {
         title: form.title.trim(),
+        slug: form.slug.trim() || undefined,
         description: form.description.trim() || undefined,
         price: parsedPrice,
         stripePriceId: form.stripePriceId.trim() || undefined,
@@ -419,6 +424,20 @@ export default function AdminGuidesPage() {
                 className="w-full border border-slate-300 rounded-xl px-3 py-2.5 text-sm"
                 required
               />
+            </div>
+            <div className="md:col-span-2">
+              <label className="block text-sm font-semibold text-slate-700 mb-1">
+                Slug (optional)
+              </label>
+              <input
+                value={form.slug}
+                onChange={handleFieldChange('slug')}
+                className="w-full border border-slate-300 rounded-xl px-3 py-2.5 text-sm"
+                placeholder="auto from title"
+              />
+              <p className="text-xs text-slate-500 mt-1">
+                Public URL: /guides/your-slug. Leave blank to generate from title.
+              </p>
             </div>
             <div className="md:col-span-2">
               <label className="block text-sm font-semibold text-slate-700 mb-1">Description</label>

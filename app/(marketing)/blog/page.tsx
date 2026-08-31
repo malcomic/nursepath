@@ -6,6 +6,12 @@ export const metadata: Metadata = {
   title: 'Blog',
   description:
     'Nursing exam prep tips, NCLEX study strategies, and resources for nursing students from NursePath.',
+  openGraph: {
+    title: 'NursePath Blog — NCLEX & Nursing Exam Prep Tips',
+    description:
+      'Nursing exam prep tips, NCLEX study strategies, and resources for nursing students from NursePath.',
+    type: 'website',
+  },
 };
 
 export default function BlogIndexPage() {

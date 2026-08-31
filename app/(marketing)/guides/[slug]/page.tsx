@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
-import { notFound } from 'next/navigation';
+import { notFound, permanentRedirect } from 'next/navigation';
 import { ArrowLeft, CheckCircle, FileText, Clock, Award } from 'lucide-react';
 import { guideService } from '@/lib/services/guideService';
 import { ApiError } from '@/lib/errors/api-error';
@@ -19,19 +19,23 @@ const features = [
 ];
 
 interface GuidePageProps {
-  params: Promise<{ id: string }>;
+  params: Promise<{ slug: string }>;
 }
 
 export async function generateMetadata({ params }: GuidePageProps): Promise<Metadata> {
-  const { id } = await params;
+  const { slug } = await params;
   try {
-    const guide = await guideService.getGuide(id);
+    const guide = await guideService.getGuideByParam(slug);
+    const baseUrl = process.env.PUBLIC_APP_URL ?? 'http://localhost:3000';
+    const canonical = `${baseUrl}/guides/${guide.slug}`;
     return {
       title: guide.title,
       description: guide.description ?? `Study guide: ${guide.title}`,
+      alternates: { canonical },
       openGraph: {
         title: guide.title,
         description: guide.description ?? undefined,
+        url: canonical,
         images: guide.thumbnailUrl ? [{ url: guide.thumbnailUrl }] : undefined,
       },
     };
@@ -41,11 +45,11 @@ export async function generateMetadata({ params }: GuidePageProps): Promise<Meta
 }
 
 export default async function GuidePage({ params }: GuidePageProps) {
-  const { id } = await params;
+  const { slug: param } = await params;
 
   let guide;
   try {
-    guide = await guideService.getGuide(id);
+    guide = await guideService.getGuideByParam(param);
   } catch (error) {
     if (error instanceof ApiError && error.statusCode === 404) {
       notFound();
@@ -53,7 +57,12 @@ export default async function GuidePage({ params }: GuidePageProps) {
     throw error;
   }
 
+  if (param === guide.id && guide.slug) {
+    permanentRedirect(`/guides/${guide.slug}`);
+  }
+
   const baseUrl = process.env.PUBLIC_APP_URL ?? 'http://localhost:3000';
+  const guideUrl = `${baseUrl}/guides/${guide.slug}`;
   const productJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Product',
@@ -65,7 +74,7 @@ export default async function GuidePage({ params }: GuidePageProps) {
       price: guide.price.toString(),
       priceCurrency: 'USD',
       availability: 'https://schema.org/InStock',
-      url: `${baseUrl}/guides/${guide.id}`,
+      url: guideUrl,
     },
   };
 

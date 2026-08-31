@@ -5,6 +5,7 @@ import PaymentSuccessClient from '@/components/checkout/PaymentSuccessClient';
 export const metadata: Metadata = {
   title: 'Payment Successful',
   description: 'Your NursePath purchase was successful. Access your study guide download.',
+  robots: { index: false, follow: false },
 };
 
 export default function PaymentSuccessPage() {

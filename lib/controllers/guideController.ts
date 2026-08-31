@@ -16,8 +16,17 @@ const createFileUrlSchema = (prefix: string, errorMessage: string) =>
 const thumbnailUrlSchema = createFileUrlSchema('/api/guides/thumbnail/', 'Invalid thumbnail URL');
 const pdfUrlSchema = createFileUrlSchema('/api/guides/pdf/', 'Invalid PDF URL');
 
+const optionalSlugSchema = z
+  .string()
+  .trim()
+  .min(1)
+  .max(255)
+  .optional()
+  .or(z.literal('').transform(() => undefined));
+
 const createGuideSchema = z.object({
   title: z.string().min(1).max(255),
+  slug: optionalSlugSchema,
   description: z.string().optional(),
   price: z.number().positive(),
   stripePriceId: z

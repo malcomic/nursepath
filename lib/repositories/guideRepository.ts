@@ -20,6 +20,14 @@ export class GuideRepository {
     return guide ? ({ ...guide, price: Number(guide.price) } as GuideWithCategory) : null;
   }
 
+  async findBySlug(slug: string): Promise<GuideWithCategory | null> {
+    const guide = await prisma.guide.findUnique({
+      where: { slug },
+      include: { category: true },
+    });
+    return guide ? ({ ...guide, price: Number(guide.price) } as GuideWithCategory) : null;
+  }
+
   async findByCategory(categoryId: string): Promise<GuideWithCategory[]> {
     const guides = await prisma.guide.findMany({
       where: { categoryId },
@@ -33,6 +41,7 @@ export class GuideRepository {
     const guide = await prisma.guide.create({
       data: {
         title: data.title,
+        slug: data.slug,
         description: data.description,
         price: data.price,
         stripePriceId: data.stripePriceId ?? null,
@@ -49,6 +58,7 @@ export class GuideRepository {
       where: { id },
       data: {
         title: data.title,
+        slug: data.slug,
         description: data.description,
         price: data.price !== undefined ? Number(data.price) : undefined,
         stripePriceId: data.stripePriceId === undefined ? undefined : (data.stripePriceId ?? null),
