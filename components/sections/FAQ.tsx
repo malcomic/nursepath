@@ -1,93 +1,78 @@
 'use client';
 
 import { useState } from 'react';
-import { ChevronDown, ChevronUp } from 'lucide-react';
-import Card from '../ui/Card';
+import { ChevronDown } from 'lucide-react';
 
 const faqs = [
   {
-    question: 'What format are the study guides in?',
-    answer:
-      'All study guides are provided as PDF files that you can download and access on any device. They are optimized for both desktop and mobile viewing.',
+    q: 'How do I receive my study guides after purchasing?',
+    a: "Instantly! Once your checkout is complete, you'll immediately see a download link on the screen. We also send an automated email with backup links.",
   },
   {
-    question: 'How long do I have access to purchased guides?',
-    answer:
-      "You have lifetime access to all purchased study guides. Once you buy a guide, it's yours forever. You can download it as many times as you need.",
+    q: 'Can I view these guides on multiple devices?',
+    a: 'Yes. Your PDF downloads work on phone, tablet, and desktop. Save them wherever you study.',
   },
   {
-    question: 'Are the study guides updated regularly?',
-    answer:
-      "Yes! We regularly update our study guides to reflect the latest exam requirements and best practices. You'll receive notifications when updates are available for your purchased guides.",
+    q: 'Are the study guides updated for the Next-Gen NCLEX (NGN)?',
+    a: 'Yes. Our materials are aligned with current NGN-style objectives and are updated regularly.',
   },
   {
-    question: 'Do you offer refunds?',
-    answer:
-      "Absolutely! We offer a 30-day money-back guarantee. If you're not satisfied with your purchase for any reason, contact us within 30 days for a full refund.",
+    q: 'Do I need to sign up for an account to purchase?',
+    a: 'No. Checkout only needs your name and email so we can deliver your download links.',
   },
   {
-    question: 'Can I share my purchased guides with others?',
-    answer:
-      'No, our study guides are for personal use only. Each purchase is licensed to a single user. Sharing or distributing the materials violates our terms of service.',
+    q: 'What is your refund policy?',
+    a: 'We offer a 30-day money-back guarantee on eligible purchases. See our Refund Policy for details.',
   },
   {
-    question: 'What payment methods do you accept?',
-    answer:
-      'We accept all major credit cards, debit cards, and PayPal. All transactions are secure and encrypted for your protection.',
-  },
-  {
-    question: 'How quickly will I receive my study guide after purchase?',
-    answer:
-      'You receive instant access! As soon as your payment is confirmed, you can immediately download your study guide from your account dashboard.',
-  },
-  {
-    question: 'Do you offer discounts for bulk purchases?',
-    answer:
-      'Yes! We offer special pricing for students purchasing multiple guides. Contact our support team for information about bulk discounts and institutional pricing.',
+    q: 'Who writes the study guides?',
+    a: 'Guides are co-authored by practicing nurse practitioners and experienced test-prep educators.',
   },
 ];
 
 export default function FAQ() {
-  const [openIndex, setOpenIndex] = useState<number | null>(0);
-
-  const toggleFAQ = (index: number) => {
-    setOpenIndex(openIndex === index ? null : index);
-  };
+  const [open, setOpen] = useState(0);
 
   return (
-    <section id="faq" className="py-20 bg-white">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-gray-900 mb-4">
+    <section id="faq" className="bg-white py-20 lg:py-24">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto mb-12 max-w-2xl text-center">
+          <p className="mb-3 font-display text-sm font-bold uppercase text-primary-600">
+            Have Questions?
+          </p>
+          <h2 className="mb-4 font-display text-3xl font-bold text-navy-800 sm:text-4xl">
             Frequently Asked Questions
           </h2>
-          <p className="text-xl text-gray-600">
-            Have questions? We&apos;ve got answers. If you can&apos;t find what you&apos;re looking
-            for, feel free to contact us.
+          <p className="text-lg text-navy-400">
+            Everything you need to know about our PDF nursing study guides.
           </p>
         </div>
 
-        <div className="space-y-4">
-          {faqs.map((faq, index) => (
-            <Card key={index} className="overflow-hidden">
-              <button
-                onClick={() => toggleFAQ(index)}
-                className="w-full flex items-center justify-between p-6 text-left hover:bg-gray-50 transition-colors"
+        <div className="mx-auto max-w-3xl space-y-3">
+          {faqs.map((faq, i) => {
+            const isOpen = open === i;
+            return (
+              <div
+                key={faq.q}
+                className="overflow-hidden rounded-2xl border border-border bg-soft"
               >
-                <span className="text-lg font-bold text-gray-900 pr-8">{faq.question}</span>
-                {openIndex === index ? (
-                  <ChevronUp className="w-5 h-5 text-primary-600 flex-shrink-0" />
-                ) : (
-                  <ChevronDown className="w-5 h-5 text-gray-400 flex-shrink-0" />
+                <button
+                  type="button"
+                  className="flex w-full items-center justify-between gap-4 px-6 py-5 text-left"
+                  onClick={() => setOpen(isOpen ? -1 : i)}
+                  aria-expanded={isOpen}
+                >
+                  <span className="font-display font-semibold text-navy-800">{faq.q}</span>
+                  <ChevronDown
+                    className={`h-4 w-4 shrink-0 text-navy-400 transition-transform ${isOpen ? 'rotate-180' : ''}`}
+                  />
+                </button>
+                {isOpen && (
+                  <div className="px-6 pb-5 text-[15px] leading-relaxed text-navy-400">{faq.a}</div>
                 )}
-              </button>
-              {openIndex === index && (
-                <div className="px-6 pb-6">
-                  <p className="text-gray-600 leading-relaxed">{faq.answer}</p>
-                </div>
-              )}
-            </Card>
-          ))}
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>

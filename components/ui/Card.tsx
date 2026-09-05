@@ -26,7 +26,7 @@ export default function Card({
 
   return (
     <div
-      className={`bg-white rounded-2xl border border-gray-200 shadow-soft ${paddingClasses[padding]} ${hoverClass} ${className}`}
+      className={`bg-white rounded-2xl border border-border shadow-soft ${paddingClasses[padding]} ${hoverClass} ${className}`}
     >
       {children}
     </div>

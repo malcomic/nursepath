@@ -1,65 +1,69 @@
-import { BookOpen, Award, Clock, Users, Shield, TrendingUp } from 'lucide-react';
-import Card from '../ui/Card';
+import { Shield, Download, UserCheck, Percent, GraduationCap, RefreshCw } from 'lucide-react';
 
-const features = [
-  {
-    icon: BookOpen,
-    title: 'Comprehensive Content',
-    description: 'Detailed study guides covering all essential topics for your nursing exams.',
-  },
-  {
-    icon: Award,
-    title: 'Expert-Curated',
-    description: 'Created by experienced nursing professionals and educators.',
-  },
-  {
-    icon: Clock,
-    title: 'Updated Regularly',
-    description: 'All materials are kept up-to-date with the latest exam requirements.',
-  },
-  {
-    icon: Users,
-    title: 'Trusted by Students',
-    description: 'Join nursing students who have successfully passed their exams with our guides.',
-  },
+const benefits = [
   {
     icon: Shield,
-    title: 'Money-Back Guarantee',
-    description: '100% satisfaction guarantee or your money back.',
+    title: 'Comprehensive Content',
+    body: 'Covers all key exam objectives and next-gen style layouts.',
   },
   {
-    icon: TrendingUp,
-    title: 'Proven Results',
-    description: 'Students report significant improvement in their exam scores.',
+    icon: Download,
+    title: 'Instant PDF Download',
+    body: 'Immediate access links delivered straight to your email inbox.',
+  },
+  {
+    icon: UserCheck,
+    title: 'No Account Required',
+    body: 'No usernames, passwords, or endless profiles to manage.',
+  },
+  {
+    icon: Percent,
+    title: 'Affordable Pricing',
+    body: 'Premium nursing materials at a fraction of standard test-prep costs.',
+  },
+  {
+    icon: GraduationCap,
+    title: 'Expert-Written',
+    body: 'Co-authored by practicing nurse practitioners and test-prep professionals.',
+  },
+  {
+    icon: RefreshCw,
+    title: 'Updated Regularly',
+    body: 'Aligned with current NGN exam rubrics and guidelines.',
   },
 ];
 
 export default function Features() {
   return (
-    <section className="py-20 bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-gray-900 mb-4">
-            Why Choose NursePath?
+    <section className="bg-soft py-20 lg:py-24">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto mb-16 max-w-2xl text-center">
+          <p className="mb-3 font-display text-sm font-bold uppercase text-primary-600">
+            Built for Nursing Students
+          </p>
+          <h2 className="mb-4 font-display text-3xl font-bold text-navy-800 sm:text-4xl">
+            Why Students Choose NursePath
           </h2>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Everything you need to succeed in your nursing career, all in one place.
+          <p className="text-lg text-navy-400">
+            Everything you need to succeed without the complications of traditional learning
+            platforms.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {features.map((feature, index) => {
-            const Icon = feature.icon;
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {benefits.map((b) => {
+            const Icon = b.icon;
             return (
-              <Card key={index} hover className="text-center">
-                <div className="flex justify-center mb-4">
-                  <div className="w-16 h-16 bg-primary-100 rounded-2xl flex items-center justify-center">
-                    <Icon className="w-8 h-8 text-primary-600" />
-                  </div>
+              <div
+                key={b.title}
+                className="rounded-2xl border border-border bg-white p-8 transition-shadow hover:shadow-soft"
+              >
+                <div className="mb-4 flex size-12 items-center justify-center rounded-xl bg-primary-50">
+                  <Icon className="h-6 w-6 text-primary-600" />
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-3">{feature.title}</h3>
-                <p className="text-gray-600 leading-relaxed">{feature.description}</p>
-              </Card>
+                <h3 className="mb-2 font-display text-lg font-bold text-navy-800">{b.title}</h3>
+                <p className="text-sm leading-relaxed text-navy-400">{b.body}</p>
+              </div>
             );
           })}
         </div>

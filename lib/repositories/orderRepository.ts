@@ -19,6 +19,14 @@ export class OrderRepository {
     });
   }
 
+  async findByPaymentReference(paymentReference: string) {
+    return prisma.order.findMany({
+      where: { paymentReference },
+      include: { guide: true },
+      orderBy: { createdAt: 'asc' },
+    });
+  }
+
   async findManyWithFilters(filters: OrderFilters) {
     const {
       page = 1,

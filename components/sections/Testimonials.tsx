@@ -1,89 +1,69 @@
-import { Star, Quote } from 'lucide-react';
-import Card from '../ui/Card';
+import { Star } from 'lucide-react';
 
 const testimonials = [
   {
-    name: 'Sarah Johnson',
-    role: 'Nursing Student',
-    image: '👩‍⚕️',
-    rating: 5,
-    text: 'These study guides were a game-changer for my NCLEX exam. The content is comprehensive and well-organized. I passed on my first try!',
+    quote:
+      'The NCLEX cram sheet was a lifesaver. It summarized exactly what I needed to know, especially for pharmacology. I passed in minimum questions!',
+    name: 'Jessica Miller, BSN',
+    detail: 'Passed NCLEX-RN (75 Qs)',
+    initials: 'JM',
   },
   {
-    name: 'Michael Chen',
-    role: 'RN Candidate',
-    image: '👨‍⚕️',
-    rating: 5,
-    text: 'The quality of the materials exceeded my expectations. The practice questions were especially helpful in identifying my weak areas.',
+    quote:
+      'These visual charts are incredible. Traditional study books are so dry, but NursePath kept me engaged and built actual understanding.',
+    name: 'Michael Chen, LPN',
+    detail: 'Passed NCLEX-PN on 1st Try',
+    initials: 'MC',
   },
   {
-    name: 'Emily Rodriguez',
-    role: 'Nursing Graduate',
-    image: '👩‍🎓',
-    rating: 5,
-    text: 'I used NursePath guides for multiple exams throughout my program. Consistent quality and always up-to-date. Highly recommend!',
-  },
-  {
-    name: 'David Thompson',
-    role: 'Nurse Practitioner Student',
-    image: '👨‍🎓',
-    rating: 5,
-    text: 'The guides are detailed yet easy to follow. They helped me understand complex concepts that I struggled with in class.',
-  },
-  {
-    name: 'Jessica Martinez',
-    role: 'BSN Student',
-    image: '👩‍⚕️',
-    rating: 5,
-    text: 'Worth every penny! The study guides are professionally written and cover everything you need to know. My grades improved significantly.',
-  },
-  {
-    name: 'Robert Williams',
-    role: 'Nursing Student',
-    image: '👨‍⚕️',
-    rating: 5,
-    text: 'Excellent resource for exam preparation. The format is clean, the content is accurate, and the support team is responsive.',
+    quote:
+      'Med-Surg used to be my absolute nightmare. This study guide broke down complex disease processes into clean, simple flowcharts.',
+    name: 'Sarah Jenkins',
+    detail: 'Senior Nursing Student',
+    initials: 'SJ',
   },
 ];
 
 export default function Testimonials() {
   return (
-    <section className="py-20 bg-gradient-to-br from-primary-50 to-secondary-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-gray-900 mb-4">
+    <section className="bg-soft py-20 lg:py-24">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto mb-16 max-w-2xl text-center">
+          <p className="mb-3 font-display text-sm font-bold uppercase text-primary-600">
+            Success Stories
+          </p>
+          <h2 className="mb-4 font-display text-3xl font-bold text-navy-800 sm:text-4xl">
             What Our Students Say
           </h2>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Don&apos;t just take our word for it. Here&apos;s what successful students have to say.
+          <p className="text-lg text-navy-400">
+            Join thousands of students who studied smarter and passed their exams on the first try.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {testimonials.map((testimonial, index) => (
-            <Card key={index} hover className="relative">
-              <div className="absolute -top-4 -left-4 w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center">
-                <Quote className="w-6 h-6 text-primary-600" />
-              </div>
-
-              <div className="flex items-center gap-1 mb-4">
-                {[...Array(testimonial.rating)].map((_, i) => (
-                  <Star key={i} className="w-5 h-5 fill-amber-400 text-amber-400" />
+        <div className="grid gap-6 md:grid-cols-3">
+          {testimonials.map((t) => (
+            <div
+              key={t.name}
+              className="flex flex-col rounded-2xl border border-border bg-white p-8 shadow-soft"
+            >
+              <div className="mb-4 flex gap-1">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <Star key={i} className="h-3.5 w-3.5 fill-accent-500 text-accent-500" />
                 ))}
               </div>
-
-              <p className="text-gray-700 mb-6 leading-relaxed">{testimonial.text}</p>
-
+              <p className="mb-8 flex-grow text-[15px] leading-relaxed text-navy-400">
+                &ldquo;{t.quote}&rdquo;
+              </p>
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-gradient-to-br from-primary-400 to-secondary-400 rounded-full flex items-center justify-center text-2xl">
-                  {testimonial.image}
+                <div className="flex size-12 items-center justify-center rounded-full bg-primary-100 font-display text-sm font-bold text-primary-700">
+                  {t.initials}
                 </div>
                 <div>
-                  <div className="font-bold text-gray-900">{testimonial.name}</div>
-                  <div className="text-sm text-gray-600">{testimonial.role}</div>
+                  <p className="font-display font-bold text-navy-800">{t.name}</p>
+                  <p className="text-sm text-navy-400">{t.detail}</p>
                 </div>
               </div>
-            </Card>
+            </div>
           ))}
         </div>
       </div>

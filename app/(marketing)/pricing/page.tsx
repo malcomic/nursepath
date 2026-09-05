@@ -12,10 +12,12 @@ export const metadata: Metadata = {
 export default function PricingPage() {
   return (
     <main>
-      <section className="bg-gradient-to-r from-primary-600 to-secondary-600 text-white py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black mb-4">Pricing</h1>
-          <p className="text-xl text-white/90 max-w-2xl mx-auto">
+      <section className="bg-navy-800 py-16 text-white">
+        <div className="mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
+          <h1 className="mb-4 font-display text-4xl font-extrabold sm:text-5xl lg:text-6xl">
+            Pricing
+          </h1>
+          <p className="mx-auto max-w-2xl text-xl text-navy-200">
             Choose the plan that works best for your nursing exam preparation journey.
           </p>
         </div>

@@ -19,34 +19,36 @@ export default function BlogIndexPage() {
 
   return (
     <main>
-      <section className="bg-gradient-to-r from-primary-600 to-secondary-600 text-white py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black mb-4">NursePath Blog</h1>
-          <p className="text-xl text-white/90 max-w-2xl">
+      <section className="bg-navy-800 py-16 text-white">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <h1 className="mb-4 font-display text-4xl font-extrabold sm:text-5xl lg:text-6xl">
+            NursePath Blog
+          </h1>
+          <p className="max-w-2xl text-xl text-navy-200">
             Study tips, exam strategies, and nursing school advice from our team of educators.
           </p>
         </div>
       </section>
 
-      <section className="py-16 bg-gray-50">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="bg-soft py-16">
+        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
           {posts.length === 0 ? (
-            <p className="text-gray-600 text-center">No blog posts yet. Check back soon!</p>
+            <p className="text-center text-navy-400">No blog posts yet. Check back soon!</p>
           ) : (
             <div className="space-y-8">
               {posts.map((post) => (
                 <article
                   key={post.slug}
-                  className="bg-white rounded-2xl border border-gray-200 p-8 hover:shadow-lg transition-shadow"
+                  className="rounded-2xl border border-border bg-white p-8 transition-shadow hover:shadow-lg"
                 >
-                  <time className="text-sm text-gray-500" dateTime={post.publishedAt}>
+                  <time className="text-sm text-navy-400" dateTime={post.publishedAt}>
                     {new Date(post.publishedAt).toLocaleDateString('en-US', {
                       year: 'numeric',
                       month: 'long',
                       day: 'numeric',
                     })}
                   </time>
-                  <h2 className="text-2xl font-bold text-gray-900 mt-2 mb-3">
+                  <h2 className="mt-2 mb-3 font-display text-2xl font-bold text-navy-800">
                     <Link
                       href={`/blog/${post.slug}`}
                       className="hover:text-primary-600 transition-colors"

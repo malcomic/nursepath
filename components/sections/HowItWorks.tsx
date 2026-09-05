@@ -1,70 +1,59 @@
-import { Search, ShoppingCart, FileText, CheckCircle } from 'lucide-react';
-import Card from '../ui/Card';
+import { FileText, DownloadCloud, BookOpen } from 'lucide-react';
 
 const steps = [
   {
-    number: '01',
-    icon: Search,
-    title: 'Browse Study Guides',
-    description:
-      'Explore our comprehensive collection of nursing study guides organized by category and exam type.',
-  },
-  {
-    number: '02',
-    icon: ShoppingCart,
-    title: 'Choose & Purchase',
-    description: 'Select the study guides you need and complete a quick, secure checkout process.',
-  },
-  {
-    number: '03',
+    num: '01',
     icon: FileText,
-    title: 'Download & Study',
-    description: 'Get instant access to your purchased guides and start studying immediately.',
+    title: 'Choose Your Guide',
+    body: 'Browse our clinically validated study materials and select the topics you need help with.',
   },
   {
-    number: '04',
-    icon: CheckCircle,
-    title: 'Ace Your Exam',
-    description:
-      'Study with confidence using our proven materials and pass your exams with flying colors.',
+    num: '02',
+    icon: DownloadCloud,
+    title: 'Instant Download',
+    body: 'Pay securely via card, Apple Pay, or Google Pay. Receive your PDF downloads immediately.',
+  },
+  {
+    num: '03',
+    icon: BookOpen,
+    title: 'Start Studying',
+    body: 'Open your guide on any mobile, tablet, or desktop device. No accounts or registrations required.',
   },
 ];
 
 export default function HowItWorks() {
   return (
-    <section id="how-it-works" className="py-20 bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-gray-900 mb-4">
-            How It Works
+    <section id="how-it-works" className="bg-white py-20 lg:py-24">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto mb-16 max-w-2xl text-center">
+          <p className="mb-3 font-display text-sm font-bold uppercase text-primary-600">
+            No Hassle, Just Learning
+          </p>
+          <h2 className="mb-4 font-display text-3xl font-bold text-navy-800 sm:text-4xl">
+            Instant Study Prep in 3 Easy Steps
           </h2>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Getting started is simple. Follow these four easy steps to begin your journey to exam
-            success.
+          <p className="text-lg text-navy-400">
+            Get study materials in seconds with zero accounts or sign-up walls to slow you down.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {steps.map((step, index) => {
+        <div className="grid gap-10 md:grid-cols-3">
+          {steps.map((step) => {
             const Icon = step.icon;
             return (
-              <div key={index} className="relative">
-                {index < steps.length - 1 && (
-                  <div className="hidden lg:block absolute top-20 left-full w-full h-0.5 bg-gradient-to-r from-primary-200 to-transparent -z-10" />
-                )}
-
-                <Card className="text-center h-full">
-                  <div className="text-6xl font-black text-primary-100 mb-4">{step.number}</div>
-
-                  <div className="flex justify-center mb-4">
-                    <div className="w-16 h-16 bg-primary-600 rounded-2xl flex items-center justify-center">
-                      <Icon className="w-8 h-8 text-white" />
-                    </div>
+              <div key={step.num} className="flex flex-col gap-6">
+                <div className="flex items-center justify-between">
+                  <div className="flex size-16 items-center justify-center rounded-full bg-primary-600">
+                    <Icon className="h-7 w-7 text-white" />
                   </div>
-
-                  <h3 className="text-xl font-bold text-gray-900 mb-3">{step.title}</h3>
-                  <p className="text-gray-600 leading-relaxed">{step.description}</p>
-                </Card>
+                  <span className="font-display text-5xl font-extrabold text-primary-50">
+                    {step.num}
+                  </span>
+                </div>
+                <div>
+                  <h3 className="mb-2 font-display text-xl font-bold text-navy-800">{step.title}</h3>
+                  <p className="text-[15px] leading-relaxed text-navy-400">{step.body}</p>
+                </div>
               </div>
             );
           })}

@@ -58,6 +58,57 @@ class EmailService {
     }
   }
 
+  async sendMultiDownloadEmail(payload: {
+    to: string;
+    name: string;
+    items: Array<{ guideTitle: string; downloadUrl: string }>;
+  }) {
+    if (payload.items.length === 1) {
+      return this.sendDownloadEmail({
+        to: payload.to,
+        name: payload.name,
+        guideTitle: payload.items[0].guideTitle,
+        downloadUrl: payload.items[0].downloadUrl,
+      });
+    }
+
+    const list = payload.items
+      .map(
+        (item) =>
+          `<li><strong>${escapeHtml(item.guideTitle)}</strong> — <a href="${escapeHtml(item.downloadUrl)}">Download</a></li>`
+      )
+      .join('');
+
+    const subject = `Your NursePath downloads (${payload.items.length} guides)`;
+    const html = `
+      <p>Hi ${escapeHtml(payload.name)},</p>
+      <p>Thank you for your purchase! Your study guides are ready to download:</p>
+      <ul>${list}</ul>
+      <p>These links expire after the download limit is reached. If you need help, reply to this email.</p>
+      <p>— NursePath</p>
+    `;
+
+    const client = this.getClient();
+    if (!client) {
+      logger.info(
+        `[email stub] Multi-download email to ${payload.to}: ${payload.items.map((i) => i.downloadUrl).join(', ')}`
+      );
+      return;
+    }
+
+    const { error } = await client.emails.send({
+      from: config.contactFromEmail,
+      to: payload.to,
+      subject,
+      html,
+    });
+
+    if (error) {
+      logger.error('Failed to send multi-download email:', error);
+      throw new Error('Failed to send download email');
+    }
+  }
+
   async sendContactEmail(payload: ContactEmailPayload) {
     const subject = `[Contact] ${payload.subject}`;
     const html = `

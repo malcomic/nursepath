@@ -48,11 +48,13 @@ export default async function ServicesPage({ searchParams }: ServicesPageProps) 
   const hasActiveFilters = !!(params.category || params.search || params.price);
 
   return (
-    <main className="bg-gray-50">
-      <section className="bg-gradient-to-r from-primary-600 to-secondary-600 text-white py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black mb-4">Study Guides Catalog</h1>
-          <p className="text-xl text-white/90 max-w-2xl">
+    <main className="bg-soft">
+      <section className="bg-navy-800 py-16 text-white">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <h1 className="mb-4 font-display text-4xl font-extrabold sm:text-5xl lg:text-6xl">
+            Study Guides Catalog
+          </h1>
+          <p className="max-w-2xl text-xl text-navy-200">
             Browse our comprehensive collection of nursing study guides and find the perfect
             resources for your exam preparation.
           </p>
@@ -62,8 +64,8 @@ export default async function ServicesPage({ searchParams }: ServicesPageProps) 
       <ServicesFilters categories={categories} currentParams={params} />
 
       <section className="py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="mb-6 text-sm text-gray-600">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="mb-6 text-sm text-navy-400">
             Showing {guides.length} {guides.length === 1 ? 'guide' : 'guides'}
             {hasActiveFilters && ' (filtered)'}
           </div>

@@ -3,16 +3,11 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import {
-  BookOpen,
-  MessageCircle,
-  Phone,
-  MessageSquare,
-  X,
-  Menu,
-} from 'lucide-react';
+import { MessageCircle, Phone, MessageSquare, X, Menu, ShoppingCart } from 'lucide-react';
 import MobileMenu from './MobileMenu';
+import Logo from './Logo';
 import { adminFetch } from '@/lib/admin/api-client';
+import { useCart } from '@/components/cart/CartProvider';
 
 const PHONE_NUMBER = '+12135744133';
 
@@ -21,6 +16,7 @@ export default function Header() {
   const [showHelpModal, setShowHelpModal] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const pathname = usePathname();
+  const { count, hydrated } = useCart();
 
   useEffect(() => {
     let cancelled = false;
@@ -53,26 +49,21 @@ export default function Header() {
 
   return (
     <>
-      <header className="bg-white border-b border-slate-200 sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-20">
-            <Link href="/" className="flex items-center gap-2.5 group">
-              <div className="bg-blue-600 p-1.5 rounded-lg group-hover:bg-blue-700 transition-colors duration-200">
-                <BookOpen className="text-white w-5 h-5" />
-              </div>
-              <span className="text-xl font-bold text-slate-900 tracking-tight">NursePath</span>
-            </Link>
+      <header className="sticky top-0 z-50 border-b border-border bg-white">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex h-[88px] items-center justify-between">
+            <Logo />
 
-            <nav className="hidden lg:flex flex-1 justify-center items-center">
+            <nav className="hidden flex-1 items-center justify-center lg:flex">
               <div className="flex items-center gap-8">
                 {navLinks.map((link) => (
                   <Link
                     key={link.path}
                     href={link.path}
-                    className={`text-sm font-medium transition-colors duration-150 ${
+                    className={`font-display text-[15px] font-medium transition-colors duration-150 ${
                       isActive(link.path)
-                        ? 'text-slate-900'
-                        : 'text-slate-600 hover:text-slate-900'
+                        ? 'text-navy-800'
+                        : 'text-navy-400 hover:text-navy-800'
                     }`}
                   >
                     {link.label}
@@ -81,31 +72,32 @@ export default function Header() {
               </div>
             </nav>
 
-            <div className="hidden lg:flex items-center gap-3">
-              <button
-                type="button"
-                onClick={() => setShowHelpModal(true)}
-                className="inline-flex items-center gap-2 bg-blue-600 text-white px-5 py-2.5 rounded-full text-sm font-semibold hover:bg-blue-700 transition-colors duration-150 shadow-md shadow-blue-100"
+            <div className="hidden items-center gap-5 lg:flex">
+              <Link
+                href="/cart"
+                className="relative rounded-lg p-2 text-navy-400 transition-colors hover:bg-primary-50 hover:text-primary-600"
+                aria-label="Cart"
               >
-                <MessageCircle className="w-4 h-4" />
-                Get Exam Help
-                <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-200 opacity-75" />
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-white" />
-                </span>
-              </button>
+                <ShoppingCart className="h-5 w-5" />
+                {hydrated && count > 0 && (
+                  <span className="absolute -right-0.5 -top-0.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-accent-500 px-1 text-[11px] font-bold text-white">
+                    {count}
+                  </span>
+                )}
+              </Link>
+
               {isAdmin ? (
                 <>
                   <Link
                     href="/admin/dashboard"
-                    className="inline-flex items-center justify-center rounded-lg border border-slate-200 px-5 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50 transition-colors duration-150"
+                    className="font-display text-[15px] font-semibold text-primary-600 hover:text-primary-700"
                   >
                     Dashboard
                   </Link>
                   <button
                     type="button"
                     onClick={handleLogout}
-                    className="inline-flex items-center justify-center rounded-lg bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white hover:bg-slate-700 transition-colors duration-150"
+                    className="font-display text-[15px] font-semibold text-navy-400 hover:text-navy-800"
                   >
                     Logout
                   </button>
@@ -113,20 +105,42 @@ export default function Header() {
               ) : (
                 <Link
                   href="/admin/login"
-                  className="inline-flex items-center justify-center rounded-lg bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white hover:bg-slate-700 transition-colors duration-150"
+                  className="font-display text-[15px] font-semibold text-primary-600 hover:text-primary-700"
                 >
                   Log In
                 </Link>
               )}
+
+              <button
+                type="button"
+                onClick={() => setShowHelpModal(true)}
+                className="inline-flex items-center gap-2 rounded-full bg-primary-600 px-4 py-2 font-display text-sm font-semibold text-white transition-colors hover:bg-primary-700"
+              >
+                Get Exam Help
+              </button>
             </div>
 
-            <button
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="lg:hidden p-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition-colors duration-150"
-              aria-label="Toggle menu"
-            >
-              {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-            </button>
+            <div className="flex items-center gap-2 lg:hidden">
+              <Link
+                href="/cart"
+                className="relative rounded-lg p-2 text-navy-400"
+                aria-label="Cart"
+              >
+                <ShoppingCart className="h-5 w-5" />
+                {hydrated && count > 0 && (
+                  <span className="absolute -right-0.5 -top-0.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-accent-500 px-1 text-[11px] font-bold text-white">
+                    {count}
+                  </span>
+                )}
+              </Link>
+              <button
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className="rounded-lg p-2 text-navy-400 transition-colors hover:bg-primary-50 hover:text-navy-800"
+                aria-label="Toggle menu"
+              >
+                {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+              </button>
+            </div>
           </div>
         </div>
 
@@ -143,26 +157,28 @@ export default function Header() {
 
       {showHelpModal && (
         <div
-          className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-[100] flex items-center justify-center p-4"
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-navy-800/50 p-4 backdrop-blur-sm"
           onClick={() => setShowHelpModal(false)}
         >
           <div
-            className="bg-white rounded-3xl p-8 max-w-sm w-full relative shadow-2xl animate-in fade-in zoom-in duration-200"
+            className="relative w-full max-w-sm rounded-3xl bg-white p-8 shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           >
             <button
               onClick={() => setShowHelpModal(false)}
-              className="absolute top-5 right-5 p-1.5 hover:bg-slate-100 rounded-full text-slate-400 hover:text-slate-700 transition-colors duration-150"
+              className="absolute right-5 top-5 rounded-full p-1.5 text-navy-400 transition-colors hover:bg-soft hover:text-navy-800"
             >
-              <X className="w-5 h-5" />
+              <X className="h-5 w-5" />
             </button>
 
-            <div className="text-center mb-8">
-              <div className="w-16 h-16 bg-blue-50 rounded-2xl flex items-center justify-center mx-auto mb-5">
-                <MessageCircle className="w-8 h-8 text-blue-600" />
+            <div className="mb-8 text-center">
+              <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-primary-50">
+                <MessageCircle className="h-8 w-8 text-primary-600" />
               </div>
-              <h3 className="text-2xl font-bold text-slate-900 tracking-tight">Need Exam Help?</h3>
-              <p className="text-slate-500 text-sm mt-2 leading-relaxed">
+              <h3 className="font-display text-2xl font-bold tracking-tight text-navy-800">
+                Need Exam Help?
+              </h3>
+              <p className="mt-2 text-sm leading-relaxed text-navy-400">
                 Our nursing experts are standing by to help you ace your next assessment.
               </p>
             </div>
@@ -172,22 +188,22 @@ export default function Header() {
                 href={`https://wa.me/${PHONE_NUMBER.replace('+', '')}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-between bg-green-500 text-white px-5 py-4 rounded-xl hover:bg-green-600 transition-colors duration-150 font-semibold text-sm shadow-lg shadow-green-100"
+                className="flex items-center justify-between rounded-xl bg-secondary-500 px-5 py-4 text-sm font-semibold text-white shadow-lg shadow-secondary-100 transition-colors hover:bg-secondary-600"
               >
                 WhatsApp Us
-                <Phone className="w-5 h-5" />
+                <Phone className="h-5 w-5" />
               </a>
               <a
                 href={`sms:${PHONE_NUMBER}`}
-                className="flex items-center justify-between bg-blue-600 text-white px-5 py-4 rounded-xl hover:bg-blue-700 transition-colors duration-150 font-semibold text-sm shadow-lg shadow-blue-100"
+                className="flex items-center justify-between rounded-xl bg-primary-600 px-5 py-4 text-sm font-semibold text-white shadow-lg shadow-primary-100 transition-colors hover:bg-primary-700"
               >
                 Text (SMS)
-                <MessageSquare className="w-5 h-5" />
+                <MessageSquare className="h-5 w-5" />
               </a>
 
               <button
                 onClick={() => setShowHelpModal(false)}
-                className="w-full pt-2 text-slate-400 text-sm font-medium hover:text-slate-700 transition-colors duration-150"
+                className="w-full pt-2 text-sm font-medium text-navy-400 transition-colors hover:text-navy-800"
               >
                 Not now, thanks
               </button>

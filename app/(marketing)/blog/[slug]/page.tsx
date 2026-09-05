@@ -68,24 +68,26 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
       <JsonLd data={blogJsonLd} />
 
       <article>
-        <section className="bg-gradient-to-r from-primary-600 to-secondary-600 text-white py-16">
-          <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+        <section className="bg-navy-800 py-16 text-white">
+          <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
             <Link
               href="/blog"
-              className="text-white/80 hover:text-white text-sm font-medium mb-4 inline-block"
+              className="mb-4 inline-block text-sm font-medium text-navy-200 hover:text-white"
             >
               ← Back to Blog
             </Link>
-            <time className="text-white/70 text-sm" dateTime={post.publishedAt}>
+            <time className="text-sm text-navy-300" dateTime={post.publishedAt}>
               {new Date(post.publishedAt).toLocaleDateString('en-US', {
                 year: 'numeric',
                 month: 'long',
                 day: 'numeric',
               })}
             </time>
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black mt-2">{post.title}</h1>
+            <h1 className="mt-2 font-display text-3xl font-extrabold sm:text-4xl lg:text-5xl">
+              {post.title}
+            </h1>
             {post.description && (
-              <p className="text-xl text-white/90 mt-4 leading-relaxed">{post.description}</p>
+              <p className="mt-4 text-xl leading-relaxed text-navy-200">{post.description}</p>
             )}
           </div>
         </section>

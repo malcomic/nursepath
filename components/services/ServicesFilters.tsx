@@ -48,14 +48,17 @@ export default function ServicesFilters({ categories, currentParams }: ServicesF
   const hasActiveFilters =
     !!currentParams.category || !!currentParams.search || !!currentParams.price;
 
+  const selectClass =
+    'w-full rounded-xl border border-border bg-white px-4 py-2.5 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary-500';
+
   return (
     <section
-      className={`bg-white border-b border-gray-200 sticky top-20 z-40 shadow-sm ${isPending ? 'opacity-70' : ''}`}
+      className={`sticky top-[88px] z-40 border-b border-border bg-white shadow-sm ${isPending ? 'opacity-70' : ''}`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
         <div className="mb-4">
           <div className="relative">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
+            <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-navy-300" />
             <input
               type="text"
               placeholder="Search guides by title or description..."
@@ -71,26 +74,26 @@ export default function ServicesFilters({ categories, currentParams }: ServicesF
                   updateParams({ search: value || undefined });
                 }
               }}
-              className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white"
+              className="w-full rounded-xl border border-border bg-white py-3 pl-12 pr-4 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary-500"
             />
             {currentParams.search && (
               <button
                 onClick={() => updateParams({ search: undefined })}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-navy-300 hover:text-navy-600"
                 aria-label="Clear search"
               >
-                <X className="w-5 h-5" />
+                <X className="h-5 w-5" />
               </button>
             )}
           </div>
         </div>
 
         <div className="flex flex-wrap items-center gap-4">
-          <div className="flex-1 min-w-[200px]">
+          <div className="min-w-[200px] flex-1">
             <select
               value={currentParams.category ?? ''}
               onChange={(e) => updateParams({ category: e.target.value || undefined })}
-              className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white"
+              className={selectClass}
             >
               <option value="">All Categories</option>
               {categories.map((cat) => (
@@ -101,11 +104,11 @@ export default function ServicesFilters({ categories, currentParams }: ServicesF
             </select>
           </div>
 
-          <div className="flex-1 min-w-[200px]">
+          <div className="min-w-[200px] flex-1">
             <select
               value={currentParams.price ?? ''}
               onChange={(e) => updateParams({ price: e.target.value || undefined })}
-              className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white"
+              className={selectClass}
             >
               <option value="">All Prices</option>
               <option value="free">Free</option>
@@ -116,11 +119,11 @@ export default function ServicesFilters({ categories, currentParams }: ServicesF
             </select>
           </div>
 
-          <div className="flex-1 min-w-[200px]">
+          <div className="min-w-[200px] flex-1">
             <select
               value={currentParams.sort ?? 'newest'}
               onChange={(e) => updateParams({ sort: e.target.value })}
-              className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white"
+              className={selectClass}
             >
               <option value="newest">Newest First</option>
               <option value="oldest">Oldest First</option>
@@ -132,7 +135,7 @@ export default function ServicesFilters({ categories, currentParams }: ServicesF
 
           {hasActiveFilters && (
             <Button variant="ghost" onClick={clearFilters} className="flex items-center gap-2">
-              <X className="w-4 h-4" />
+              <X className="h-4 w-4" />
               Clear Filters
             </Button>
           )}

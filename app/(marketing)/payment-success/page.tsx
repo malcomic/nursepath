@@ -12,8 +12,8 @@ export default function PaymentSuccessPage() {
   return (
     <Suspense
       fallback={
-        <main className="bg-gray-50 flex-grow py-20">
-          <div className="max-w-3xl mx-auto px-4 text-center text-gray-600">Loading…</div>
+        <main className="flex-grow bg-soft py-20">
+          <div className="mx-auto max-w-3xl px-4 text-center text-navy-400">Loading…</div>
         </main>
       }
     >

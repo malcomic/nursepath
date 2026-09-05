@@ -22,16 +22,15 @@ export default function LegalPageShell({
 }: LegalPageShellProps) {
   return (
     <main className="mx-auto max-w-3xl px-4 py-20">
-      <h1 className="text-4xl font-black text-gray-900">{title}</h1>
-      <p className="mt-2 text-sm text-gray-500">Last updated: {lastUpdated}</p>
+      <h1 className="font-display text-4xl font-extrabold text-navy-800">{title}</h1>
+      <p className="mt-2 text-sm text-navy-400">Last updated: {lastUpdated}</p>
 
-      <div className="mt-8 space-y-6 text-gray-700 leading-relaxed">{children}</div>
+      <div className="mt-8 space-y-6 leading-relaxed text-navy-400 [&_h2]:font-display [&_h2]:font-bold [&_h2]:text-navy-800">
+        {children}
+      </div>
 
-      <nav
-        className="mt-10 pt-8 border-t border-gray-200"
-        aria-label="Legal and support links"
-      >
-        <p className="text-sm font-semibold text-gray-900 mb-3">Related pages</p>
+      <nav className="mt-10 border-t border-border pt-8" aria-label="Legal and support links">
+        <p className="mb-3 text-sm font-semibold text-navy-800">Related pages</p>
         <ul className="flex flex-wrap gap-x-4 gap-y-2 text-sm">
           {LEGAL_LINKS.map((link) => (
             <li key={link.href}>
@@ -42,7 +41,7 @@ export default function LegalPageShell({
           ))}
         </ul>
         <p className="mt-6">
-          <Link href="/" className="text-primary-600 font-semibold hover:text-primary-700">
+          <Link href="/" className="font-semibold text-primary-600 hover:text-primary-700">
             Return to home
           </Link>
         </p>

@@ -47,24 +47,26 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
 
   return (
     <main>
-      <section className="bg-gradient-to-r from-primary-600 to-secondary-600 text-white py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black mb-4">{category.name}</h1>
-          <p className="text-xl text-white/90 max-w-2xl">
+      <section className="bg-navy-800 py-16 text-white">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <h1 className="mb-4 font-display text-4xl font-extrabold sm:text-5xl lg:text-6xl">
+            {category.name}
+          </h1>
+          <p className="max-w-2xl text-xl text-navy-200">
             {category.description ?? seo.description}
           </p>
         </div>
       </section>
 
-      <section className="py-12 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between mb-8">
-            <p className="text-gray-600">
+      <section className="bg-soft py-12">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="mb-8 flex items-center justify-between">
+            <p className="text-navy-400">
               {guides.length} {guides.length === 1 ? 'guide' : 'guides'} in this category
             </p>
             <Link
               href={`/services?category=${category.id}`}
-              className="text-primary-600 font-semibold hover:text-primary-700 transition-colors"
+              className="font-semibold text-primary-600 transition-colors hover:text-primary-700"
             >
               View in catalog →
             </Link>

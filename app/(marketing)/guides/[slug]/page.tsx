@@ -79,59 +79,59 @@ export default async function GuidePage({ params }: GuidePageProps) {
   };
 
   return (
-    <main className="bg-gray-50">
+    <main className="bg-soft">
       <JsonLd data={productJsonLd} />
 
-      <section className="bg-white border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+      <section className="border-b border-border bg-white">
+        <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
           <Link
             href="/services"
-            className="flex items-center gap-2 text-gray-600 hover:text-primary-600 transition-colors w-fit"
+            className="flex w-fit items-center gap-2 text-navy-400 transition-colors hover:text-primary-600"
           >
-            <ArrowLeft className="w-4 h-4" />
-            <span className="font-medium">Back to Services</span>
+            <ArrowLeft className="h-4 w-4" />
+            <span className="font-medium">Back to Catalog</span>
           </Link>
         </div>
       </section>
 
       <section className="py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div className="lg:col-span-2 space-y-8">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
+            <div className="space-y-8 lg:col-span-2">
               <Card>
-                <div className="flex items-center gap-3 mb-4">
-                  <span className="bg-primary-100 text-primary-700 text-xs font-bold uppercase tracking-wider px-3 py-1.5 rounded-lg">
+                <div className="mb-4 flex items-center gap-3">
+                  <span className="rounded-full bg-primary-100 px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-primary-700">
                     {guide.category?.name || 'Uncategorized'}
                   </span>
                 </div>
 
-                <h1 className="text-4xl sm:text-5xl font-black text-gray-900 mb-6 leading-tight">
+                <h1 className="mb-6 font-display text-4xl font-extrabold leading-tight text-navy-800 sm:text-5xl">
                   {guide.title}
                 </h1>
 
                 {guide.description && (
-                  <p className="text-xl text-gray-600 leading-relaxed">{guide.description}</p>
+                  <p className="text-xl leading-relaxed text-navy-400">{guide.description}</p>
                 )}
               </Card>
 
               <Card>
-                <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
-                  <Award className="w-6 h-6 text-primary-600" />
+                <h2 className="mb-6 flex items-center gap-2 font-display text-2xl font-bold text-navy-800">
+                  <Award className="h-6 w-6 text-primary-600" />
                   What&apos;s Included
                 </h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   {features.map((feature, index) => (
                     <div key={index} className="flex items-start gap-3">
-                      <CheckCircle className="w-5 h-5 text-secondary-600 flex-shrink-0 mt-0.5" />
-                      <span className="text-gray-700">{feature}</span>
+                      <CheckCircle className="mt-0.5 h-5 w-5 flex-shrink-0 text-secondary-600" />
+                      <span className="text-navy-700">{feature}</span>
                     </div>
                   ))}
                 </div>
               </Card>
 
               <Card>
-                <h2 className="text-2xl font-bold text-gray-900 mb-6">About This Guide</h2>
-                <div className="space-y-4 text-gray-700">
+                <h2 className="mb-6 font-display text-2xl font-bold text-navy-800">About This Guide</h2>
+                <div className="space-y-4 text-navy-400">
                   <p>
                     This comprehensive study guide has been carefully crafted by experienced nursing
                     professionals to help you succeed in your exams. It covers all essential topics
@@ -148,9 +148,9 @@ export default async function GuidePage({ params }: GuidePageProps) {
             </div>
 
             <div className="lg:col-span-1">
-              <Card className="sticky top-24">
+              <Card className="sticky top-28">
                 {guide.thumbnailUrl ? (
-                  <div className="w-full h-48 bg-gray-100 rounded-xl mb-6 overflow-hidden relative">
+                  <div className="relative mb-6 h-48 w-full overflow-hidden rounded-xl bg-navy-50">
                     <Image
                       src={guide.thumbnailUrl}
                       alt={guide.title}
@@ -161,37 +161,43 @@ export default async function GuidePage({ params }: GuidePageProps) {
                     />
                   </div>
                 ) : (
-                  <div className="w-full h-48 bg-gradient-to-br from-primary-100 to-secondary-100 rounded-xl mb-6 flex items-center justify-center">
-                    <FileText className="w-16 h-16 text-primary-600" />
+                  <div className="mb-6 flex h-48 w-full items-center justify-center rounded-xl bg-primary-50">
+                    <FileText className="h-16 w-16 text-primary-600" />
                   </div>
                 )}
 
                 <div className="mb-6">
-                  <div className="flex items-baseline gap-3 mb-2">
-                    <span className="text-4xl font-black text-gray-900">
-                      {guide.price === 0 ? 'FREE' : `$${guide.price.toFixed(2)}`}
+                  <div className="mb-2 flex items-baseline gap-3">
+                    <span className="font-display text-4xl font-extrabold text-navy-800">
+                      {Number(guide.price) === 0 ? 'FREE' : `$${Number(guide.price).toFixed(2)}`}
                     </span>
                   </div>
-                  <p className="text-sm text-gray-600">One-time payment, lifetime access</p>
+                  <p className="text-sm text-navy-400">One-time payment · Instant PDF download</p>
                 </div>
 
-                <GuidePurchaseButton guideId={guide.id} price={guide.price} />
+                <GuidePurchaseButton
+                  guideId={guide.id}
+                  price={Number(guide.price)}
+                  title={guide.title}
+                  slug={guide.slug}
+                  thumbnailUrl={guide.thumbnailUrl}
+                />
 
-                <div className="space-y-3 pt-6 mt-6 border-t border-gray-200">
-                  <div className="flex items-center gap-3 text-sm text-gray-600">
-                    <CheckCircle className="w-5 h-5 text-secondary-600" />
+                <div className="mt-6 space-y-3 border-t border-border pt-6">
+                  <div className="flex items-center gap-3 text-sm text-navy-400">
+                    <CheckCircle className="h-5 w-5 text-secondary-600" />
                     <span>Instant download</span>
                   </div>
-                  <div className="flex items-center gap-3 text-sm text-gray-600">
-                    <Clock className="w-5 h-5 text-secondary-600" />
-                    <span>Lifetime access</span>
+                  <div className="flex items-center gap-3 text-sm text-navy-400">
+                    <Clock className="h-5 w-5 text-secondary-600" />
+                    <span>No account required</span>
                   </div>
-                  <div className="flex items-center gap-3 text-sm text-gray-600">
-                    <FileText className="w-5 h-5 text-secondary-600" />
+                  <div className="flex items-center gap-3 text-sm text-navy-400">
+                    <FileText className="h-5 w-5 text-secondary-600" />
                     <span>PDF format</span>
                   </div>
-                  <div className="flex items-center gap-3 text-sm text-gray-600">
-                    <Award className="w-5 h-5 text-secondary-600" />
+                  <div className="flex items-center gap-3 text-sm text-navy-400">
+                    <Award className="h-5 w-5 text-secondary-600" />
                     <span>30-day money-back guarantee</span>
                   </div>
                 </div>

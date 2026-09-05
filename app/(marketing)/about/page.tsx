@@ -46,35 +46,39 @@ const stats = [
 export default function AboutPage() {
   return (
     <main>
-      <section className="bg-gradient-to-r from-primary-600 to-secondary-600 text-white py-20">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black mb-6">About NursePath</h1>
-          <p className="text-xl text-white/90 leading-relaxed">
+      <section className="bg-navy-800 py-20 text-white">
+        <div className="mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
+          <h1 className="mb-6 font-display text-4xl font-extrabold sm:text-5xl lg:text-6xl">
+            About NursePath
+          </h1>
+          <p className="text-xl leading-relaxed text-navy-200">
             We&apos;re dedicated to helping nursing students excel in their exams through
             comprehensive, expertly-crafted study materials.
           </p>
         </div>
       </section>
 
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+      <section className="bg-white py-16">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
             {stats.map((stat, index) => (
               <div key={index} className="text-center">
-                <div className="text-4xl md:text-5xl font-black text-primary-600 mb-2">
+                <div className="mb-2 font-display text-4xl font-extrabold text-primary-600 md:text-5xl">
                   {stat.number}
                 </div>
-                <div className="text-gray-600 font-medium">{stat.label}</div>
+                <div className="font-medium text-navy-400">{stat.label}</div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="py-20 bg-gray-50">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl sm:text-4xl font-black text-gray-900 mb-8 text-center">Our Story</h2>
-          <div className="space-y-6 text-lg text-gray-700 leading-relaxed">
+      <section className="bg-soft py-20">
+        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+          <h2 className="mb-8 text-center font-display text-3xl font-extrabold text-navy-800 sm:text-4xl">
+            Our Story
+          </h2>
+          <div className="space-y-6 text-lg leading-relaxed text-navy-400">
             <p>
               NursePath was founded with a simple mission: to make high-quality exam preparation
               materials accessible to all nursing students. We recognized that many students struggle
@@ -93,23 +97,23 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl sm:text-4xl font-black text-gray-900 mb-12 text-center">
+      <section className="bg-white py-20">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <h2 className="mb-12 text-center font-display text-3xl font-extrabold text-navy-800 sm:text-4xl">
             Our Values
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
             {values.map((value, index) => {
               const Icon = value.icon;
               return (
                 <Card key={index} hover className="text-center">
-                  <div className="flex justify-center mb-4">
-                    <div className="w-16 h-16 bg-primary-100 rounded-2xl flex items-center justify-center">
-                      <Icon className="w-8 h-8 text-primary-600" />
+                  <div className="mb-4 flex justify-center">
+                    <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary-100">
+                      <Icon className="h-8 w-8 text-primary-600" />
                     </div>
                   </div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-3">{value.title}</h3>
-                  <p className="text-gray-600 leading-relaxed">{value.description}</p>
+                  <h3 className="mb-3 font-display text-xl font-bold text-navy-800">{value.title}</h3>
+                  <p className="leading-relaxed text-navy-400">{value.description}</p>
                 </Card>
               );
             })}

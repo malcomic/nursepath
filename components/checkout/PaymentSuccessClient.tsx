@@ -15,11 +15,15 @@ import {
 import Card from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
 
-interface OrderData {
+interface OrderItem {
   id: string;
   paymentStatus: 'PAID' | 'PENDING' | 'FAILED' | 'REFUNDED';
   guide: { id: string; title: string; price: number };
   downloadUrl: string | null;
+}
+
+interface OrderData extends OrderItem {
+  items?: OrderItem[];
 }
 
 const POLL_INTERVAL_MS = 1500;
@@ -73,6 +77,8 @@ export default function PaymentSuccessClient() {
     return () => window.clearTimeout(timer);
   }, [data?.paymentStatus, orderId, pollAttempts, fetchStatus]);
 
+  const items = data?.items?.length ? data.items : data ? [data] : [];
+
   const statusLabel = useMemo(() => {
     switch (data?.paymentStatus) {
       case 'PAID':
@@ -88,33 +94,35 @@ export default function PaymentSuccessClient() {
     }
   }, [data?.paymentStatus]);
 
-  const pollTimedOut =
-    data?.paymentStatus === 'PENDING' && pollAttempts >= MAX_POLL_ATTEMPTS;
+  const pollTimedOut = data?.paymentStatus === 'PENDING' && pollAttempts >= MAX_POLL_ATTEMPTS;
+  const total = items.reduce((sum, i) => sum + Number(i.guide.price), 0);
 
   return (
-    <main className="bg-gray-50 flex-grow py-20">
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
+    <main className="flex-grow bg-soft py-20">
+      <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+        <div className="mb-12 text-center">
           {statusLabel.tone === 'success' ? (
-            <div className="w-20 h-20 bg-secondary-100 rounded-full flex items-center justify-center mx-auto mb-6">
-              <CheckCircle className="w-12 h-12 text-secondary-600" />
+            <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-secondary-100">
+              <CheckCircle className="h-12 w-12 text-secondary-600" />
             </div>
           ) : statusLabel.tone === 'pending' ? (
-            <div className="w-20 h-20 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-6">
-              <Clock className="w-12 h-12 text-amber-600" />
+            <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-amber-100">
+              <Clock className="h-12 w-12 text-amber-600" />
             </div>
           ) : (
-            <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
-              <XCircle className="w-12 h-12 text-red-600" />
+            <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-red-100">
+              <XCircle className="h-12 w-12 text-red-600" />
             </div>
           )}
 
-          <h1 className="text-4xl sm:text-5xl font-black text-gray-900 mb-4">
+          <h1 className="mb-4 font-display text-4xl font-extrabold text-navy-800 sm:text-5xl">
             {statusLabel.text}
           </h1>
-          <p className="text-xl text-gray-600 mb-2">
+          <p className="mb-2 text-xl text-navy-400">
             {data?.paymentStatus === 'PAID'
-              ? 'Your study guide is ready to download.'
+              ? items.length > 1
+                ? 'Your study guides are ready to download.'
+                : 'Your study guide is ready to download.'
               : data?.paymentStatus === 'PENDING'
                 ? pollTimedOut
                   ? 'Payment confirmation is taking longer than expected.'
@@ -122,76 +130,76 @@ export default function PaymentSuccessClient() {
                 : 'Please try purchasing again or contact support.'}
           </p>
           {orderId && (
-            <p className="text-gray-500">
+            <p className="text-navy-300">
               Order ID: <span className="font-semibold">{orderId}</span>
             </p>
           )}
         </div>
 
         <Card className="mb-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Order Details</h2>
+          <h2 className="mb-6 font-display text-2xl font-bold text-navy-800">Order Details</h2>
           {loading ? (
-            <div className="text-sm text-gray-600">Loading order…</div>
+            <div className="text-sm text-navy-400">Loading order…</div>
           ) : error ? (
             <div className="text-sm text-red-600">{error}</div>
-          ) : data ? (
+          ) : items.length > 0 ? (
             <div className="space-y-4">
-              <div className="flex items-center justify-between py-4 border-b border-gray-200">
-                <div className="flex items-center gap-4">
-                  <div className="w-16 h-16 bg-gradient-to-br from-primary-100 to-secondary-100 rounded-lg flex items-center justify-center">
-                    <FileText className="w-8 h-8 text-primary-600" />
+              {items.map((item) => (
+                <div
+                  key={item.id}
+                  className="flex items-center justify-between border-b border-border py-4 last:border-0"
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="flex h-16 w-16 items-center justify-center rounded-lg bg-primary-50">
+                      <FileText className="h-8 w-8 text-primary-600" />
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-navy-800">{item.guide.title}</h3>
+                      <p className="text-sm text-navy-400">Study Guide - PDF</p>
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="font-bold text-gray-900">{data.guide.title}</h3>
-                    <p className="text-sm text-gray-600">Study Guide - PDF</p>
-                  </div>
-                </div>
-                <div className="text-right">
-                  <p className="font-bold text-gray-900">
-                    {data.guide.price === 0 ? 'FREE' : `$${data.guide.price.toFixed(2)}`}
+                  <p className="font-bold text-navy-800">
+                    {item.guide.price === 0 ? 'FREE' : `$${Number(item.guide.price).toFixed(2)}`}
                   </p>
                 </div>
-              </div>
-              <div className="flex items-center justify-between pt-4">
-                <span className="text-lg font-bold text-gray-900">Total</span>
-                <span className="text-2xl font-black text-gray-900">
-                  {data.guide.price === 0 ? 'FREE' : `$${data.guide.price.toFixed(2)}`}
+              ))}
+              <div className="flex items-center justify-between pt-2">
+                <span className="font-display text-lg font-bold text-navy-800">Total</span>
+                <span className="font-display text-2xl font-extrabold text-navy-800">
+                  {total === 0 ? 'FREE' : `$${total.toFixed(2)}`}
                 </span>
               </div>
             </div>
           ) : (
-            <div className="text-sm text-gray-600">No order data.</div>
+            <div className="text-sm text-navy-400">No order data.</div>
           )}
         </Card>
 
         <Card className="mb-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Download Your Guide</h2>
-          <p className="text-gray-600 mb-6">
+          <h2 className="mb-6 font-display text-2xl font-bold text-navy-800">Download</h2>
+          <p className="mb-6 text-navy-400">
             Downloads are enabled once payment is confirmed. A copy of your download link has also
             been sent to your email. You can reclaim purchases anytime on your dashboard using the
             same email you used at checkout.
           </p>
           <div className="space-y-3">
-            {data?.downloadUrl ? (
-              <a href={data.downloadUrl} className="block">
+            {items.filter((i) => i.downloadUrl).map((item) => (
+              <a key={item.id} href={item.downloadUrl!} className="block">
                 <Button fullWidth size="lg" className="group">
-                  <Download className="w-5 h-5 mr-2" />
-                  Download Now
+                  <Download className="mr-2 h-5 w-5" />
+                  Download {item.guide.title}
                 </Button>
               </a>
-            ) : (
-              <Button fullWidth size="lg" disabled className="group">
-                <Download className="w-5 h-5 mr-2" />
-                {data?.paymentStatus === 'PENDING'
-                  ? pollTimedOut
-                    ? 'Still waiting for confirmation…'
-                    : 'Waiting for confirmation…'
-                  : 'Download unavailable'}
+            ))}
+            {data?.paymentStatus === 'PENDING' && (
+              <Button fullWidth size="lg" disabled>
+                <Download className="mr-2 h-5 w-5" />
+                {pollTimedOut ? 'Still waiting for confirmation…' : 'Waiting for confirmation…'}
               </Button>
             )}
             {pollTimedOut && (
               <Button variant="outline" fullWidth onClick={() => fetchStatus()}>
-                <RefreshCw className="w-4 h-4 mr-2" />
+                <RefreshCw className="mr-2 h-4 w-4" />
                 Check again
               </Button>
             )}
@@ -200,19 +208,14 @@ export default function PaymentSuccessClient() {
                 View in Dashboard
               </Button>
             </Link>
-            <Link href="/reviews#submit" className="block">
-              <Button variant="ghost" fullWidth>
-                Leave a review
-              </Button>
-            </Link>
           </div>
         </Card>
 
-        <div className="flex flex-col sm:flex-row gap-4">
+        <div className="flex flex-col gap-4 sm:flex-row">
           <Link href="/services" className="flex-1">
             <Button variant="outline" fullWidth size="lg" className="group">
               Browse More Guides
-              <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+              <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
             </Button>
           </Link>
           <Link href="/dashboard" className="flex-1">

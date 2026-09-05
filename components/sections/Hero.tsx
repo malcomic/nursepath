@@ -1,68 +1,69 @@
 import Link from 'next/link';
-import { ArrowRight, CheckCircle } from 'lucide-react';
+import Image from 'next/image';
 import Button from '../ui/Button';
 
 export default function Hero() {
   return (
-    <section className="relative bg-gradient-to-br from-primary-50 via-white to-secondary-50 overflow-hidden">
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-blob"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-secondary-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-blob animation-delay-2000"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-accent-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-blob animation-delay-4000"></div>
-      </div>
-
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-32">
-        <div className="text-center">
-          <div className="inline-flex items-center gap-2 bg-primary-100 text-primary-700 px-4 py-2 rounded-full text-sm font-semibold mb-6">
-            <CheckCircle className="w-4 h-4" />
-            Trusted by Nursing Students Worldwide
-          </div>
-
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-black text-gray-900 mb-6 leading-tight">
-            Excel in Your
-            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-primary-600 to-secondary-600">
-              Nursing Exams
-            </span>
-            with Expert Study Guides
-          </h1>
-
-          <p className="text-xl sm:text-2xl text-gray-600 mb-10 max-w-3xl mx-auto leading-relaxed">
-            Comprehensive, high-yield study materials designed by nursing professionals to help you
-            ace your exams and advance your career.
-          </p>
-
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
-            <Link href="/services">
-              <Button size="lg" className="group">
-                Browse Study Guides
-                <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </Button>
-            </Link>
-            <Link href="/pricing">
-              <Button variant="outline" size="lg">
-                View Pricing
-              </Button>
-            </Link>
-          </div>
-
-          <div className="flex flex-wrap items-center justify-center gap-8 text-sm text-gray-600">
-            <div className="flex items-center gap-2">
-              <CheckCircle className="w-5 h-5 text-secondary-600" />
-              <span className="font-semibold">Expert-Curated Content</span>
+    <section className="bg-soft">
+      <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
+        <div className="flex flex-col items-center gap-12 lg:flex-row lg:gap-16">
+          <div className="flex flex-1 flex-col items-start gap-8">
+            <div className="inline-flex items-center gap-2 rounded-full bg-primary-50 px-4 py-1.5">
+              <Image src="/brand/sparkles.svg" alt="" width={14} height={14} className="size-3.5" />
+              <span className="font-display text-[13px] font-bold uppercase text-primary-600">
+                Updated for the 2026 NCLEX-RN &amp; PN
+              </span>
             </div>
-            <div className="flex items-center gap-2">
-              <CheckCircle className="w-5 h-5 text-secondary-600" />
-              <span className="font-semibold">Instant PDF Download</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <CheckCircle className="w-5 h-5 text-secondary-600" />
-              <span className="font-semibold">100+ Study Guides</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <CheckCircle className="w-5 h-5 text-secondary-600" />
-              <span className="font-semibold">24/7 Support</span>
+
+            <h1 className="font-display text-4xl font-extrabold leading-[1.15] text-navy-800 sm:text-5xl lg:text-[54px]">
+              Pass Your NCLEX on the{' '}
+              <span className="text-primary-600">First Try</span>
+            </h1>
+
+            <p className="max-w-xl text-lg leading-relaxed text-navy-400 sm:text-xl">
+              Master key nursing concepts with comprehensive, visual PDF study guides created by
+              experienced educators. Download instantly, study at your own pace, and ace your exams
+              without stress.
+            </p>
+
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
+              <Link href="/services">
+                <Button size="lg">Browse Study Guides</Button>
+              </Link>
+              <Link href="/#how-it-works">
+                <Button size="lg" variant="outline">
+                  How It Works
+                </Button>
+              </Link>
             </div>
           </div>
+
+          <div className="relative h-[280px] w-full max-w-[540px] shrink-0 overflow-hidden rounded-3xl sm:h-[360px] lg:h-[440px]">
+            <Image
+              src="/brand/hero.jpg"
+              alt="Nursing student studying for NCLEX"
+              fill
+              className="object-cover"
+              sizes="(max-width: 1024px) 100vw, 540px"
+              priority
+            />
+          </div>
+        </div>
+
+        <div className="mt-16 grid grid-cols-2 gap-6 rounded-2xl border border-border bg-white px-6 py-6 sm:px-8 lg:grid-cols-4 lg:gap-4">
+          {[
+            { value: '10,000+', label: 'Nursing students helped' },
+            { value: '98.4%', label: 'First-time pass rate' },
+            { value: '50+', label: 'Expert-written guides' },
+            { value: '4.9/5', label: 'Average student rating' },
+          ].map((stat) => (
+            <div key={stat.label} className="flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-4">
+              <span className="font-display text-2xl font-extrabold text-primary-600 sm:text-3xl">
+                {stat.value}
+              </span>
+              <span className="max-w-[150px] text-sm font-medium text-navy-400">{stat.label}</span>
+            </div>
+          ))}
         </div>
       </div>
     </section>

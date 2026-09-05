@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { guideService } from '@/lib/services/guideService';
 import { ApiError } from '@/lib/errors/api-error';
-import CheckoutForm from '@/components/checkout/CheckoutForm';
+import BuyNowRedirect from '@/components/checkout/BuyNowRedirect';
 
 interface PurchasePageProps {
   params: Promise<{ id: string }>;
@@ -36,13 +36,13 @@ export default async function PurchasePage({ params }: PurchasePageProps) {
   }
 
   return (
-    <CheckoutForm
+    <BuyNowRedirect
       guide={{
         id: guide.id,
         slug: guide.slug,
         title: guide.title,
         description: guide.description,
-        price: guide.price,
+        price: Number(guide.price),
         thumbnailUrl: guide.thumbnailUrl,
         stripePriceId: guide.stripePriceId,
       }}

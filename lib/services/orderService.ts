@@ -132,6 +132,24 @@ export class OrderService {
     });
   }
 
+  async fulfillOrdersByPaymentReference(paymentReference: string, baseUrl: string) {
+    const orders = await orderRepository.findByPaymentReference(paymentReference);
+    if (orders.length === 0) return;
+
+    const downloadable = orders.filter((order) => this.canDownload(order));
+    if (downloadable.length === 0) return;
+
+    const first = downloadable[0];
+    await emailService.sendMultiDownloadEmail({
+      to: first.customerEmail,
+      name: first.customerName,
+      items: downloadable.map((order) => ({
+        guideTitle: order.guide.title,
+        downloadUrl: `${baseUrl}/api/download/${order.downloadToken}`,
+      })),
+    });
+  }
+
   async resendDownloadLink(id: string, baseUrl: string) {
     const order = await this.getOrderById(id);
     if (!this.canDownload(order)) {

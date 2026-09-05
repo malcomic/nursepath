@@ -18,18 +18,18 @@ export default async function ReviewsPage() {
       : reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length;
 
   return (
-    <main className="bg-slate-50">
-      <section className="bg-gradient-to-br from-slate-900 via-slate-900 to-slate-800 text-white">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
-          <div className="text-center max-w-3xl mx-auto">
-            <div className="inline-flex items-center gap-2 rounded-full bg-emerald-500/10 text-emerald-300 px-3 py-1 text-xs font-semibold tracking-wide mb-4">
-              <CheckCircle2 className="w-3.5 h-3.5" />
+    <main className="bg-soft">
+      <section className="bg-navy-800 text-white">
+        <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
+          <div className="mx-auto max-w-3xl text-center">
+            <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-primary-500/20 px-3 py-1 text-xs font-semibold tracking-wide text-primary-200">
+              <CheckCircle2 className="h-3.5 w-3.5" />
               VERIFIED SUCCESS
             </div>
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight mb-4">
+            <h1 className="mb-4 font-display text-3xl font-extrabold tracking-tight sm:text-4xl md:text-5xl">
               Real Student Conversations
             </h1>
-            <p className="text-sm sm:text-base md:text-lg text-slate-200/90 max-w-2xl mx-auto">
+            <p className="mx-auto max-w-2xl text-sm text-navy-200 sm:text-base md:text-lg">
               Direct feedback from nursing students who used our ATI, NCLEX, HESI, and TEAS study
               guides to prepare with confidence.
             </p>

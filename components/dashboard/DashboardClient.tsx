@@ -99,10 +99,10 @@ export default function DashboardClient() {
 
   if (loading) {
     return (
-      <main className="flex-grow py-12 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center py-20">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto mb-4" />
-          <p className="text-gray-600">Loading your purchases…</p>
+      <main className="flex-grow bg-soft py-12">
+        <div className="mx-auto max-w-7xl px-4 py-20 text-center sm:px-6 lg:px-8">
+          <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-b-2 border-primary-600" />
+          <p className="text-navy-400">Loading your purchases…</p>
         </div>
       </main>
     );
@@ -110,15 +110,15 @@ export default function DashboardClient() {
 
   if (!email) {
     return (
-      <main className="flex-grow py-12 bg-gray-50">
-        <div className="max-w-md mx-auto px-4 sm:px-6 lg:px-8">
+      <main className="flex-grow bg-soft py-12">
+        <div className="mx-auto max-w-md px-4 sm:px-6 lg:px-8">
           <Card>
-            <div className="text-center mb-6">
-              <div className="w-14 h-14 bg-primary-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                <Mail className="w-7 h-7 text-primary-600" />
+            <div className="mb-6 text-center">
+              <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-primary-100">
+                <Mail className="h-7 w-7 text-primary-600" />
               </div>
-              <h1 className="text-2xl font-black text-gray-900 mb-2">My Purchases</h1>
-              <p className="text-gray-600 text-sm">
+              <h1 className="mb-2 font-display text-2xl font-extrabold text-navy-800">My Purchases</h1>
+              <p className="text-sm text-navy-400">
                 Enter the email you used at checkout to view your study guides and download links.
               </p>
             </div>
@@ -143,13 +143,15 @@ export default function DashboardClient() {
   }
 
   return (
-    <main className="flex-grow py-12 bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="mb-8 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+    <main className="flex-grow bg-soft py-12">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <h1 className="text-4xl sm:text-5xl font-black text-gray-900 mb-2">My Dashboard</h1>
-            <p className="text-xl text-gray-600">
-              Purchases for <span className="font-semibold text-gray-900">{email}</span>
+            <h1 className="mb-2 font-display text-4xl font-extrabold text-navy-800 sm:text-5xl">
+              My Dashboard
+            </h1>
+            <p className="text-xl text-navy-400">
+              Purchases for <span className="font-semibold text-navy-800">{email}</span>
             </p>
           </div>
           <button

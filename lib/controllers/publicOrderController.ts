@@ -56,6 +56,25 @@ export async function getOrderStatus(id: string) {
     throw new ApiError(404, 'Order not found');
   }
 
+  const siblings =
+    order.paymentReference != null
+      ? await orderRepository.findByPaymentReference(order.paymentReference)
+      : [order];
+
+  const items = siblings.map((o) => {
+    const eligible = orderService.canDownload(o);
+    return {
+      id: o.id,
+      paymentStatus: o.paymentStatus,
+      guide: {
+        id: o.guide.id,
+        title: o.guide.title,
+        price: Number(o.guide.price),
+      },
+      downloadUrl: eligible ? `/api/download/${encodeURIComponent(o.downloadToken)}` : null,
+    };
+  });
+
   const eligible = orderService.canDownload(order);
   const downloadUrl = eligible
     ? `/api/download/${encodeURIComponent(order.downloadToken)}`
@@ -72,6 +91,7 @@ export async function getOrderStatus(id: string) {
         price: Number(order.guide.price),
       },
       downloadUrl,
+      items,
     },
   };
 }
