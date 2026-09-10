@@ -2,8 +2,9 @@
 
 import { useState, type FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
-import { Mail, Lock, ShieldCheck, ArrowRight, BookOpen, Star } from 'lucide-react';
+import { Mail, Lock, ShieldCheck, ArrowRight, Star } from 'lucide-react';
 import { adminJson } from '@/lib/admin/api-client';
+import Logo from '@/components/layout/Logo';
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -41,11 +42,8 @@ export default function AdminLoginPage() {
         </div>
 
         <div className="relative z-10">
-          <div className="flex items-center gap-3 mb-12">
-            <div className="bg-blue-600 p-2 rounded-xl">
-              <BookOpen className="text-white w-8 h-8" />
-            </div>
-            <span className="text-2xl font-black text-white tracking-tight">NursePath</span>
+          <div className="mb-12">
+            <Logo href="/" size={72} />
           </div>
           <h2 className="text-5xl font-black text-white leading-tight mb-8">
             Manage The Best <br />

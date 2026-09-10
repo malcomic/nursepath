@@ -44,7 +44,6 @@ export default async function PurchasePage({ params }: PurchasePageProps) {
         description: guide.description,
         price: Number(guide.price),
         thumbnailUrl: guide.thumbnailUrl,
-        stripePriceId: guide.stripePriceId,
       }}
     />
   );

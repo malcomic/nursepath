@@ -1,0 +1,5 @@
+-- AlterTable
+ALTER TABLE "Guide" DROP COLUMN IF EXISTS "stripePriceId";
+
+-- AlterTable
+ALTER TABLE "Settings" ADD COLUMN IF NOT EXISTS "usdToKesRate" DECIMAL(10,4) NOT NULL DEFAULT 130;

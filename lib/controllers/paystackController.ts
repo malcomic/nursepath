@@ -1,7 +1,10 @@
 import crypto from 'crypto';
-import type Stripe from 'stripe';
 import { z } from 'zod';
-import { stripe } from '@/lib/stripe';
+import {
+  initializeTransaction,
+  verifyPaystackSignature,
+  verifyTransaction,
+} from '@/lib/paystack';
 import { guideRepository } from '@/lib/repositories/guideRepository';
 import { orderRepository } from '@/lib/repositories/orderRepository';
 import { settingsService } from '@/lib/services/settingsService';
@@ -10,12 +13,13 @@ import { PaymentStatus } from '@/lib/generated/prisma/enums';
 import { config } from '@/lib/config/env';
 import { orderService } from '@/lib/services/orderService';
 
-const createCheckoutSessionSchema = z
+const initializePaymentSchema = z
   .object({
     guideId: z.string().min(1).optional(),
     guideIds: z.array(z.string().min(1)).min(1).optional(),
     buyerName: z.string().trim().min(1).max(255),
     buyerEmail: z.string().trim().email(),
+    method: z.enum(['card', 'mpesa']),
   })
   .refine((data) => Boolean(data.guideId || (data.guideIds && data.guideIds.length > 0)), {
     message: 'guideId or guideIds is required',
@@ -27,15 +31,15 @@ function buildAbsoluteUrl(base: string, pathAndQuery: string) {
   return new URL(normalized, url).toString();
 }
 
-function resolveGuideIds(input: z.infer<typeof createCheckoutSessionSchema>): string[] {
+function resolveGuideIds(input: z.infer<typeof initializePaymentSchema>): string[] {
   if (input.guideIds?.length) {
     return [...new Set(input.guideIds)];
   }
   return input.guideId ? [input.guideId] : [];
 }
 
-export async function createCheckoutSession(body: unknown, ipAddress?: string) {
-  const input = createCheckoutSessionSchema.parse(body);
+export async function initializePayment(body: unknown, ipAddress?: string) {
+  const input = initializePaymentSchema.parse(body);
   const guideIds = resolveGuideIds(input);
 
   const guides = await Promise.all(guideIds.map((id) => guideRepository.findById(id)));
@@ -51,13 +55,6 @@ export async function createCheckoutSession(body: unknown, ipAddress?: string) {
     throw new ApiError(400, 'Use free checkout for carts with only free guides');
   }
 
-  for (const guide of paidGuides) {
-    if (!guide.stripePriceId) {
-      throw new ApiError(400, `"${guide.title}" is not configured for Stripe checkout yet`);
-    }
-  }
-
-  // Mixed cart: free items stay PENDING until paid checkout succeeds (fulfilled in webhook)
   const settings = await settingsService.getSettings();
   const now = new Date();
   const downloadExpiresAt = new Date(
@@ -76,104 +73,142 @@ export async function createCheckoutSession(body: unknown, ipAddress?: string) {
       downloadToken: crypto.randomUUID(),
       downloadExpiresAt,
       maxDownloads: settings.maxDownloads,
-      paymentProvider: Number(guide.price) === 0 ? 'free' : 'stripe',
+      paymentProvider: Number(guide.price) === 0 ? 'free' : 'paystack',
       ipAddress,
     });
     orders.push(order);
   }
 
   const primaryOrderId = orders[0].id;
-  const successUrl = buildAbsoluteUrl(
+  const reference = `np_${primaryOrderId}_${crypto.randomBytes(4).toString('hex')}`;
+  const usdTotal = paidGuides.reduce((sum, g) => sum + Number(g.price), 0);
+
+  const callbackUrl = buildAbsoluteUrl(
     config.publicAppUrl!,
     `/payment-success?order_id=${encodeURIComponent(primaryOrderId)}`
   );
-  const cancelUrl = buildAbsoluteUrl(config.publicAppUrl!, '/cart');
 
-  const session = await stripe.checkout.sessions.create({
-    mode: 'payment',
-    payment_method_types: ['card'],
-    line_items: paidGuides.map((guide) => ({
-      price: guide.stripePriceId!,
-      quantity: 1,
-    })),
-    customer_email: input.buyerEmail,
-    client_reference_id: primaryOrderId,
+  let currency: 'USD' | 'KES';
+  let amount: number;
+  let channels: Array<'card' | 'mobile_money'>;
+  let kesTotal: number | undefined;
+
+  if (input.method === 'card') {
+    currency = 'USD';
+    amount = Math.round(usdTotal * 100);
+    channels = ['card'];
+  } else {
+    kesTotal = Math.round(usdTotal * Number(settings.usdToKesRate));
+    currency = 'KES';
+    amount = kesTotal * 100;
+    channels = ['mobile_money'];
+  }
+
+  if (amount < 1) {
+    throw new ApiError(400, 'Payment amount must be greater than zero');
+  }
+
+  const session = await initializeTransaction({
+    email: input.buyerEmail,
+    amount,
+    currency,
+    reference,
+    callback_url: callbackUrl,
+    channels,
     metadata: {
       orderId: primaryOrderId,
       orderIds: orders.map((o) => o.id).join(','),
+      method: input.method,
+      usdTotal,
+      ...(kesTotal !== undefined ? { kesTotal } : {}),
     },
-    success_url: successUrl,
-    cancel_url: cancelUrl,
   });
 
   await Promise.all(
-    orders.map((order) => orderRepository.update(order.id, { paymentReference: session.id }))
+    orders.map((order) => orderRepository.update(order.id, { paymentReference: reference }))
   );
 
-  if (!session.url) {
-    throw new ApiError(500, 'Stripe did not return a checkout URL');
+  if (!session.authorization_url) {
+    throw new ApiError(500, 'Paystack did not return a checkout URL');
   }
 
   return {
     success: true as const,
-    data: { url: session.url, orderId: primaryOrderId, orderIds: orders.map((o) => o.id) },
+    data: {
+      url: session.authorization_url,
+      orderId: primaryOrderId,
+      orderIds: orders.map((o) => o.id),
+      reference,
+    },
   };
 }
 
-export async function handleStripeWebhook(rawBody: string, signature: string | null) {
+export async function handlePaystackWebhook(rawBody: string, signature: string | null) {
   if (!signature) {
-    throw new ApiError(400, 'Missing Stripe signature');
+    throw new ApiError(400, 'Missing Paystack signature');
   }
 
-  let event: Stripe.Event;
+  if (!verifyPaystackSignature(rawBody, signature)) {
+    throw new ApiError(400, 'Invalid Paystack signature');
+  }
+
+  let event: { event?: string; data?: { reference?: string; status?: string } };
   try {
-    event = stripe.webhooks.constructEvent(
-      rawBody,
-      signature,
-      config.stripeWebhookSecret!
-    );
-  } catch (err) {
-    throw new ApiError(400, err instanceof Error ? err.message : 'Invalid signature');
+    event = JSON.parse(rawBody) as {
+      event?: string;
+      data?: { reference?: string; status?: string };
+    };
+  } catch {
+    throw new ApiError(400, 'Invalid webhook payload');
   }
 
-  if (event.type === 'checkout.session.completed') {
-    const session = event.data.object as Stripe.Checkout.Session;
-    const baseUrl = config.publicAppUrl || 'http://localhost:3000';
+  if (event.event === 'charge.success') {
+    const reference = event.data?.reference;
+    if (!reference) {
+      throw new ApiError(400, 'Missing transaction reference');
+    }
 
-    // Prefer fulfilling the whole cart by payment reference (session id)
-    const byRef = await orderRepository.findByPaymentReference(session.id);
+    const verified = await verifyTransaction(reference);
+    if (verified.status !== 'success') {
+      return { received: true };
+    }
+
+    const baseUrl = config.publicAppUrl || 'http://localhost:3000';
+    const byRef = await orderRepository.findByPaymentReference(reference);
+
     if (byRef.length > 0) {
       const pending = byRef.filter((o) => o.paymentStatus !== PaymentStatus.PAID);
       await Promise.all(
         pending.map((order) =>
           orderRepository.update(order.id, {
             paymentStatus: PaymentStatus.PAID,
-            paymentReference: session.id,
-            paymentProvider: order.paymentProvider || 'stripe',
+            paymentReference: reference,
+            paymentProvider: order.paymentProvider === 'free' ? 'free' : 'paystack',
           })
         )
       );
 
       if (pending.length > 0) {
-        await orderService.fulfillOrdersByPaymentReference(session.id, baseUrl).catch((err) => {
+        await orderService.fulfillOrdersByPaymentReference(reference, baseUrl).catch((err) => {
           console.error('Failed to send fulfillment email:', err);
         });
       }
       return { received: true };
     }
 
-    // Legacy single-order metadata fallback
-    const orderId = session.metadata?.orderId;
+    // Legacy metadata fallback (single order)
+    const meta = verified.metadata as { orderId?: string } | undefined;
+    const orderId = meta?.orderId;
     if (!orderId) {
-      throw new ApiError(400, 'Missing orderId in session metadata');
+      throw new ApiError(400, 'Missing orderId for payment reference');
     }
 
     const existing = await orderRepository.findById(orderId);
     if (existing && existing.paymentStatus !== PaymentStatus.PAID) {
       await orderRepository.update(orderId, {
         paymentStatus: PaymentStatus.PAID,
-        paymentReference: session.id,
-        paymentProvider: 'stripe',
+        paymentReference: reference,
+        paymentProvider: 'paystack',
       });
 
       await orderService.fulfillPaidOrder(orderId, baseUrl).catch((err) => {

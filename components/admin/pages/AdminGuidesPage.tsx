@@ -17,7 +17,6 @@ interface Guide {
   slug: string;
   description?: string;
   price: number;
-  stripePriceId?: string | null;
   categoryId: string;
   pdfUrl: string;
   thumbnailUrl?: string | null;
@@ -28,7 +27,6 @@ interface GuideFormState {
   slug: string;
   description: string;
   price: string;
-  stripePriceId: string;
   categoryId: string;
   pdfUrl: string;
   thumbnailUrl: string;
@@ -39,7 +37,6 @@ const emptyForm: GuideFormState = {
   slug: '',
   description: '',
   price: '',
-  stripePriceId: '',
   categoryId: '',
   pdfUrl: '',
   thumbnailUrl: '',
@@ -123,7 +120,6 @@ export default function AdminGuidesPage() {
       slug: guide.slug || '',
       description: guide.description || '',
       price: guide.price.toString(),
-      stripePriceId: guide.stripePriceId || '',
       categoryId: guide.categoryId,
       pdfUrl: guide.pdfUrl,
       thumbnailUrl: guide.thumbnailUrl || '',
@@ -243,7 +239,6 @@ export default function AdminGuidesPage() {
         slug: form.slug.trim() || undefined,
         description: form.description.trim() || undefined,
         price: parsedPrice,
-        stripePriceId: form.stripePriceId.trim() || undefined,
         categoryId: form.categoryId,
         pdfUrl,
         thumbnailUrl: thumbnailUrl || undefined,
@@ -473,17 +468,6 @@ export default function AdminGuidesPage() {
                 onChange={handleFieldChange('price')}
                 className="w-full border border-slate-300 rounded-xl px-3 py-2.5 text-sm"
                 required
-              />
-            </div>
-            <div className="md:col-span-2">
-              <label className="block text-sm font-semibold text-slate-700 mb-1">
-                Stripe Price ID (optional)
-              </label>
-              <input
-                value={form.stripePriceId}
-                onChange={handleFieldChange('stripePriceId')}
-                className="w-full border border-slate-300 rounded-xl px-3 py-2.5 text-sm"
-                placeholder="price_..."
               />
             </div>
           </div>

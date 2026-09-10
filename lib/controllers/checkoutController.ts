@@ -37,7 +37,7 @@ export async function createFreeCheckout(body: unknown, ipAddress?: string) {
 
   const validGuides = guides.filter((g): g is NonNullable<typeof g> => Boolean(g));
   if (validGuides.some((g) => Number(g.price) !== 0)) {
-    throw new ApiError(400, 'One or more guides require payment via Stripe checkout');
+    throw new ApiError(400, 'One or more guides require payment via Paystack checkout');
   }
 
   const settings = await settingsService.getSettings();

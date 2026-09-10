@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -16,8 +16,9 @@ export interface CheckoutGuide {
   description?: string | null;
   price: number;
   thumbnailUrl?: string | null;
-  stripePriceId?: string | null;
 }
+
+type PaymentMethod = 'card' | 'mpesa';
 
 interface CheckoutFormProps {
   guide: CheckoutGuide;
@@ -27,11 +28,34 @@ export default function CheckoutForm({ guide }: CheckoutFormProps) {
   const router = useRouter();
   const [buyerName, setBuyerName] = useState('');
   const [buyerEmail, setBuyerEmail] = useState('');
+  const [method, setMethod] = useState<PaymentMethod>('card');
+  const [usdToKesRate, setUsdToKesRate] = useState<number | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const isFree = guide.price === 0;
-  const canCheckout = isFree || !!guide.stripePriceId;
+  const canCheckout = isFree || guide.price > 0;
+  const kesTotal =
+    usdToKesRate !== null ? Math.round(guide.price * usdToKesRate) : null;
+
+  useEffect(() => {
+    if (isFree) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await fetch('/api/settings/public');
+        const json = await res.json();
+        if (!cancelled && res.ok && json.success) {
+          setUsdToKesRate(Number(json.data.usdToKesRate));
+        }
+      } catch {
+        // Rate preview is optional; server still converts on initialize
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [isFree]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -59,13 +83,14 @@ export default function CheckoutForm({ guide }: CheckoutFormProps) {
         return;
       }
 
-      const res = await fetch('/api/create-checkout-session', {
+      const res = await fetch('/api/paystack/initialize', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           guideId: guide.id,
           buyerName,
           buyerEmail,
+          method,
         }),
       });
       const json = await res.json();
@@ -96,24 +121,6 @@ export default function CheckoutForm({ guide }: CheckoutFormProps) {
           <ArrowLeft className="w-4 h-4" />
           <span className="font-medium">Back</span>
         </button>
-
-        {!canCheckout && (
-          <Card className="mb-8 border-amber-200 bg-amber-50">
-            <p className="text-amber-900 font-medium mb-2">
-              This guide is not available for online checkout yet.
-            </p>
-            <p className="text-amber-800 text-sm mb-4">
-              Payment has not been configured for this guide. Please check back later or contact
-              support.
-            </p>
-            <Link
-              href={`/guides/${guide.slug}`}
-              className="text-primary-600 font-semibold hover:text-primary-700"
-            >
-              ← Back to guide details
-            </Link>
-          </Card>
-        )}
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2">
@@ -155,6 +162,42 @@ export default function CheckoutForm({ guide }: CheckoutFormProps) {
                   </div>
                 </div>
 
+                {!isFree && (
+                  <div>
+                    <h2 className="text-xl font-bold text-gray-900 mb-4">Payment method</h2>
+                    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                      <button
+                        type="button"
+                        onClick={() => setMethod('card')}
+                        className={`rounded-xl border px-4 py-3 text-left transition-colors ${
+                          method === 'card'
+                            ? 'border-primary-600 bg-primary-50 text-primary-900'
+                            : 'border-gray-200 bg-white text-gray-700 hover:border-gray-300'
+                        }`}
+                      >
+                        <span className="block font-semibold">Card (USD)</span>
+                        <span className="text-sm opacity-80">Visa, Mastercard, and more</span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setMethod('mpesa')}
+                        className={`rounded-xl border px-4 py-3 text-left transition-colors ${
+                          method === 'mpesa'
+                            ? 'border-primary-600 bg-primary-50 text-primary-900'
+                            : 'border-gray-200 bg-white text-gray-700 hover:border-gray-300'
+                        }`}
+                      >
+                        <span className="block font-semibold">M-Pesa</span>
+                        <span className="text-sm opacity-80">
+                          {kesTotal !== null
+                            ? `≈ KES ${kesTotal.toLocaleString()}`
+                            : 'Pay in Kenyan Shillings'}
+                        </span>
+                      </button>
+                    </div>
+                  </div>
+                )}
+
                 <div className="pt-6 border-t border-gray-200">
                   <Button
                     type="submit"
@@ -174,7 +217,7 @@ export default function CheckoutForm({ guide }: CheckoutFormProps) {
                   <p className="text-sm text-gray-500 mt-4 text-center">
                     {isFree
                       ? 'No payment required — instant download after confirmation'
-                      : 'Your payment is secure and encrypted via Stripe'}
+                      : 'Secure payment via Paystack (card or M-Pesa)'}
                   </p>
                 </div>
               </form>
@@ -212,6 +255,12 @@ export default function CheckoutForm({ guide }: CheckoutFormProps) {
                   <span>Subtotal</span>
                   <span>{guide.price === 0 ? 'FREE' : `$${guide.price.toFixed(2)}`}</span>
                 </div>
+                {!isFree && method === 'mpesa' && kesTotal !== null && (
+                  <div className="flex items-center justify-between text-gray-600">
+                    <span>M-Pesa total</span>
+                    <span>≈ KES {kesTotal.toLocaleString()}</span>
+                  </div>
+                )}
                 <div className="flex items-center justify-between text-gray-600">
                   <span>Tax</span>
                   <span>$0.00</span>
@@ -219,7 +268,11 @@ export default function CheckoutForm({ guide }: CheckoutFormProps) {
                 <div className="pt-3 border-t border-gray-200 flex items-center justify-between">
                   <span className="text-lg font-bold text-gray-900">Total</span>
                   <span className="text-2xl font-black text-gray-900">
-                    {guide.price === 0 ? 'FREE' : `$${guide.price.toFixed(2)}`}
+                    {guide.price === 0
+                      ? 'FREE'
+                      : method === 'mpesa' && kesTotal !== null
+                        ? `KES ${kesTotal.toLocaleString()}`
+                        : `$${guide.price.toFixed(2)}`}
                   </span>
                 </div>
               </div>

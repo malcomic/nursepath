@@ -6,7 +6,7 @@ Next.js application for NCLEX-RN study guides and nursing exam prep.
 
 - **Next.js App Router** at repo root — `app/`, `lib/`, `prisma/`
 - **Prisma + PostgreSQL** — migrations only under root `prisma/`
-- **Stripe** checkout, **Resend** email, **Vercel Blob** uploads
+- **Paystack** checkout (card USD + M-Pesa KES), **Resend** email, **Vercel Blob** uploads
 
 ### Legacy archive
 
@@ -45,8 +45,8 @@ The footer links to `/sitemap`, which redirects to `/sitemap.xml`.
 
 Add to `.env.local` (see `.env.example`):
 
-- `STRIPE_SECRET_KEY` — Stripe test secret key
-- `STRIPE_WEBHOOK_SECRET` — from Stripe CLI (see below)
+- `PAYSTACK_SECRET_KEY` — Paystack secret key (test or live)
+- `PAYSTACK_WEBHOOK_SECRET` — webhook signing secret from the Paystack Dashboard
 - `PUBLIC_APP_URL=http://localhost:3000`
 - `RESEND_API_KEY` — optional; emails log to console when unset
 - `CONTACT_FROM_EMAIL` — e.g. `NursePath <onboarding@resend.dev>`
@@ -54,31 +54,35 @@ Add to `.env.local` (see `.env.example`):
 
 **Resend sandbox note:** `onboarding@resend.dev` only delivers to verified email addresses until your domain is verified in Resend.
 
-### Local Stripe webhook setup
+### Local Paystack webhook setup
 
-1. Install [Stripe CLI](https://stripe.com/docs/stripe-cli)
-2. Run: `stripe listen --forward-to localhost:3000/api/stripe-webhook`
-3. Copy the webhook signing secret (`whsec_...`) to `STRIPE_WEBHOOK_SECRET` in `.env.local`
-4. Restart the dev server
+1. Create a Kenya Paystack business and enable **card** + **mobile_money** (M-Pesa). Enable **USD** if you settle card payments in USD.
+2. In Dashboard → Settings → API Keys, copy the **test** secret key into `PAYSTACK_SECRET_KEY`.
+3. In Dashboard → Settings → API Keys & Webhooks, add webhook URL:
+   - Local tunnel example: `https://<your-tunnel>/api/paystack/webhook`
+   - Production: `https://your-domain.com/api/paystack/webhook`
+4. Copy the webhook secret into `PAYSTACK_WEBHOOK_SECRET`.
+5. In Admin → Settings, set **USD to KES rate** (used when buyers choose M-Pesa).
+6. Restart the dev server.
 
 ### Guide setup for checkout
 
-Each paid guide needs a `stripePriceId` in the database pointing to a Stripe Price object. Guides without it show a friendly error on `/purchase/[id]`. Free guides (`price === 0`) skip Stripe and go directly to `/payment-success`.
+Paid guides use the catalog `price` (USD). Free guides (`price === 0`) skip Paystack and go directly to `/payment-success`. At checkout, buyers choose **Card (USD)** or **M-Pesa (KES)**.
 
 ### E2E verification checklist
 
 | Test | Expected |
 |------|----------|
-| `/purchase/[id]` loads | Name/email form + order summary sidebar |
-| Submit paid checkout | Redirects to Stripe hosted checkout |
-| Pay with `4242 4242 4242 4242` | Lands on `/payment-success?order_id=` |
-| Poll while PENDING | Resolves to PAID within a few seconds |
+| `/purchase/[id]` / `/checkout` | Name/email form + Card / M-Pesa selector for paid carts |
+| Submit paid checkout (card) | Redirects to Paystack hosted checkout (USD) |
+| Submit paid checkout (M-Pesa) | Redirects to Paystack hosted checkout (KES mobile money) |
+| Complete test payment | Lands on `/payment-success?order_id=` |
+| Poll while PENDING | Resolves to PAID after webhook |
 | Download button | `GET /api/download/[token]` redirects to PDF |
 | Download email | Received via Resend (or logged if no API key) |
-| Free guide (`price === 0`) | Skips Stripe, immediate download on success page |
+| Free guide (`price === 0`) | Skips Paystack, immediate download on success page |
 | Contact form submit | Email to `CONTACT_TO_EMAIL` (or logged in dev) |
-| Cancel on Stripe | Returns to `/guides/[slug]` |
-| Decline card `4000 0000 0000 0002` | Payment fails on Stripe side |
+| Abandon / cancel Paystack | Orders stay PENDING |
 | `npm run build` | Passes |
 
 ## Phase 6: Admin panel and uploads
@@ -103,10 +107,10 @@ Admin auth uses an **httpOnly `admin_token` cookie** set on `POST /api/admin/log
 | Logout | Cookie cleared; Header shows Log In |
 | Create category + guide (URL mode) | Persists; appears on `/services` |
 | Upload PDF + thumbnail | Blob URLs saved on guide |
-| Guide with `stripePriceId` | Checkout still works |
+| Paid guide checkout | Works with Paystack (no Stripe Price ID) |
 | Approve pending review | Appears on `/reviews` |
 | Order resend / regenerate / refund | Success toasts; DB updates |
-| Save settings | Persists; masked API key on GET |
+| Save settings (incl. USD→KES rate) | Persists; masked API key on GET |
 | `npm run build` | Passes |
 
 ## Phase 7: Blog, sitemap, and legal pages
@@ -149,7 +153,7 @@ After adding or editing a post, redeploy — posts are statically generated at b
 
 - Canonical public path: `/guides/{slug}` (persisted unique `Guide.slug`)
 - Old `/guides/{cuid}` URLs **301 redirect** to the slug URL
-- Purchase/checkout still use **cuid**: `/purchase/{id}`, order FKs, Stripe metadata
+- Purchase/checkout still use **cuid**: `/purchase/{id}`, order FKs, Paystack metadata
 - Admin guides form includes optional **Slug** (auto from title when blank)
 - Changing the title auto-refreshes the slug unless you set an explicit slug
 
@@ -166,14 +170,9 @@ After adding or editing a post, redeploy — posts are statically generated at b
 | `/guides/{cuid}` | 301 → `/guides/{slug}` |
 | GuideCard / services | Links use slug |
 | `/purchase/{cuid}` | Still works |
-| Stripe cancel | Returns to `/guides/{slug}` |
+| Paystack cancel / abandon | Buyer can return and retry |
 | Sitemap | Slug URLs only |
 | Admin create without slug | Auto slug from title |
 | `npm run build` | Passes |
 | `main` | No `nursepath/` or `backend/` |
 | `archive/legacy-vite-express` | Contains legacy trees |
-
-### Stripe test cards
-
-- **Success:** `4242 4242 4242 4242` (any future expiry, any CVC)
-- **Decline:** `4000 0000 0000 0002`

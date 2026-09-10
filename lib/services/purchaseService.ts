@@ -22,7 +22,7 @@ export class PurchaseService {
     void buyerEmail;
     throw new ApiError(
       410,
-      'Direct purchases are disabled. Please use Stripe checkout to purchase guides.'
+      'Direct purchases are disabled. Please use Paystack checkout to purchase guides.'
     );
   }
 }

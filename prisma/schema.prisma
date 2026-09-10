@@ -43,7 +43,6 @@ model Guide {
   slug         String   @unique
   description  String?
   price        Decimal  @db.Decimal(10, 2)
-  stripePriceId String?
   categoryId   String
   pdfUrl       String
   thumbnailUrl String?
@@ -103,6 +102,7 @@ model Settings {
   maxDownloads        Int     @default(3)
   supportEmail        String  @default("support@scholarwriters.com")
   currency            String  @default("USD")
+  usdToKesRate        Decimal @default(130) @db.Decimal(10, 4)
   paymentProvider     String?
   paymentApiKey       String?
 }

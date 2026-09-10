@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -10,17 +10,40 @@ import Input from '@/components/ui/Input';
 import Button from '@/components/ui/Button';
 import { useCart } from '@/components/cart/CartProvider';
 
+type PaymentMethod = 'card' | 'mpesa';
+
 export default function CartCheckoutForm() {
   const router = useRouter();
   const { items, total, clearCart, hydrated } = useCart();
   const [buyerName, setBuyerName] = useState('');
   const [buyerEmail, setBuyerEmail] = useState('');
+  const [method, setMethod] = useState<PaymentMethod>('card');
+  const [usdToKesRate, setUsdToKesRate] = useState<number | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const isFree = total === 0 && items.length > 0;
-  const hasUnconfiguredPaid = items.some((i) => Number(i.price) > 0);
-  // Stripe config checked server-side; client allows submit for paid carts
+  const kesTotal =
+    usdToKesRate !== null ? Math.round(total * usdToKesRate) : null;
+
+  useEffect(() => {
+    if (isFree || items.length === 0) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await fetch('/api/settings/public');
+        const json = await res.json();
+        if (!cancelled && res.ok && json.success) {
+          setUsdToKesRate(Number(json.data.usdToKesRate));
+        }
+      } catch {
+        // Rate preview is optional; server still converts on initialize
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [isFree, items.length]);
 
   if (!hydrated) {
     return (
@@ -72,10 +95,10 @@ export default function CartCheckoutForm() {
         return;
       }
 
-      const res = await fetch('/api/create-checkout-session', {
+      const res = await fetch('/api/paystack/initialize', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ guideIds, buyerName, buyerEmail }),
+        body: JSON.stringify({ guideIds, buyerName, buyerEmail, method }),
       });
       const json = await res.json();
       if (!res.ok || !json.success) {
@@ -146,6 +169,44 @@ export default function CartCheckoutForm() {
                   </div>
                 </div>
 
+                {!isFree && (
+                  <div>
+                    <h2 className="mb-4 font-display text-xl font-bold text-navy-800">
+                      Payment method
+                    </h2>
+                    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                      <button
+                        type="button"
+                        onClick={() => setMethod('card')}
+                        className={`rounded-xl border px-4 py-3 text-left transition-colors ${
+                          method === 'card'
+                            ? 'border-primary-600 bg-primary-50 text-primary-900'
+                            : 'border-border bg-white text-navy-700 hover:border-navy-200'
+                        }`}
+                      >
+                        <span className="block font-semibold">Card (USD)</span>
+                        <span className="text-sm opacity-80">Visa, Mastercard, and more</span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setMethod('mpesa')}
+                        className={`rounded-xl border px-4 py-3 text-left transition-colors ${
+                          method === 'mpesa'
+                            ? 'border-primary-600 bg-primary-50 text-primary-900'
+                            : 'border-border bg-white text-navy-700 hover:border-navy-200'
+                        }`}
+                      >
+                        <span className="block font-semibold">M-Pesa</span>
+                        <span className="text-sm opacity-80">
+                          {kesTotal !== null
+                            ? `≈ KES ${kesTotal.toLocaleString()}`
+                            : 'Pay in Kenyan Shillings'}
+                        </span>
+                      </button>
+                    </div>
+                  </div>
+                )}
+
                 <div className="border-t border-border pt-6">
                   <Button
                     type="submit"
@@ -165,13 +226,8 @@ export default function CartCheckoutForm() {
                   <p className="mt-4 text-center text-sm text-navy-400">
                     {isFree
                       ? 'No payment required — instant download after confirmation'
-                      : 'Your payment is secure and encrypted via Stripe'}
+                      : 'Secure payment via Paystack (card or M-Pesa)'}
                   </p>
-                  {!isFree && hasUnconfiguredPaid && (
-                    <p className="mt-2 text-center text-xs text-navy-400">
-                      Paid guides must have Stripe prices configured in admin.
-                    </p>
-                  )}
                 </div>
               </form>
             </Card>
@@ -209,11 +265,23 @@ export default function CartCheckoutForm() {
                 ))}
               </div>
 
-              <div className="mb-6 flex items-center justify-between">
-                <span className="font-display text-lg font-bold text-navy-800">Total</span>
-                <span className="font-display text-2xl font-extrabold text-navy-800">
-                  {total === 0 ? 'FREE' : `$${total.toFixed(2)}`}
-                </span>
+              <div className="mb-6 space-y-2">
+                {!isFree && method === 'mpesa' && kesTotal !== null && (
+                  <div className="flex items-center justify-between text-sm text-navy-400">
+                    <span>M-Pesa total</span>
+                    <span>≈ KES {kesTotal.toLocaleString()}</span>
+                  </div>
+                )}
+                <div className="flex items-center justify-between">
+                  <span className="font-display text-lg font-bold text-navy-800">Total</span>
+                  <span className="font-display text-2xl font-extrabold text-navy-800">
+                    {total === 0
+                      ? 'FREE'
+                      : method === 'mpesa' && kesTotal !== null
+                        ? `KES ${kesTotal.toLocaleString()}`
+                        : `$${total.toFixed(2)}`}
+                  </span>
+                </div>
               </div>
 
               <div className="space-y-2 border-t border-border pt-6">

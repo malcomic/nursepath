@@ -1,6 +1,6 @@
 import { withHandler } from '@/lib/api/with-handler';
 import { jsonResponse } from '@/lib/api/response';
-import { createCheckoutSession } from '@/lib/controllers/stripeController';
+import { initializePayment } from '@/lib/controllers/paystackController';
 
 export const POST = withHandler(async (req) => {
   const body = await req.json();
@@ -8,5 +8,5 @@ export const POST = withHandler(async (req) => {
     req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
     req.headers.get('x-real-ip') ||
     undefined;
-  return jsonResponse(await createCheckoutSession(body, ipAddress));
+  return jsonResponse(await initializePayment(body, ipAddress));
 });

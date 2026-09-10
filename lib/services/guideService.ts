@@ -38,7 +38,6 @@ export class GuideService {
     slug?: string;
     description?: string;
     price: number;
-    stripePriceId?: string;
     categoryId: string;
     pdfUrl: string;
     thumbnailUrl?: string;
@@ -50,7 +49,6 @@ export class GuideService {
       slug,
       description: data.description ?? null,
       price: data.price,
-      stripePriceId: data.stripePriceId ?? null,
       categoryId: data.categoryId,
       pdfUrl: data.pdfUrl,
       thumbnailUrl: data.thumbnailUrl ?? null,
@@ -64,7 +62,6 @@ export class GuideService {
       slug?: string;
       description?: string;
       price?: number;
-      stripePriceId?: string;
       categoryId?: string;
       pdfUrl?: string;
       thumbnailUrl?: string;

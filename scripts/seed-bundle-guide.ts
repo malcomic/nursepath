@@ -7,7 +7,7 @@
  * Prerequisites:
  * - DATABASE_URL set
  * - At least one Category in the database
- * - After seeding, set a real pdfUrl / stripePriceId / thumbnailUrl in Admin → Guides
+ * - After seeding, set a real pdfUrl / thumbnailUrl in Admin → Guides
  */
 import 'dotenv/config';
 import { prisma } from '../lib/prisma';
@@ -37,13 +37,12 @@ async function main() {
       // Placeholder — replace via Admin with a real Vercel Blob PDF URL
       pdfUrl: 'https://example.com/replace-with-real-bundle.pdf',
       thumbnailUrl: null,
-      stripePriceId: null,
     },
   });
 
   console.log(`Created bundle guide: ${guide.id}`);
   console.log(`Public URL: /guides/${guide.slug}`);
-  console.log('Next: open Admin → Guides, upload the PDF, set Stripe Price ID, and save.');
+  console.log('Next: open Admin → Guides, upload the PDF, and save.');
 }
 
 main()

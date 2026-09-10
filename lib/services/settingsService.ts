@@ -6,8 +6,16 @@ export interface SettingsInput {
   maxDownloads?: number;
   supportEmail?: string;
   currency?: string;
+  usdToKesRate?: number;
   paymentProvider?: string | null;
   paymentApiKey?: string | null;
+}
+
+function serializeSettings<T extends { usdToKesRate: unknown }>(settings: T) {
+  return {
+    ...settings,
+    usdToKesRate: Number(settings.usdToKesRate),
+  };
 }
 
 export class SettingsService {
@@ -16,7 +24,7 @@ export class SettingsService {
     if (!settings) {
       settings = await prisma.settings.create({ data: {} });
     }
-    return settings;
+    return serializeSettings(settings);
   }
 
   async updateSettings(input: SettingsInput) {
@@ -36,19 +44,28 @@ export class SettingsService {
       throw new ApiError(400, 'maxDownloads must be between 1 and 10');
     }
 
-    return prisma.settings.update({
+    if (
+      input.usdToKesRate !== undefined &&
+      (input.usdToKesRate <= 0 || input.usdToKesRate > 10000)
+    ) {
+      throw new ApiError(400, 'usdToKesRate must be greater than 0 and at most 10000');
+    }
+
+    const updated = await prisma.settings.update({
       where: { id: current.id },
       data: {
         downloadExpiryHours: input.downloadExpiryHours ?? current.downloadExpiryHours,
         maxDownloads: input.maxDownloads ?? current.maxDownloads,
         supportEmail: input.supportEmail ?? current.supportEmail,
         currency: input.currency ?? current.currency,
+        usdToKesRate: input.usdToKesRate ?? current.usdToKesRate,
         paymentProvider:
           input.paymentProvider !== undefined ? input.paymentProvider : current.paymentProvider,
         paymentApiKey:
           input.paymentApiKey !== undefined ? input.paymentApiKey : current.paymentApiKey,
       },
     });
+    return serializeSettings(updated);
   }
 }
 

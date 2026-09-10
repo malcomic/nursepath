@@ -21,7 +21,6 @@ export interface Guide {
   slug: string;
   description: string | null;
   price: number;
-  stripePriceId?: string | null;
   categoryId: string;
   pdfUrl: string;
   thumbnailUrl: string | null;

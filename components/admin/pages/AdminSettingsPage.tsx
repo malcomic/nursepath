@@ -9,6 +9,7 @@ interface Settings {
   maxDownloads: number;
   supportEmail: string;
   currency: string;
+  usdToKesRate: number;
   paymentProvider?: string | null;
   paymentApiKey?: string | null;
 }
@@ -37,7 +38,11 @@ export default function AdminSettingsPage() {
   const handleChange = (field: keyof Settings, value: string) => {
     if (!settings) return;
     let parsed: string | number = value;
-    if (field === 'downloadExpiryHours' || field === 'maxDownloads') {
+    if (
+      field === 'downloadExpiryHours' ||
+      field === 'maxDownloads' ||
+      field === 'usdToKesRate'
+    ) {
       parsed = value === '' ? 0 : Number(value);
     }
     setSettings({ ...settings, [field]: parsed });
@@ -120,6 +125,22 @@ export default function AdminSettingsPage() {
                   onChange={(e) => handleChange('currency', e.target.value)}
                   className="w-full px-3 py-2.5 rounded-xl border border-slate-200 text-sm"
                 />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-1">
+                  USD to KES rate
+                </label>
+                <input
+                  type="number"
+                  min={1}
+                  step={0.0001}
+                  value={settings.usdToKesRate}
+                  onChange={(e) => handleChange('usdToKesRate', e.target.value)}
+                  className="w-full px-3 py-2.5 rounded-xl border border-slate-200 text-sm"
+                />
+                <p className="mt-1 text-xs text-slate-500">
+                  Used to convert USD catalog prices when buyers pay with M-Pesa.
+                </p>
               </div>
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-1">

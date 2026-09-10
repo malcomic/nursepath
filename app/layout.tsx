@@ -21,17 +21,23 @@ export const metadata: Metadata = {
     template: '%s | NursePath',
   },
   description: 'NCLEX-RN study guides and nursing exam prep for students.',
+  icons: {
+    icon: '/brand/logo.png',
+    apple: '/apple-icon.png',
+  },
   openGraph: {
     type: 'website',
     locale: 'en_US',
     siteName: 'NursePath',
     title: 'NursePath — NCLEX-RN Study Guides & Nursing Exam Prep',
     description: 'NCLEX-RN study guides and nursing exam prep for students.',
+    images: [{ url: '/brand/logo.png', width: 500, height: 500, alt: 'NursePath' }],
   },
   twitter: {
-    card: 'summary_large_image',
+    card: 'summary',
     title: 'NursePath — NCLEX-RN Study Guides & Nursing Exam Prep',
     description: 'NCLEX-RN study guides and nursing exam prep for students.',
+    images: ['/brand/logo.png'],
   },
 };
 

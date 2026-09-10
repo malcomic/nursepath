@@ -21,8 +21,9 @@ export default function PrivacyPage() {
         <h2 className="text-xl font-bold text-gray-900 mb-3">Information We Collect</h2>
         <p>
           When you make a purchase or contact us, we may collect your name, email address, order
-          details, and messages you send through our contact form. Payment card details are processed
-          by Stripe — we do not store full credit card numbers on our servers.
+          details, and messages you send through our contact form. Payment card and mobile money
+          details are processed by Paystack — we do not store full card numbers or M-Pesa PINs on
+          our servers.
         </p>
       </section>
 
@@ -40,15 +41,15 @@ export default function PrivacyPage() {
         <p>
           Payments are handled securely by{' '}
           <a
-            href="https://stripe.com/privacy"
+            href="https://paystack.com/ke/terms"
             className="text-primary-600 hover:text-primary-700"
             target="_blank"
             rel="noopener noreferrer"
           >
-            Stripe
+            Paystack
           </a>
-          . Stripe&apos;s privacy policy governs how payment data is collected and stored during
-          checkout.
+          . Paystack&apos;s privacy and terms policies govern how payment data is collected and
+          stored during checkout.
         </p>
       </section>
 

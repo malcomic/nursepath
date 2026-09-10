@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { ToastProvider } from '@/components/admin/ToastProvider';
 import { adminFetch } from '@/lib/admin/api-client';
+import Logo from '@/components/layout/Logo';
 
 const PAGE_TITLES: Record<string, string> = {
   '/admin/dashboard': 'Dashboard',
@@ -57,19 +58,15 @@ export default function AdminShell({ children }: AdminShellProps) {
     <ToastProvider>
       <div className="min-h-screen bg-slate-50 flex">
         <aside className="hidden md:flex w-64 flex-col border-r border-slate-200 bg-white">
-          <div className="h-16 flex items-center px-6 border-b border-slate-200">
-            <div className="flex items-center gap-2">
-              <div className="bg-blue-600 text-white w-9 h-9 rounded-xl flex items-center justify-center font-black text-sm">
-                NP
-              </div>
-              <div className="flex flex-col">
-                <span className="text-sm font-black text-slate-900 tracking-tight">
-                  NursePath
-                </span>
-                <span className="text-[11px] font-semibold uppercase tracking-widest text-slate-400">
-                  Admin
-                </span>
-              </div>
+          <div className="h-16 flex items-center gap-2.5 px-5 border-b border-slate-200">
+            <Logo href="/admin/dashboard" mark size={40} />
+            <div className="flex flex-col min-w-0">
+              <span className="text-sm font-black text-slate-900 tracking-tight truncate">
+                NursePath
+              </span>
+              <span className="text-[11px] font-semibold uppercase tracking-widest text-slate-400">
+                Admin
+              </span>
             </div>
           </div>
 
