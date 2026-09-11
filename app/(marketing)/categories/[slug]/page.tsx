@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { categoryService } from '@/lib/services/categoryService';
 import { guideService } from '@/lib/services/guideService';
+import { toPublicGuide } from '@/lib/controllers/guideController';
 import { getCategorySeo } from '@/lib/seo/category-keywords';
 import { slugify } from '@/lib/slugify';
 import GuideGrid from '@/components/guides/GuideGrid';
@@ -42,7 +43,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
     notFound();
   }
 
-  const guides = await guideService.getGuidesByCategory(category.id);
+  const guides = (await guideService.getGuidesByCategory(category.id)).map(toPublicGuide);
   const seo = getCategorySeo(slug);
 
   return (

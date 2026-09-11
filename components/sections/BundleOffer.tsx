@@ -1,7 +1,10 @@
+'use client';
+
 import Link from 'next/link';
 import Image from 'next/image';
 import { FileText } from 'lucide-react';
 import Button from '../ui/Button';
+import GuidePrice from '@/components/currency/GuidePrice';
 
 interface BundleOfferProps {
   slug: string;
@@ -36,7 +39,13 @@ export default function BundleOffer({
         <div className="overflow-hidden rounded-3xl border border-border bg-soft lg:flex lg:items-center">
           <div className="relative h-56 w-full shrink-0 bg-primary-50 lg:h-auto lg:min-h-[280px] lg:w-[380px]">
             {thumbnailUrl ? (
-              <Image src={thumbnailUrl} alt={title} fill className="object-cover" sizes="380px" />
+              <Image
+                src={thumbnailUrl}
+                alt={title}
+                fill
+                className="object-contain"
+                sizes="380px"
+              />
             ) : (
               <div className="flex h-full min-h-[220px] items-center justify-center">
                 <FileText className="h-16 w-16 text-primary-600" />
@@ -48,16 +57,14 @@ export default function BundleOffer({
               Popular Savings
             </span>
             <h3 className="font-display text-2xl font-bold text-navy-800 sm:text-3xl">{title}</h3>
-            {description && (
-              <p className="max-w-xl text-navy-400">{description}</p>
-            )}
+            {description && <p className="max-w-xl text-navy-400">{description}</p>}
             <div className="mt-2 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-wide text-navy-400">
                   Bundle price
                 </p>
                 <p className="font-display text-4xl font-extrabold text-primary-600">
-                  ${price.toFixed(0)}
+                  <GuidePrice usd={price} showUsdSecondary />
                 </p>
               </div>
               <Link href={`/guides/${slug}`}>

@@ -7,7 +7,11 @@ import { guideService } from '@/lib/services/guideService';
 import { ApiError } from '@/lib/errors/api-error';
 import Card from '@/components/ui/Card';
 import GuidePurchaseButton from '@/components/guides/GuidePurchaseButton';
+import GuidePreviewButton from '@/components/guides/GuidePreviewButton';
+import GuidePrice from '@/components/currency/GuidePrice';
 import JsonLd from '@/components/seo/JsonLd';
+import { settingsService } from '@/lib/services/settingsService';
+import { usdToKes } from '@/lib/currency/format';
 
 const features = [
   'Comprehensive nursing exam preparation material',
@@ -63,6 +67,9 @@ export default async function GuidePage({ params }: GuidePageProps) {
 
   const baseUrl = process.env.PUBLIC_APP_URL ?? 'http://localhost:3000';
   const guideUrl = `${baseUrl}/guides/${guide.slug}`;
+  const settings = await settingsService.getSettings();
+  const usdToKesRate = Number(settings.usdToKesRate);
+  const displayPriceKes = usdToKes(Number(guide.price), usdToKesRate);
   const productJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Product',
@@ -71,8 +78,8 @@ export default async function GuidePage({ params }: GuidePageProps) {
     image: guide.thumbnailUrl ?? undefined,
     offers: {
       '@type': 'Offer',
-      price: guide.price.toString(),
-      priceCurrency: 'USD',
+      price: Number(guide.price) === 0 ? '0' : displayPriceKes.toString(),
+      priceCurrency: 'KES',
       availability: 'https://schema.org/InStock',
       url: guideUrl,
     },
@@ -150,18 +157,18 @@ export default async function GuidePage({ params }: GuidePageProps) {
             <div className="lg:col-span-1">
               <Card className="sticky top-28">
                 {guide.thumbnailUrl ? (
-                  <div className="relative mb-6 h-48 w-full overflow-hidden rounded-xl bg-navy-50">
+                  <div className="relative mb-6 aspect-[3/4] w-full overflow-hidden rounded-xl bg-navy-50 lg:min-h-[320px]">
                     <Image
                       src={guide.thumbnailUrl}
                       alt={guide.title}
                       fill
-                      className="object-cover"
+                      className="object-contain"
                       sizes="(max-width: 1024px) 100vw, 33vw"
                       priority
                     />
                   </div>
                 ) : (
-                  <div className="mb-6 flex h-48 w-full items-center justify-center rounded-xl bg-primary-50">
+                  <div className="mb-6 flex aspect-[3/4] w-full items-center justify-center rounded-xl bg-primary-50 lg:min-h-[320px]">
                     <FileText className="h-16 w-16 text-primary-600" />
                   </div>
                 )}
@@ -169,11 +176,13 @@ export default async function GuidePage({ params }: GuidePageProps) {
                 <div className="mb-6">
                   <div className="mb-2 flex items-baseline gap-3">
                     <span className="font-display text-4xl font-extrabold text-navy-800">
-                      {Number(guide.price) === 0 ? 'FREE' : `$${Number(guide.price).toFixed(2)}`}
+                      <GuidePrice usd={Number(guide.price)} showUsdSecondary />
                     </span>
                   </div>
                   <p className="text-sm text-navy-400">One-time payment · Instant PDF download</p>
                 </div>
+
+                <GuidePreviewButton title={guide.title} previewPdfUrl={guide.previewPdfUrl} />
 
                 <GuidePurchaseButton
                   guideId={guide.id}

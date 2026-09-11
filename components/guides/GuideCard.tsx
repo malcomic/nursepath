@@ -5,11 +5,12 @@ import Image from 'next/image';
 import { FileText, Eye } from 'lucide-react';
 import Card from '../ui/Card';
 import Button from '../ui/Button';
-import type { GuideWithCategory } from '@/lib/types/guide';
+import GuidePrice from '@/components/currency/GuidePrice';
+import type { PublicGuideWithCategory } from '@/lib/types/guide';
 import { useCart } from '@/components/cart/CartProvider';
 
 interface GuideCardProps {
-  guide: GuideWithCategory;
+  guide: PublicGuideWithCategory;
 }
 
 export default function GuideCard({ guide }: GuideCardProps) {
@@ -30,17 +31,17 @@ export default function GuideCard({ guide }: GuideCardProps) {
   return (
     <Card hover className="group flex h-full flex-col overflow-hidden rounded-2xl border-border p-4">
       {guide.thumbnailUrl ? (
-        <div className="relative mb-4 h-48 w-full overflow-hidden rounded-xl bg-navy-50">
+        <div className="relative mb-4 h-48 w-full overflow-hidden rounded-xl bg-navy-50 lg:h-64">
           <Image
             src={guide.thumbnailUrl}
             alt={guide.title}
             fill
-            className="object-cover transition-transform duration-300 group-hover:scale-105"
+            className="object-contain"
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
           />
         </div>
       ) : (
-        <div className="mb-4 flex h-48 w-full items-center justify-center rounded-xl bg-primary-50">
+        <div className="mb-4 flex h-48 w-full items-center justify-center rounded-xl bg-primary-50 lg:h-64">
           <FileText className="h-16 w-16 text-primary-600" />
         </div>
       )}
@@ -61,7 +62,7 @@ export default function GuideCard({ guide }: GuideCardProps) {
 
       <div className="mt-auto space-y-3">
         <span className="font-display text-2xl font-extrabold text-navy-800">
-          {Number(guide.price) === 0 ? 'FREE' : `$${Number(guide.price).toFixed(2)}`}
+          <GuidePrice usd={Number(guide.price)} />
         </span>
 
         <div className="grid grid-cols-2 gap-2">

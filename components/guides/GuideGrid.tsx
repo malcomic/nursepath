@@ -1,8 +1,8 @@
-import type { GuideWithCategory } from '@/lib/types/guide';
+import type { PublicGuideWithCategory } from '@/lib/types/guide';
 import GuideCard from './GuideCard';
 
 interface GuideGridProps {
-  guides: GuideWithCategory[];
+  guides: PublicGuideWithCategory[];
 }
 
 export default function GuideGrid({ guides }: GuideGridProps) {

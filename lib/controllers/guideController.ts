@@ -15,6 +15,7 @@ const createFileUrlSchema = (prefix: string, errorMessage: string) =>
 
 const thumbnailUrlSchema = createFileUrlSchema('/api/guides/thumbnail/', 'Invalid thumbnail URL');
 const pdfUrlSchema = createFileUrlSchema('/api/guides/pdf/', 'Invalid PDF URL');
+const previewPdfUrlSchema = createFileUrlSchema('/api/guides/preview/', 'Invalid preview PDF URL');
 
 const optionalSlugSchema = z
   .string()
@@ -31,14 +32,26 @@ const createGuideSchema = z.object({
   price: z.number().positive(),
   categoryId: z.string().min(1),
   pdfUrl: pdfUrlSchema,
+  previewPdfUrl: previewPdfUrlSchema.nullable().optional(),
   thumbnailUrl: thumbnailUrlSchema.optional(),
 });
 
 const updateGuideSchema = createGuideSchema.partial();
 
+/** Public guide payload without the full PDF URL. */
+export function toPublicGuide<T extends { pdfUrl: string }>(guide: T): Omit<T, 'pdfUrl'> {
+  const { pdfUrl: _pdfUrl, ...rest } = guide;
+  return rest;
+}
+
 export async function getAllGuides() {
   const guides = await guideService.getAllGuides();
   return { success: true as const, data: guides };
+}
+
+export async function getAllGuidesPublic() {
+  const guides = await guideService.getAllGuides();
+  return { success: true as const, data: guides.map(toPublicGuide) };
 }
 
 export async function getGuideById(id: string) {
@@ -46,9 +59,14 @@ export async function getGuideById(id: string) {
   return { success: true as const, data: guide };
 }
 
+export async function getGuideByIdPublic(id: string) {
+  const guide = await guideService.getGuide(id);
+  return { success: true as const, data: toPublicGuide(guide) };
+}
+
 export async function getGuidesByCategory(categoryId: string) {
   const guides = await guideService.getGuidesByCategory(categoryId);
-  return { success: true as const, data: guides };
+  return { success: true as const, data: guides.map(toPublicGuide) };
 }
 
 export async function searchGuides(q: string | null) {
@@ -56,7 +74,7 @@ export async function searchGuides(q: string | null) {
     throw new ApiError(400, 'Search query required');
   }
   const results = await guideService.searchGuides(q);
-  return { success: true as const, data: results };
+  return { success: true as const, data: results.map(toPublicGuide) };
 }
 
 export async function createGuide(body: unknown) {

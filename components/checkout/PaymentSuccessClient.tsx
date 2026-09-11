@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import Card from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
+import GuidePrice from '@/components/currency/GuidePrice';
 
 interface OrderItem {
   id: string;
@@ -159,14 +160,14 @@ export default function PaymentSuccessClient() {
                     </div>
                   </div>
                   <p className="font-bold text-navy-800">
-                    {item.guide.price === 0 ? 'FREE' : `$${Number(item.guide.price).toFixed(2)}`}
+                    <GuidePrice usd={Number(item.guide.price)} />
                   </p>
                 </div>
               ))}
               <div className="flex items-center justify-between pt-2">
                 <span className="font-display text-lg font-bold text-navy-800">Total</span>
                 <span className="font-display text-2xl font-extrabold text-navy-800">
-                  {total === 0 ? 'FREE' : `$${total.toFixed(2)}`}
+                  <GuidePrice usd={total} />
                 </span>
               </div>
             </div>

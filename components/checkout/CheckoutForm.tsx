@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -8,6 +8,8 @@ import { ArrowLeft, Lock, FileText, CheckCircle } from 'lucide-react';
 import Card from '@/components/ui/Card';
 import Input from '@/components/ui/Input';
 import Button from '@/components/ui/Button';
+import GuidePrice from '@/components/currency/GuidePrice';
+import { useCurrency } from '@/components/currency/CurrencyProvider';
 
 export interface CheckoutGuide {
   id: string;
@@ -26,36 +28,16 @@ interface CheckoutFormProps {
 
 export default function CheckoutForm({ guide }: CheckoutFormProps) {
   const router = useRouter();
+  const { formatPrice, formatUsdAmount, toKes, formatKesAmount } = useCurrency();
   const [buyerName, setBuyerName] = useState('');
   const [buyerEmail, setBuyerEmail] = useState('');
   const [method, setMethod] = useState<PaymentMethod>('card');
-  const [usdToKesRate, setUsdToKesRate] = useState<number | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const isFree = guide.price === 0;
   const canCheckout = isFree || guide.price > 0;
-  const kesTotal =
-    usdToKesRate !== null ? Math.round(guide.price * usdToKesRate) : null;
-
-  useEffect(() => {
-    if (isFree) return;
-    let cancelled = false;
-    (async () => {
-      try {
-        const res = await fetch('/api/settings/public');
-        const json = await res.json();
-        if (!cancelled && res.ok && json.success) {
-          setUsdToKesRate(Number(json.data.usdToKesRate));
-        }
-      } catch {
-        // Rate preview is optional; server still converts on initialize
-      }
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, [isFree]);
+  const kesTotal = toKes(guide.price);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -175,8 +157,12 @@ export default function CheckoutForm({ guide }: CheckoutFormProps) {
                             : 'border-gray-200 bg-white text-gray-700 hover:border-gray-300'
                         }`}
                       >
-                        <span className="block font-semibold">Card (USD)</span>
-                        <span className="text-sm opacity-80">Visa, Mastercard, and more</span>
+                        <span className="block font-semibold">Card</span>
+                        <span className="text-sm opacity-80">
+                          {isFree
+                            ? 'No charge'
+                            : `Charged in USD (≈ ${formatUsdAmount(guide.price)})`}
+                        </span>
                       </button>
                       <button
                         type="button"
@@ -188,11 +174,7 @@ export default function CheckoutForm({ guide }: CheckoutFormProps) {
                         }`}
                       >
                         <span className="block font-semibold">M-Pesa</span>
-                        <span className="text-sm opacity-80">
-                          {kesTotal !== null
-                            ? `≈ KES ${kesTotal.toLocaleString()}`
-                            : 'Pay in Kenyan Shillings'}
-                        </span>
+                        <span className="text-sm opacity-80">{formatKesAmount(kesTotal)}</span>
                       </button>
                     </div>
                   </div>
@@ -235,7 +217,7 @@ export default function CheckoutForm({ guide }: CheckoutFormProps) {
                       src={guide.thumbnailUrl}
                       alt={guide.title}
                       fill
-                      className="object-cover"
+                      className="object-contain"
                       sizes="80px"
                     />
                   </div>
@@ -253,27 +235,23 @@ export default function CheckoutForm({ guide }: CheckoutFormProps) {
               <div className="space-y-3 mb-6">
                 <div className="flex items-center justify-between text-gray-600">
                   <span>Subtotal</span>
-                  <span>{guide.price === 0 ? 'FREE' : `$${guide.price.toFixed(2)}`}</span>
+                  <span>
+                    <GuidePrice usd={guide.price} />
+                  </span>
                 </div>
-                {!isFree && method === 'mpesa' && kesTotal !== null && (
+                {!isFree && method === 'card' && (
                   <div className="flex items-center justify-between text-gray-600">
-                    <span>M-Pesa total</span>
-                    <span>≈ KES {kesTotal.toLocaleString()}</span>
+                    <span>Card charge</span>
+                    <span>≈ {formatUsdAmount(guide.price)}</span>
                   </div>
                 )}
                 <div className="flex items-center justify-between text-gray-600">
                   <span>Tax</span>
-                  <span>$0.00</span>
+                  <span>KES 0</span>
                 </div>
                 <div className="pt-3 border-t border-gray-200 flex items-center justify-between">
                   <span className="text-lg font-bold text-gray-900">Total</span>
-                  <span className="text-2xl font-black text-gray-900">
-                    {guide.price === 0
-                      ? 'FREE'
-                      : method === 'mpesa' && kesTotal !== null
-                        ? `KES ${kesTotal.toLocaleString()}`
-                        : `$${guide.price.toFixed(2)}`}
-                  </span>
+                  <span className="text-2xl font-black text-gray-900">{formatPrice(guide.price)}</span>
                 </div>
               </div>
 

@@ -23,6 +23,7 @@ export interface Guide {
   price: number;
   categoryId: string;
   pdfUrl: string;
+  previewPdfUrl: string | null;
   thumbnailUrl: string | null;
   createdAt: Date;
   updatedAt: Date;

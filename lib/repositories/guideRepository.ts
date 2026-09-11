@@ -46,6 +46,7 @@ export class GuideRepository {
         price: data.price,
         categoryId: data.categoryId,
         pdfUrl: data.pdfUrl,
+        previewPdfUrl: data.previewPdfUrl,
         thumbnailUrl: data.thumbnailUrl,
       },
     });
@@ -62,6 +63,7 @@ export class GuideRepository {
         price: data.price !== undefined ? Number(data.price) : undefined,
         categoryId: data.categoryId,
         pdfUrl: data.pdfUrl,
+        previewPdfUrl: data.previewPdfUrl,
         thumbnailUrl: data.thumbnailUrl,
       },
     });

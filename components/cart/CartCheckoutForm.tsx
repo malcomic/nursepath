@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -9,41 +9,23 @@ import Card from '@/components/ui/Card';
 import Input from '@/components/ui/Input';
 import Button from '@/components/ui/Button';
 import { useCart } from '@/components/cart/CartProvider';
+import GuidePrice from '@/components/currency/GuidePrice';
+import { useCurrency } from '@/components/currency/CurrencyProvider';
 
 type PaymentMethod = 'card' | 'mpesa';
 
 export default function CartCheckoutForm() {
   const router = useRouter();
   const { items, total, clearCart, hydrated } = useCart();
+  const { formatPrice, formatUsdAmount, toKes, formatKesAmount } = useCurrency();
   const [buyerName, setBuyerName] = useState('');
   const [buyerEmail, setBuyerEmail] = useState('');
   const [method, setMethod] = useState<PaymentMethod>('card');
-  const [usdToKesRate, setUsdToKesRate] = useState<number | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const isFree = total === 0 && items.length > 0;
-  const kesTotal =
-    usdToKesRate !== null ? Math.round(total * usdToKesRate) : null;
-
-  useEffect(() => {
-    if (isFree || items.length === 0) return;
-    let cancelled = false;
-    (async () => {
-      try {
-        const res = await fetch('/api/settings/public');
-        const json = await res.json();
-        if (!cancelled && res.ok && json.success) {
-          setUsdToKesRate(Number(json.data.usdToKesRate));
-        }
-      } catch {
-        // Rate preview is optional; server still converts on initialize
-      }
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, [isFree, items.length]);
+  const kesTotal = toKes(total);
 
   if (!hydrated) {
     return (
@@ -184,8 +166,10 @@ export default function CartCheckoutForm() {
                             : 'border-border bg-white text-navy-700 hover:border-navy-200'
                         }`}
                       >
-                        <span className="block font-semibold">Card (USD)</span>
-                        <span className="text-sm opacity-80">Visa, Mastercard, and more</span>
+                        <span className="block font-semibold">Card</span>
+                        <span className="text-sm opacity-80">
+                          {isFree ? 'No charge' : `Charged in USD (≈ ${formatUsdAmount(total)})`}
+                        </span>
                       </button>
                       <button
                         type="button"
@@ -198,9 +182,7 @@ export default function CartCheckoutForm() {
                       >
                         <span className="block font-semibold">M-Pesa</span>
                         <span className="text-sm opacity-80">
-                          {kesTotal !== null
-                            ? `≈ KES ${kesTotal.toLocaleString()}`
-                            : 'Pay in Kenyan Shillings'}
+                          {formatKesAmount(kesTotal)}
                         </span>
                       </button>
                     </div>
@@ -246,7 +228,7 @@ export default function CartCheckoutForm() {
                           src={item.thumbnailUrl}
                           alt=""
                           fill
-                          className="object-cover"
+                          className="object-contain"
                           sizes="48px"
                         />
                       </div>
@@ -258,7 +240,7 @@ export default function CartCheckoutForm() {
                     <div className="min-w-0 flex-1">
                       <p className="line-clamp-2 text-sm font-semibold text-navy-800">{item.title}</p>
                       <p className="text-sm text-primary-600">
-                        {item.price === 0 ? 'FREE' : `$${Number(item.price).toFixed(2)}`}
+                        <GuidePrice usd={Number(item.price)} />
                       </p>
                     </div>
                   </div>
@@ -266,20 +248,16 @@ export default function CartCheckoutForm() {
               </div>
 
               <div className="mb-6 space-y-2">
-                {!isFree && method === 'mpesa' && kesTotal !== null && (
+                {!isFree && method === 'card' && (
                   <div className="flex items-center justify-between text-sm text-navy-400">
-                    <span>M-Pesa total</span>
-                    <span>≈ KES {kesTotal.toLocaleString()}</span>
+                    <span>Card charge</span>
+                    <span>≈ {formatUsdAmount(total)}</span>
                   </div>
                 )}
                 <div className="flex items-center justify-between">
                   <span className="font-display text-lg font-bold text-navy-800">Total</span>
                   <span className="font-display text-2xl font-extrabold text-navy-800">
-                    {total === 0
-                      ? 'FREE'
-                      : method === 'mpesa' && kesTotal !== null
-                        ? `KES ${kesTotal.toLocaleString()}`
-                        : `$${total.toFixed(2)}`}
+                    {formatPrice(total)}
                   </span>
                 </div>
               </div>

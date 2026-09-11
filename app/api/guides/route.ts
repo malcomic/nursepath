@@ -1,10 +1,27 @@
+import { NextRequest } from 'next/server';
 import { withHandler } from '@/lib/api/with-handler';
 import { jsonResponse } from '@/lib/api/response';
 import { verifyAdmin } from '@/lib/api/verify-admin';
-import { getAllGuides, createGuide } from '@/lib/controllers/guideController';
+import {
+  getAllGuides,
+  getAllGuidesPublic,
+  createGuide,
+} from '@/lib/controllers/guideController';
 
-export const GET = withHandler(async () => {
-  return jsonResponse(await getAllGuides());
+function isAdminRequest(req: NextRequest): boolean {
+  try {
+    verifyAdmin(req);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+export const GET = withHandler(async (req) => {
+  if (isAdminRequest(req)) {
+    return jsonResponse(await getAllGuides());
+  }
+  return jsonResponse(await getAllGuidesPublic());
 });
 
 export const POST = withHandler(async (req) => {

@@ -1,3 +1,4 @@
+import { toPublicGuide } from '@/lib/controllers/guideController';
 import { guideService } from '@/lib/services/guideService';
 import { filterGuides, parseGuideFilters } from './filter-guides';
 
@@ -16,5 +17,5 @@ export async function getFilteredGuides(params: {
     guides = await guideService.getAllGuides();
   }
 
-  return filterGuides(guides, filters);
+  return filterGuides(guides, filters).map(toPublicGuide);
 }

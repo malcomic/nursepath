@@ -13,6 +13,7 @@ import {
 import { guideService } from '@/lib/services/guideService';
 import { categoryService } from '@/lib/services/categoryService';
 import { slugify } from '@/lib/slugify';
+import { toPublicGuide } from '@/lib/controllers/guideController';
 import Hero from '@/components/sections/Hero';
 import Features from '@/components/sections/Features';
 import HowItWorks from '@/components/sections/HowItWorks';
@@ -42,7 +43,7 @@ export default async function HomePage() {
     guideService.getAllGuides(),
     categoryService.getAllCategories(),
   ]);
-  const featured = guides.slice(0, 3);
+  const featured = guides.slice(0, 3).map(toPublicGuide);
 
   let bundle = null;
   try {

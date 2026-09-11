@@ -37,8 +37,9 @@ export default function TermsPage() {
       <section>
         <h2 className="text-xl font-bold text-gray-900 mb-3">Payments and Refunds</h2>
         <p>
-          All prices are listed in USD. Payments are processed by Paystack (card in USD or
-          M-Pesa in KES). We offer a 30-day money-back guarantee on eligible purchases. See our{' '}
+          All prices are listed in Kenyan Shillings (KES), converted from our USD catalog rate.
+          Payments are processed by Paystack (card charged in USD, or M-Pesa in KES). We offer a
+          30-day money-back guarantee on eligible purchases. See our{' '}
           <Link href="/refund" className="text-primary-600 hover:text-primary-700">
             Refund Policy
           </Link>{' '}

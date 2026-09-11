@@ -6,6 +6,7 @@ import { FileText, ShoppingBag, Trash2 } from 'lucide-react';
 import { useCart } from '@/components/cart/CartProvider';
 import Button from '@/components/ui/Button';
 import Card from '@/components/ui/Card';
+import GuidePrice from '@/components/currency/GuidePrice';
 
 export default function CartPageClient() {
   const { items, total, removeItem, hydrated } = useCart();
@@ -47,7 +48,7 @@ export default function CartPageClient() {
                         src={item.thumbnailUrl}
                         alt={item.title}
                         fill
-                        className="object-cover"
+                        className="object-contain"
                         sizes="80px"
                       />
                     </div>
@@ -64,7 +65,7 @@ export default function CartPageClient() {
                       {item.title}
                     </Link>
                     <p className="mt-1 font-display text-lg font-extrabold text-primary-600">
-                      {item.price === 0 ? 'FREE' : `$${Number(item.price).toFixed(2)}`}
+                      <GuidePrice usd={Number(item.price)} />
                     </p>
                   </div>
                   <button
@@ -85,11 +86,15 @@ export default function CartPageClient() {
                 <span>
                   {items.length} item{items.length === 1 ? '' : 's'}
                 </span>
-                <span>{total === 0 ? 'FREE' : `$${total.toFixed(2)}`}</span>
+                <span>
+                  <GuidePrice usd={total} />
+                </span>
               </div>
               <div className="mb-6 flex justify-between border-t border-border pt-4 font-display text-lg font-bold text-navy-800">
                 <span>Total</span>
-                <span>{total === 0 ? 'FREE' : `$${total.toFixed(2)}`}</span>
+                <span>
+                  <GuidePrice usd={total} showUsdSecondary />
+                </span>
               </div>
               <Link href="/checkout" className="block">
                 <Button fullWidth size="lg">

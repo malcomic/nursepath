@@ -40,6 +40,7 @@ export class GuideService {
     price: number;
     categoryId: string;
     pdfUrl: string;
+    previewPdfUrl?: string | null;
     thumbnailUrl?: string;
   }) {
     await categoryRepository.findById(data.categoryId);
@@ -51,6 +52,7 @@ export class GuideService {
       price: data.price,
       categoryId: data.categoryId,
       pdfUrl: data.pdfUrl,
+      previewPdfUrl: data.previewPdfUrl ?? null,
       thumbnailUrl: data.thumbnailUrl ?? null,
     });
   }
@@ -64,6 +66,7 @@ export class GuideService {
       price?: number;
       categoryId?: string;
       pdfUrl?: string;
+      previewPdfUrl?: string | null;
       thumbnailUrl?: string;
     }
   ) {

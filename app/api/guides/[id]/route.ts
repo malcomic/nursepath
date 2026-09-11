@@ -1,11 +1,29 @@
+import { NextRequest } from 'next/server';
 import { withHandler } from '@/lib/api/with-handler';
 import { jsonResponse } from '@/lib/api/response';
 import { verifyAdmin } from '@/lib/api/verify-admin';
-import { getGuideById, updateGuide, deleteGuide } from '@/lib/controllers/guideController';
+import {
+  getGuideById,
+  getGuideByIdPublic,
+  updateGuide,
+  deleteGuide,
+} from '@/lib/controllers/guideController';
 
-export const GET = withHandler(async (_req, { params }) => {
+function isAdminRequest(req: NextRequest): boolean {
+  try {
+    verifyAdmin(req);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+export const GET = withHandler(async (req, { params }) => {
   const { id } = await params;
-  return jsonResponse(await getGuideById(id));
+  if (isAdminRequest(req)) {
+    return jsonResponse(await getGuideById(id));
+  }
+  return jsonResponse(await getGuideByIdPublic(id));
 });
 
 export const PUT = withHandler(async (req, { params }) => {

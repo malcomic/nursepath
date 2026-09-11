@@ -19,6 +19,7 @@ interface Guide {
   price: number;
   categoryId: string;
   pdfUrl: string;
+  previewPdfUrl?: string | null;
   thumbnailUrl?: string | null;
 }
 
@@ -177,7 +178,9 @@ export default function AdminGuidesPage() {
     return result.data.thumbnailUrl;
   };
 
-  const uploadPdf = async (file: File): Promise<string> => {
+  const uploadPdf = async (
+    file: File
+  ): Promise<{ pdfUrl: string; previewPdfUrl: string | null }> => {
     const formData = new FormData();
     formData.append('pdf', file);
     const response = await adminFetch('/api/guides/upload-pdf', {
@@ -191,7 +194,10 @@ export default function AdminGuidesPage() {
     if (!result?.data?.pdfUrl) {
       throw new Error('Upload succeeded but no PDF URL was returned');
     }
-    return result.data.pdfUrl;
+    return {
+      pdfUrl: result.data.pdfUrl as string,
+      previewPdfUrl: (result.data.previewPdfUrl as string | null | undefined) ?? null,
+    };
   };
 
   const handleSubmit = async (event: FormEvent) => {
@@ -225,8 +231,11 @@ export default function AdminGuidesPage() {
       setStatusMessage(null);
 
       let pdfUrl = form.pdfUrl.trim();
+      let previewPdfUrl: string | null | undefined = undefined;
       if (pdfMode === 'upload' && pdfFile) {
-        pdfUrl = await uploadPdf(pdfFile);
+        const uploaded = await uploadPdf(pdfFile);
+        pdfUrl = uploaded.pdfUrl;
+        previewPdfUrl = uploaded.previewPdfUrl;
       }
 
       let thumbnailUrl = form.thumbnailUrl.trim();
@@ -241,6 +250,7 @@ export default function AdminGuidesPage() {
         price: parsedPrice,
         categoryId: form.categoryId,
         pdfUrl,
+        ...(previewPdfUrl !== undefined ? { previewPdfUrl } : {}),
         thumbnailUrl: thumbnailUrl || undefined,
       };
 
