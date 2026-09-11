@@ -46,14 +46,16 @@ const quickLinks = [
 export default function AdminDashboardPage() {
   return (
     <div className="space-y-8">
-      <div className="bg-white border border-slate-200 rounded-2xl shadow-sm p-8">
+      <div className="bg-white border border-border rounded-2xl shadow-soft p-8">
         <div className="flex items-start gap-4">
-          <div className="bg-blue-600 text-white w-12 h-12 rounded-2xl flex items-center justify-center">
+          <div className="bg-primary-600 text-white w-12 h-12 rounded-2xl flex items-center justify-center">
             <LayoutDashboard className="w-6 h-6" />
           </div>
           <div>
-            <h2 className="text-2xl font-black text-slate-900">Welcome to NursePath Admin</h2>
-            <p className="text-slate-600 mt-2 max-w-2xl">
+            <h2 className="font-display text-2xl font-bold text-navy-800">
+              Welcome to NursePath Admin
+            </h2>
+            <p className="text-navy-400 mt-2 max-w-2xl">
               Manage study guides, moderate reviews, fulfill orders, and configure store settings
               from this dashboard.
             </p>
@@ -68,17 +70,17 @@ export default function AdminDashboardPage() {
             <Link
               key={link.href}
               href={link.href}
-              className="bg-white border border-slate-200 rounded-2xl p-6 hover:border-blue-500 hover:shadow-md transition-all group"
+              className="bg-white border border-border rounded-2xl p-6 hover:border-primary-500 hover:shadow-soft transition-all group"
             >
               <div className="flex items-start gap-4">
-                <div className="bg-blue-50 text-blue-600 p-3 rounded-xl group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                <div className="bg-primary-50 text-primary-600 p-3 rounded-xl group-hover:bg-primary-600 group-hover:text-white transition-colors">
                   <Icon className="w-5 h-5" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold text-slate-900 group-hover:text-blue-700">
+                  <h3 className="font-display text-lg font-bold text-navy-800 group-hover:text-primary-700">
                     {link.label}
                   </h3>
-                  <p className="text-sm text-slate-500 mt-1">{link.description}</p>
+                  <p className="text-sm text-navy-400 mt-1">{link.description}</p>
                 </div>
               </div>
             </Link>

@@ -2,7 +2,6 @@ import type { MetadataRoute } from 'next';
 import { guideService } from '@/lib/services/guideService';
 import { categoryService } from '@/lib/services/categoryService';
 import { getAllPosts } from '@/lib/blog';
-import { slugify } from '@/lib/slugify';
 
 const baseUrl = process.env.PUBLIC_APP_URL ?? 'http://localhost:3000';
 
@@ -50,7 +49,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }));
 
   const categoryPages: MetadataRoute.Sitemap = categories.map((category) => ({
-    url: `${baseUrl}/categories/${slugify(category.name)}`,
+    url: `${baseUrl}/categories/${category.slug}`,
     lastModified: now,
     changeFrequency: 'weekly',
     priority: 0.9,

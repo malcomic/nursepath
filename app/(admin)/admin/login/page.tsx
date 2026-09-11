@@ -2,7 +2,7 @@
 
 import { useState, type FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
-import { Mail, Lock, ShieldCheck, ArrowRight, Star } from 'lucide-react';
+import { Mail, Lock, ShieldCheck, ArrowRight } from 'lucide-react';
 import { adminJson } from '@/lib/admin/api-client';
 import Logo from '@/components/layout/Logo';
 
@@ -34,57 +34,61 @@ export default function AdminLoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white flex flex-col md:flex-row">
-      <div className="hidden md:flex flex-1 bg-slate-900 relative p-12 flex-col justify-between overflow-hidden">
-        <div className="absolute inset-0 opacity-20 pointer-events-none">
-          <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-600 rounded-full blur-[100px] -mr-64 -mt-64" />
-          <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-teal-500 rounded-full blur-[100px] -ml-64 -mb-64" />
+    <div className="min-h-screen bg-soft flex flex-col md:flex-row">
+      <div className="hidden md:flex flex-1 bg-navy-800 relative p-12 flex-col justify-between overflow-hidden">
+        <div className="absolute inset-0 opacity-30 pointer-events-none">
+          <div className="absolute top-0 right-0 w-[480px] h-[480px] bg-primary-600 rounded-full blur-[110px] -mr-40 -mt-40" />
+          <div className="absolute bottom-0 left-0 w-[420px] h-[420px] bg-accent-500 rounded-full blur-[110px] -ml-40 -mb-40 opacity-40" />
         </div>
 
         <div className="relative z-10">
           <div className="mb-12">
             <Logo href="/" size={72} />
           </div>
-          <h2 className="text-5xl font-black text-white leading-tight mb-8">
-            Manage The Best <br />
-            Nursing Resources <br />
-            <span className="text-blue-400">From One Place.</span>
+          <h2 className="font-display text-4xl lg:text-5xl font-extrabold text-white leading-tight mb-6">
+            Manage nursing
+            <br />
+            study resources
+            <br />
+            <span className="text-primary-300">from one place.</span>
           </h2>
+          <p className="text-navy-200 max-w-md text-base leading-relaxed">
+            Guides, orders, reviews, and settings — styled for NursePath, built for daily ops.
+          </p>
         </div>
 
-        <div className="relative z-10 space-y-8">
-          <div className="flex items-start gap-4">
-            <div className="bg-white/10 p-2 rounded-lg mt-1">
-              <Star className="w-5 h-5 text-amber-400" />
-            </div>
-            <div>
-              <p className="text-white font-bold">Trusted by 10,000+ Students</p>
-              <p className="text-slate-400 text-sm">Join the community of successful future nurses.</p>
-            </div>
-          </div>
+        <div className="relative z-10">
+          <p className="text-sm text-navy-300 font-medium">
+            Tip: use strong credentials and sign out on shared devices.
+          </p>
         </div>
       </div>
 
-      <div className="flex-1 flex items-center justify-center p-8 bg-slate-50 md:bg-white">
-        <div className="w-full max-w-md space-y-10">
+      <div className="flex-1 flex items-center justify-center p-8 bg-soft md:bg-white">
+        <div className="w-full max-w-md space-y-8">
+          <div className="md:hidden mb-2">
+            <Logo href="/" size={56} />
+          </div>
           <div className="text-center md:text-left">
-            <h1 className="text-4xl font-black text-slate-900 mb-3">Admin Access</h1>
-            <p className="text-slate-500 font-medium">
-              Enter your admin credentials to manage guides and content.
+            <h1 className="font-display text-3xl sm:text-4xl font-extrabold text-navy-800 mb-3">
+              Admin Access
+            </h1>
+            <p className="text-navy-400 font-medium">
+              Enter your credentials to manage guides and content.
             </p>
           </div>
 
           {error && (
-            <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-2xl text-sm font-medium">
+            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-2xl text-sm font-medium">
               {error}
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-5">
             <div className="space-y-2">
-              <label className="text-sm font-bold text-slate-700 ml-1">Email Address</label>
+              <label className="text-sm font-semibold text-navy-700 ml-1">Email Address</label>
               <div className="relative group">
-                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-blue-600 transition" />
+                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-navy-300 group-focus-within:text-primary-600 transition" />
                 <input
                   type="email"
                   required
@@ -92,15 +96,15 @@ export default function AdminLoginPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   disabled={loading}
-                  className="w-full bg-slate-50 border border-slate-200 px-12 py-4 rounded-2xl font-medium text-slate-900 focus:outline-none focus:ring-4 focus:ring-blue-100 focus:border-blue-600 transition disabled:opacity-50"
+                  className="w-full bg-soft border border-border px-12 py-4 rounded-2xl font-medium text-navy-800 focus:outline-none focus:ring-4 focus:ring-primary-100 focus:border-primary-600 transition disabled:opacity-50"
                 />
               </div>
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-bold text-slate-700 ml-1">Password</label>
+              <label className="text-sm font-semibold text-navy-700 ml-1">Password</label>
               <div className="relative group">
-                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-blue-600 transition" />
+                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-navy-300 group-focus-within:text-primary-600 transition" />
                 <input
                   type="password"
                   required
@@ -108,7 +112,7 @@ export default function AdminLoginPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   disabled={loading}
-                  className="w-full bg-slate-50 border border-slate-200 px-12 py-4 rounded-2xl font-medium text-slate-900 focus:outline-none focus:ring-4 focus:ring-blue-100 focus:border-blue-600 transition disabled:opacity-50"
+                  className="w-full bg-soft border border-border px-12 py-4 rounded-2xl font-medium text-navy-800 focus:outline-none focus:ring-4 focus:ring-primary-100 focus:border-primary-600 transition disabled:opacity-50"
                 />
               </div>
             </div>
@@ -116,18 +120,18 @@ export default function AdminLoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-blue-600 text-white py-5 rounded-2xl font-black text-lg hover:bg-blue-700 transition shadow-xl shadow-blue-500/20 flex items-center justify-center gap-3 group disabled:opacity-70 disabled:cursor-not-allowed"
+              className="w-full bg-accent-500 text-white py-4 rounded-full font-display font-bold text-lg hover:bg-accent-600 transition shadow-md hover:shadow-lg flex items-center justify-center gap-3 group disabled:opacity-70 disabled:cursor-not-allowed"
             >
-              {loading ? 'Signing In...' : 'Access Admin Dashboard'}
+              {loading ? 'Signing In...' : 'Access Dashboard'}
               {!loading && (
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition" />
               )}
             </button>
           </form>
 
-          <div className="flex items-center justify-center gap-2 text-[10px] text-slate-400 font-bold uppercase tracking-widest pt-8">
-            <ShieldCheck className="w-3 h-3 text-green-500" />
-            SSL Encrypted &amp; 100% Secure
+          <div className="flex items-center justify-center gap-2 text-[10px] text-navy-300 font-bold uppercase tracking-widest pt-4">
+            <ShieldCheck className="w-3 h-3 text-primary-600" />
+            Secure admin session
           </div>
         </div>
       </div>

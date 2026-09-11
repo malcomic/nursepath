@@ -57,7 +57,7 @@ function StarRatingDisplay({ rating }: { rating: number }) {
         <Star key={i} className="w-4 h-4 text-amber-400 fill-amber-400" />
       ))}
       {Array.from({ length: 5 - fullStars }).map((_, i) => (
-        <StarOff key={i} className="w-4 h-4 text-slate-300" />
+        <StarOff key={i} className="w-4 h-4 text-navy-300" />
       ))}
     </div>
   );
@@ -168,7 +168,7 @@ export default function AdminReviewsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center gap-1 border-b border-slate-200">
+      <div className="flex items-center gap-1 border-b border-border">
         {tabs.map(({ key, label }) => (
           <button
             key={key}
@@ -176,8 +176,8 @@ export default function AdminReviewsPage() {
             onClick={() => setStatusTab(key)}
             className={`px-4 py-2.5 text-sm font-semibold rounded-t-lg border-b-2 -mb-px ${
               statusTab === key
-                ? 'border-blue-600 text-blue-700 bg-blue-50/50'
-                : 'border-transparent text-slate-600 hover:bg-slate-50'
+                ? 'border-primary-600 text-primary-700 bg-primary-50/50'
+                : 'border-transparent text-navy-400 hover:bg-soft'
             }`}
           >
             {label}
@@ -185,21 +185,21 @@ export default function AdminReviewsPage() {
         ))}
       </div>
 
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 flex flex-wrap items-center gap-3">
+      <div className="bg-white rounded-lg shadow-soft border border-gray-200 p-4 flex flex-wrap items-center gap-3">
         <div className="relative flex-1 min-w-[180px]">
-          <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+          <Search className="w-4 h-4 text-navy-300 absolute left-3 top-1/2 -translate-y-1/2" />
           <input
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search by student name"
-            className="w-full pl-9 pr-3 py-2 rounded-lg border border-slate-200 text-sm"
+            className="w-full pl-9 pr-3 py-2 rounded-lg border border-border text-sm"
           />
         </div>
         <select
           value={examFilter}
           onChange={(e) => setExamFilter(e.target.value)}
-          className="pl-3 pr-8 py-2 rounded-lg border border-slate-200 text-sm"
+          className="pl-3 pr-8 py-2 rounded-lg border border-border text-sm"
         >
           <option value="">All exam types</option>
           {EXAM_OPTIONS.map((opt) => (
@@ -211,7 +211,7 @@ export default function AdminReviewsPage() {
         <select
           value={ratingFilter}
           onChange={(e) => setRatingFilter(e.target.value)}
-          className="pl-3 pr-8 py-2 rounded-lg border border-slate-200 text-sm"
+          className="pl-3 pr-8 py-2 rounded-lg border border-border text-sm"
         >
           <option value="">All ratings</option>
           {[1, 2, 3, 4, 5].map((r) => (
@@ -222,15 +222,15 @@ export default function AdminReviewsPage() {
         </select>
       </div>
 
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+      <div className="bg-white rounded-lg shadow-soft border border-gray-200 overflow-hidden">
         {loading ? (
-          <div className="py-12 text-center text-sm text-slate-500">Loading reviews...</div>
+          <div className="py-12 text-center text-sm text-navy-400">Loading reviews...</div>
         ) : filteredReviews.length === 0 ? (
-          <div className="py-12 text-center text-sm text-slate-500">No reviews found.</div>
+          <div className="py-12 text-center text-sm text-navy-400">No reviews found.</div>
         ) : (
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-slate-200 bg-slate-50/80 text-xs font-semibold text-slate-600 uppercase">
+              <tr className="border-b border-border bg-soft/80 text-xs font-semibold text-navy-400 uppercase">
                 <th className="px-4 py-3 text-left">Student</th>
                 <th className="px-4 py-3 text-left">Exam</th>
                 <th className="px-4 py-3 text-left">Rating</th>
@@ -241,7 +241,7 @@ export default function AdminReviewsPage() {
             </thead>
             <tbody>
               {filteredReviews.map((review) => (
-                <tr key={review.id} className="border-b border-slate-100 hover:bg-gray-50">
+                <tr key={review.id} className="border-b border-border hover:bg-gray-50">
                   <td className="px-4 py-3 font-medium">{review.name}</td>
                   <td className="px-4 py-3">{review.exam_type}</td>
                   <td className="px-4 py-3">
@@ -259,7 +259,7 @@ export default function AdminReviewsPage() {
                       }
                     />
                   </td>
-                  <td className="px-4 py-3 text-xs text-slate-500">
+                  <td className="px-4 py-3 text-xs text-navy-400">
                     {formatRelativeTime(review.created_at)}
                   </td>
                   <td className="px-4 py-3">
@@ -267,7 +267,7 @@ export default function AdminReviewsPage() {
                       <button
                         type="button"
                         onClick={() => setSelectedReview(review)}
-                        className="p-2 rounded-lg hover:bg-blue-50 text-slate-600"
+                        className="p-2 rounded-lg hover:bg-primary-50 text-navy-400"
                       >
                         <Eye className="w-4 h-4" />
                       </button>
@@ -304,8 +304,8 @@ export default function AdminReviewsPage() {
       </div>
 
       {selectedReview && (
-        <div className="fixed inset-0 z-40 flex items-center justify-center bg-slate-900/40 px-4">
-          <div className="bg-white max-w-2xl w-full rounded-2xl shadow-xl border border-slate-200 max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 z-40 flex items-center justify-center bg-navy-900/40 px-4">
+          <div className="bg-white max-w-2xl w-full rounded-2xl shadow-xl border border-border max-h-[90vh] overflow-y-auto">
             <div className="px-6 py-4 border-b flex items-center justify-between">
               <h2 className="font-bold">Review Details</h2>
               <button type="button" onClick={() => setSelectedReview(null)}>
@@ -317,13 +317,13 @@ export default function AdminReviewsPage() {
                 <strong>{selectedReview.name}</strong> — {selectedReview.exam_type}
               </p>
               <StarRatingDisplay rating={selectedReview.rating} />
-              <div className="bg-slate-50 rounded-xl p-4 border">{selectedReview.message}</div>
+              <div className="bg-soft rounded-xl p-4 border">{selectedReview.message}</div>
               {selectedReview.screenshot_url && (
                 <div>
                   <button
                     type="button"
                     onClick={() => setScreenshotLightbox(selectedReview.screenshot_url!)}
-                    className="text-blue-600 text-xs font-medium flex items-center gap-1"
+                    className="text-primary-600 text-xs font-medium flex items-center gap-1"
                   >
                     <ZoomIn className="w-3.5 h-3.5" />
                     View screenshot
@@ -358,7 +358,7 @@ export default function AdminReviewsPage() {
 
       {screenshotLightbox && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/80 p-4"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-navy-900/80 p-4"
           onClick={() => setScreenshotLightbox(null)}
         >
           <img

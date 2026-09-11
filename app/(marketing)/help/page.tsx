@@ -17,12 +17,24 @@ const faqs = [
     q: 'How do I download my purchased study guide?',
     a: (
       <>
-        After purchase, you will receive a download link via email. You can also enter your email on
-        the{' '}
+        After purchase, you will receive a download link via email. You can also open{' '}
         <Link href="/dashboard" className="text-primary-600 hover:text-primary-700">
           My Purchases
         </Link>{' '}
-        page to view past orders and download links.
+        and request a one-time email sign-in link to view past orders and downloads.
+      </>
+    ),
+  },
+  {
+    q: 'How do I sign in to My Purchases?',
+    a: (
+      <>
+        Go to{' '}
+        <Link href="/dashboard" className="text-primary-600 hover:text-primary-700">
+          My Purchases
+        </Link>
+        , enter the email you used at checkout, and we will email you a magic link. Links expire
+        in 30 minutes and can only be used once. After you sign in, your session lasts about 7 days.
       </>
     ),
   },

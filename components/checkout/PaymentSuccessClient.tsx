@@ -180,8 +180,11 @@ export default function PaymentSuccessClient() {
           <h2 className="mb-6 font-display text-2xl font-bold text-navy-800">Download</h2>
           <p className="mb-6 text-navy-400">
             Downloads are enabled once payment is confirmed. A copy of your download link has also
-            been sent to your email. You can reclaim purchases anytime on your dashboard using the
-            same email you used at checkout.
+            been sent to your email. You can reclaim purchases anytime on{' '}
+            <Link href="/dashboard" className="text-primary-600 hover:underline">
+              My Purchases
+            </Link>{' '}
+            by requesting a one-time sign-in link to the same email you used at checkout.
           </p>
           <div className="space-y-3">
             {items.filter((i) => i.downloadUrl).map((item) => (

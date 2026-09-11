@@ -10,14 +10,43 @@ export class CategoryRepository {
     return prisma.category.findUnique({ where: { id } });
   }
 
-  async create(name: string, description?: string, icon?: string): Promise<Category> {
-    return prisma.category.create({ data: { name, description, icon } });
+  async findBySlug(slug: string): Promise<Category | null> {
+    return prisma.category.findUnique({ where: { slug } });
   }
 
-  async update(id: string, data: Partial<Category>): Promise<Category> {
+  async create(data: {
+    name: string;
+    slug: string;
+    description?: string | null;
+    icon?: string | null;
+  }): Promise<Category> {
+    return prisma.category.create({
+      data: {
+        name: data.name,
+        slug: data.slug,
+        description: data.description ?? null,
+        icon: data.icon ?? null,
+      },
+    });
+  }
+
+  async update(
+    id: string,
+    data: {
+      name?: string;
+      slug?: string;
+      description?: string | null;
+      icon?: string | null;
+    }
+  ): Promise<Category> {
     return prisma.category.update({
       where: { id },
-      data: { name: data.name, description: data.description, icon: data.icon },
+      data: {
+        ...(data.name !== undefined ? { name: data.name } : {}),
+        ...(data.slug !== undefined ? { slug: data.slug } : {}),
+        ...(data.description !== undefined ? { description: data.description } : {}),
+        ...(data.icon !== undefined ? { icon: data.icon } : {}),
+      },
     });
   }
 

@@ -10,6 +10,7 @@ import {
   Download,
   ExternalLink,
   Mail,
+  LogOut,
 } from 'lucide-react';
 import Card from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
@@ -32,23 +33,29 @@ interface DashboardOrder {
 }
 
 export default function DashboardClient() {
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState<string | null>(null);
   const [emailInput, setEmailInput] = useState('');
   const [purchases, setPurchases] = useState<DashboardOrder[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(true);
   const [fetching, setFetching] = useState(false);
+  const [requesting, setRequesting] = useState(false);
+  const [linkSent, setLinkSent] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [statusMessage, setStatusMessage] = useState<string | null>(null);
 
-  const fetchPurchases = useCallback(async (lookupEmail: string) => {
+  const fetchOrders = useCallback(async () => {
     try {
       setFetching(true);
       setError(null);
-      const res = await fetch(
-        `/api/orders/by-email?email=${encodeURIComponent(lookupEmail)}`
-      );
+      const res = await fetch('/api/dashboard/orders');
       const json = await res.json();
       if (!res.ok || !json.success) {
+        if (res.status === 401) {
+          setEmail(null);
+          setPurchases([]);
+          return;
+        }
         throw new Error(json.error || 'Unable to load purchases.');
       }
       setPurchases(json.data || []);
@@ -57,38 +64,68 @@ export default function DashboardClient() {
       setPurchases([]);
     } finally {
       setFetching(false);
-      setLoading(false);
     }
   }, []);
 
   useEffect(() => {
-    const stored = localStorage.getItem('userEmail');
-    if (stored) {
-      setEmail(stored);
-      setEmailInput(stored);
-      fetchPurchases(stored);
-    } else {
-      setLoading(false);
-    }
-  }, [fetchPurchases]);
+    const boot = async () => {
+      try {
+        const res = await fetch('/api/dashboard/me');
+        const json = await res.json();
+        const sessionEmail = json?.data?.email as string | null;
+        if (sessionEmail) {
+          setEmail(sessionEmail);
+          await fetchOrders();
+        }
+      } catch {
+        setEmail(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+    void boot();
+  }, [fetchOrders]);
 
-  const handleEmailSubmit = (e: React.FormEvent) => {
+  const handleRequestLink = async (e: React.FormEvent) => {
     e.preventDefault();
     const trimmed = emailInput.trim().toLowerCase();
     if (!trimmed) return;
-    localStorage.setItem('userEmail', trimmed);
-    setEmail(trimmed);
-    setLoading(true);
-    fetchPurchases(trimmed);
+
+    try {
+      setRequesting(true);
+      setError(null);
+      setStatusMessage(null);
+      const res = await fetch('/api/dashboard/request-link', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: trimmed }),
+      });
+      const json = await res.json();
+      if (!res.ok || !json.success) {
+        throw new Error(json.error || 'Could not send sign-in link.');
+      }
+      setLinkSent(true);
+      setStatusMessage(
+        json.message ||
+          'If that email has purchases with us, a sign-in link is on the way. Check your inbox (and spam).'
+      );
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Could not send sign-in link.');
+      setLinkSent(false);
+    } finally {
+      setRequesting(false);
+    }
   };
 
-  const handleChangeEmail = () => {
-    localStorage.removeItem('userEmail');
-    setEmail('');
-    setEmailInput('');
+  const handleLogout = async () => {
+    await fetch('/api/dashboard/logout', { method: 'POST' });
+    setEmail(null);
     setPurchases([]);
     setSearchQuery('');
     setError(null);
+    setLinkSent(false);
+    setStatusMessage(null);
+    setEmailInput('');
   };
 
   const filtered = searchQuery
@@ -117,25 +154,57 @@ export default function DashboardClient() {
               <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-primary-100">
                 <Mail className="h-7 w-7 text-primary-600" />
               </div>
-              <h1 className="mb-2 font-display text-2xl font-extrabold text-navy-800">My Purchases</h1>
+              <h1 className="mb-2 font-display text-2xl font-extrabold text-navy-800">
+                My Purchases
+              </h1>
               <p className="text-sm text-navy-400">
-                Enter the email you used at checkout to view your study guides and download links.
+                Enter the email you used at checkout. We&apos;ll send a one-time sign-in link
+                (expires in 30 minutes) so you can view downloads securely.
               </p>
             </div>
-            <form onSubmit={handleEmailSubmit} className="space-y-4">
-              <Input
-                label="Email Address"
-                type="email"
-                name="email"
-                value={emailInput}
-                onChange={(e) => setEmailInput(e.target.value)}
-                placeholder="you@example.com"
-                required
-              />
-              <Button type="submit" fullWidth size="lg" isLoading={fetching}>
-                View My Purchases
-              </Button>
-            </form>
+
+            {error && (
+              <div className="mb-4 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
+                {error}
+              </div>
+            )}
+
+            {linkSent && statusMessage ? (
+              <div className="space-y-4">
+                <div className="rounded-lg border border-primary-200 bg-primary-50 px-3 py-3 text-sm text-primary-900">
+                  {statusMessage}
+                </div>
+                <p className="text-xs text-navy-400 text-center">
+                  Didn&apos;t get it? Check spam, or{' '}
+                  <button
+                    type="button"
+                    className="font-semibold text-primary-600 hover:text-primary-700"
+                    onClick={() => {
+                      setLinkSent(false);
+                      setStatusMessage(null);
+                    }}
+                  >
+                    try again
+                  </button>
+                  .
+                </p>
+              </div>
+            ) : (
+              <form onSubmit={handleRequestLink} className="space-y-4">
+                <Input
+                  label="Email Address"
+                  type="email"
+                  name="email"
+                  value={emailInput}
+                  onChange={(e) => setEmailInput(e.target.value)}
+                  placeholder="you@example.com"
+                  required
+                />
+                <Button type="submit" fullWidth size="lg" isLoading={requesting}>
+                  Email me a sign-in link
+                </Button>
+              </form>
+            )}
           </Card>
         </div>
       </main>
@@ -156,16 +225,17 @@ export default function DashboardClient() {
           </div>
           <button
             type="button"
-            onClick={handleChangeEmail}
-            className="text-sm font-medium text-primary-600 hover:text-primary-700"
+            onClick={() => void handleLogout()}
+            className="inline-flex items-center gap-2 text-sm font-medium text-primary-600 hover:text-primary-700"
           >
-            Use a different email
+            <LogOut className="h-4 w-4" />
+            Sign out
           </button>
         </div>
 
         <div className="mb-8">
           <div className="relative max-w-md">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-navy-300 w-5 h-5" />
             <Input
               placeholder="Search your guides..."
               value={searchQuery}
@@ -184,14 +254,14 @@ export default function DashboardClient() {
         {fetching ? (
           <div className="text-center py-20">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto mb-4" />
-            <p className="text-gray-600">Loading your purchases…</p>
+            <p className="text-navy-400">Loading your purchases…</p>
           </div>
         ) : filtered.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filtered.map((purchase) => (
               <Card key={purchase.id} hover className="flex flex-col">
                 {purchase.guide.thumbnailUrl ? (
-                  <div className="w-full h-48 bg-gray-100 rounded-xl mb-4 overflow-hidden relative">
+                  <div className="w-full h-48 bg-navy-50 rounded-xl mb-4 overflow-hidden relative">
                     <Image
                       src={purchase.guide.thumbnailUrl}
                       alt={purchase.guide.title}
@@ -201,22 +271,22 @@ export default function DashboardClient() {
                     />
                   </div>
                 ) : (
-                  <div className="w-full h-48 bg-gradient-to-br from-primary-100 to-secondary-100 rounded-xl mb-4 flex items-center justify-center">
+                  <div className="w-full h-48 bg-gradient-to-br from-primary-100 to-primary-50 rounded-xl mb-4 flex items-center justify-center">
                     <FileText className="w-16 h-16 text-primary-600" />
                   </div>
                 )}
 
-                <h3 className="text-xl font-bold text-gray-900 mb-2 line-clamp-2">
+                <h3 className="font-display text-xl font-bold text-navy-800 mb-2 line-clamp-2">
                   {purchase.guide.title}
                 </h3>
 
                 {purchase.guide.description && (
-                  <p className="text-gray-600 text-sm mb-4 line-clamp-2 flex-grow">
+                  <p className="text-navy-400 text-sm mb-4 line-clamp-2 flex-grow">
                     {purchase.guide.description}
                   </p>
                 )}
 
-                <div className="flex items-center gap-2 text-sm text-gray-500 mb-4">
+                <div className="flex items-center gap-2 text-sm text-navy-400 mb-4">
                   <Calendar className="w-4 h-4" />
                   <span>
                     Purchased{' '}
@@ -242,7 +312,7 @@ export default function DashboardClient() {
                         <Download className="w-5 h-5 mr-2" />
                         Download unavailable
                       </Button>
-                      <p className="text-xs text-gray-500 text-center">
+                      <p className="text-xs text-navy-400 text-center">
                         Link expired.{' '}
                         <Link href="/contact" className="text-primary-600 hover:underline">
                           Contact support
@@ -265,9 +335,9 @@ export default function DashboardClient() {
           </div>
         ) : (
           <Card className="text-center py-16">
-            <FileText className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-2xl font-bold text-gray-900 mb-2">No Purchases Yet</h3>
-            <p className="text-gray-600 mb-6">
+            <FileText className="w-16 h-16 text-navy-300 mx-auto mb-4" />
+            <h3 className="font-display text-2xl font-bold text-navy-800 mb-2">No Purchases Yet</h3>
+            <p className="text-navy-400 mb-6">
               {searchQuery
                 ? 'No guides found matching your search.'
                 : "You haven't purchased any study guides with this email yet."}

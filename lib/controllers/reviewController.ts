@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { reviewService } from '@/lib/services/reviewService';
-import { ApiError } from '@/lib/errors/api-error';
+import { checkIpRateLimit } from '@/lib/api/ip-rate-limit';
 
 const createReviewSchema = z.object({
   name: z.string().trim().min(1).max(255),
@@ -9,27 +9,8 @@ const createReviewSchema = z.object({
   rating: z.number().int().min(1).max(5),
   message: z.string().trim().min(1).max(500),
   verification_type: z.string().nullable().optional(),
+  screenshot_url: z.string().url().nullable().optional(),
 });
-
-const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
-const RATE_LIMIT_MAX = 5;
-const RATE_LIMIT_WINDOW_MS = 60 * 60 * 1000;
-
-function checkRateLimit(ip: string) {
-  const now = Date.now();
-  const entry = rateLimitMap.get(ip);
-
-  if (!entry || now > entry.resetAt) {
-    rateLimitMap.set(ip, { count: 1, resetAt: now + RATE_LIMIT_WINDOW_MS });
-    return;
-  }
-
-  if (entry.count >= RATE_LIMIT_MAX) {
-    throw new ApiError(429, 'Too many requests. Please try again later.');
-  }
-
-  entry.count += 1;
-}
 
 export async function getApprovedReviews() {
   const reviews = await reviewService.getApprovedReviews();
@@ -38,7 +19,7 @@ export async function getApprovedReviews() {
 
 export async function createReview(body: unknown, ipAddress?: string) {
   if (ipAddress) {
-    checkRateLimit(ipAddress);
+    checkIpRateLimit(ipAddress);
   }
 
   const data = createReviewSchema.parse(body);

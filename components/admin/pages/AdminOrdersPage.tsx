@@ -174,29 +174,29 @@ export default function AdminOrdersPage() {
   };
 
   return (
-    <div className="bg-white border border-slate-200 rounded-2xl shadow-sm mb-5">
-      <div className="px-6 py-4 border-b border-slate-200 flex items-center gap-2 text-sm text-slate-600">
-        <span className="font-semibold text-slate-900">Orders</span>
-        <span className="text-slate-400">•</span>
+    <div className="bg-white border border-border rounded-2xl shadow-soft mb-5">
+      <div className="px-6 py-4 border-b border-border flex items-center gap-2 text-sm text-navy-400">
+        <span className="font-semibold text-navy-800">Orders</span>
+        <span className="text-navy-300">•</span>
         <span>{total} total</span>
       </div>
 
-      <div className="px-6 py-4 border-b border-slate-100 space-y-3 md:space-y-0 md:flex md:items-center md:gap-3">
+      <div className="px-6 py-4 border-b border-border space-y-3 md:space-y-0 md:flex md:items-center md:gap-3">
         <div className="relative flex-1">
-          <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+          <Search className="w-4 h-4 text-navy-300 absolute left-3 top-1/2 -translate-y-1/2" />
           <input
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search by order ID, customer name, or email"
-            className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-500"
+            className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-border text-sm focus:outline-none focus:ring-2 focus:ring-primary-100 focus:border-primary-500"
           />
         </div>
         <div className="flex flex-wrap items-center gap-2">
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value as PaymentStatus | '')}
-            className="pl-3 pr-8 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold text-slate-700 bg-white"
+            className="pl-3 pr-8 py-2.5 rounded-xl border border-border text-xs font-semibold text-navy-700 bg-white"
           >
             <option value="">All payments</option>
             <option value="PAID">Paid</option>
@@ -204,23 +204,23 @@ export default function AdminOrdersPage() {
             <option value="FAILED">Failed</option>
             <option value="REFUNDED">Refunded</option>
           </select>
-          <Filter className="w-3 h-3 text-slate-500" />
+          <Filter className="w-3 h-3 text-navy-400" />
           <input
             type="date"
             value={dateFrom}
             onChange={(e) => setDateFrom(e.target.value)}
-            className="px-2 py-2 rounded-xl border border-slate-200 text-xs"
+            className="px-2 py-2 rounded-xl border border-border text-xs"
           />
           <input
             type="date"
             value={dateTo}
             onChange={(e) => setDateTo(e.target.value)}
-            className="px-2 py-2 rounded-xl border border-slate-200 text-xs"
+            className="px-2 py-2 rounded-xl border border-border text-xs"
           />
           <select
             value={sort}
             onChange={(e) => setSort(e.target.value as SortOption)}
-            className="pl-3 pr-8 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold text-slate-700 bg-white"
+            className="pl-3 pr-8 py-2.5 rounded-xl border border-border text-xs font-semibold text-navy-700 bg-white"
           >
             <option value="newest">Newest first</option>
             <option value="oldest">Oldest first</option>
@@ -233,7 +233,7 @@ export default function AdminOrdersPage() {
               setPage(1);
               fetchOrders();
             }}
-            className="px-3 py-2 rounded-xl text-xs font-semibold bg-blue-600 text-white hover:bg-blue-700"
+            className="px-3 py-2 rounded-xl text-xs font-semibold bg-primary-600 text-white hover:bg-primary-700"
           >
             Apply
           </button>
@@ -242,13 +242,13 @@ export default function AdminOrdersPage() {
 
       <div className="p-4 overflow-x-auto">
         {loading ? (
-          <div className="py-12 text-center text-sm text-slate-500">Loading orders...</div>
+          <div className="py-12 text-center text-sm text-navy-400">Loading orders...</div>
         ) : orders.length === 0 ? (
-          <div className="py-12 text-center text-sm text-slate-500">No orders found.</div>
+          <div className="py-12 text-center text-sm text-navy-400">No orders found.</div>
         ) : (
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-slate-200 text-xs font-semibold text-slate-500 uppercase">
+              <tr className="border-b border-border text-xs font-semibold text-navy-400 uppercase">
                 <th className="px-4 py-3 text-left">Order</th>
                 <th className="px-4 py-3 text-left">Customer</th>
                 <th className="px-4 py-3 text-left">Guide</th>
@@ -262,11 +262,11 @@ export default function AdminOrdersPage() {
               {orders.map((order) => {
                 const dStatus = downloadStatusFor(order);
                 return (
-                  <tr key={order.id} className="border-b border-slate-100 hover:bg-slate-50/80">
+                  <tr key={order.id} className="border-b border-border hover:bg-soft/80">
                     <td className="px-4 py-3 font-mono text-xs">{order.id.slice(0, 8)}…</td>
                     <td className="px-4 py-3">
                       <div className="font-semibold">{order.customerName}</div>
-                      <div className="text-xs text-slate-500">{order.customerEmail}</div>
+                      <div className="text-xs text-navy-400">{order.customerEmail}</div>
                     </td>
                     <td className="px-4 py-3">{order.guide?.title || 'Guide'}</td>
                     <td className="px-4 py-3 text-right font-semibold">${order.price.toFixed(2)}</td>
@@ -284,28 +284,28 @@ export default function AdminOrdersPage() {
                         <button
                           type="button"
                           onClick={() => setSelectedOrder(order)}
-                          className="p-2 rounded-lg text-slate-600 hover:text-blue-700 hover:bg-blue-50"
+                          className="p-2 rounded-lg text-navy-400 hover:text-primary-700 hover:bg-primary-50"
                         >
                           <Eye size={16} />
                         </button>
                         <button
                           type="button"
                           onClick={() => handleResendLink(order.id)}
-                          className="p-2 rounded-lg text-slate-600 hover:text-emerald-700 hover:bg-emerald-50"
+                          className="p-2 rounded-lg text-navy-400 hover:text-emerald-700 hover:bg-emerald-50"
                         >
                           <Mail size={16} />
                         </button>
                         <button
                           type="button"
                           onClick={() => setConfirmRefundId(order.id)}
-                          className="p-2 rounded-lg text-slate-600 hover:text-amber-700 hover:bg-amber-50"
+                          className="p-2 rounded-lg text-navy-400 hover:text-amber-700 hover:bg-amber-50"
                         >
                           <RefreshCw size={16} />
                         </button>
                         <button
                           type="button"
                           onClick={() => setConfirmDeleteId(order.id)}
-                          className="p-2 rounded-lg text-slate-600 hover:text-rose-700 hover:bg-rose-50"
+                          className="p-2 rounded-lg text-navy-400 hover:text-rose-700 hover:bg-rose-50"
                         >
                           <Trash2 size={16} />
                         </button>
@@ -320,7 +320,7 @@ export default function AdminOrdersPage() {
       </div>
 
       {totalPages > 1 && (
-        <div className="px-6 py-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+        <div className="px-6 py-4 border-t border-border flex items-center justify-between text-xs text-navy-400">
           <span>
             Page {page} of {totalPages}
           </span>
@@ -329,7 +329,7 @@ export default function AdminOrdersPage() {
               type="button"
               disabled={page === 1}
               onClick={() => setPage((p) => Math.max(1, p - 1))}
-              className="px-3 py-1.5 rounded-lg border border-slate-200 disabled:opacity-40"
+              className="px-3 py-1.5 rounded-lg border border-border disabled:opacity-40"
             >
               Prev
             </button>
@@ -337,7 +337,7 @@ export default function AdminOrdersPage() {
               type="button"
               disabled={page === totalPages}
               onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-              className="px-3 py-1.5 rounded-lg border border-slate-200 disabled:opacity-40"
+              className="px-3 py-1.5 rounded-lg border border-border disabled:opacity-40"
             >
               Next
             </button>
@@ -346,14 +346,14 @@ export default function AdminOrdersPage() {
       )}
 
       {selectedOrder && (
-        <div className="fixed inset-0 z-40 flex items-center justify-center bg-slate-900/40 px-4">
-          <div className="bg-white max-w-2xl w-full rounded-2xl shadow-xl border border-slate-200">
-            <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
-              <h2 className="text-base font-bold text-slate-900">Order Details</h2>
+        <div className="fixed inset-0 z-40 flex items-center justify-center bg-navy-900/40 px-4">
+          <div className="bg-white max-w-2xl w-full rounded-2xl shadow-xl border border-border">
+            <div className="px-6 py-4 border-b border-border flex items-center justify-between">
+              <h2 className="text-base font-bold text-navy-800">Order Details</h2>
               <button
                 type="button"
                 onClick={() => setSelectedOrder(null)}
-                className="text-slate-500 hover:text-slate-900 text-sm font-semibold"
+                className="text-navy-400 hover:text-navy-800 text-sm font-semibold"
               >
                 Close
               </button>
@@ -372,7 +372,7 @@ export default function AdminOrdersPage() {
                 Token: {selectedOrder.downloadToken}
               </p>
             </div>
-            <div className="px-6 py-4 border-t border-slate-100 flex flex-wrap gap-2 justify-end">
+            <div className="px-6 py-4 border-t border-border flex flex-wrap gap-2 justify-end">
               <button
                 type="button"
                 onClick={() => handleResendLink(selectedOrder.id)}
@@ -383,7 +383,7 @@ export default function AdminOrdersPage() {
               <button
                 type="button"
                 onClick={() => handleRegenerateLink(selectedOrder.id)}
-                className="px-3 py-2 rounded-xl text-xs font-semibold border border-blue-200 text-blue-700"
+                className="px-3 py-2 rounded-xl text-xs font-semibold border border-primary-200 text-primary-700"
               >
                 Regenerate Link
               </button>

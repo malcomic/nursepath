@@ -289,16 +289,16 @@ export default function AdminGuidesPage() {
   };
 
   return (
-    <div className="bg-white border border-slate-200 rounded-2xl shadow-sm">
-      <div className="px-6 py-5 border-b border-slate-200 flex items-center justify-between">
+    <div className="bg-white border border-border rounded-2xl shadow-soft">
+      <div className="px-6 py-5 border-b border-border flex items-center justify-between">
         <div>
-          <h2 className="text-lg font-bold text-slate-900">Study Guides</h2>
-          <p className="text-sm text-slate-500">Manage your digital study guides.</p>
+          <h2 className="text-lg font-bold text-navy-800">Study Guides</h2>
+          <p className="text-sm text-navy-400">Manage your digital study guides.</p>
         </div>
         <button
           type="button"
           onClick={openCreateModal}
-          className="bg-blue-600 text-white px-4 py-2.5 rounded-xl font-semibold text-sm flex items-center gap-2 hover:bg-blue-700 transition shadow-sm"
+          className="bg-accent-500 text-white px-4 py-2.5 rounded-full font-display font-semibold text-sm flex items-center gap-2 hover:bg-accent-600 transition shadow-soft"
         >
           <Plus size={18} />
           Add Guide
@@ -319,15 +319,15 @@ export default function AdminGuidesPage() {
         )}
 
         {loading ? (
-          <div className="py-12 text-center text-slate-500">Loading guides...</div>
+          <div className="py-12 text-center text-navy-400">Loading guides...</div>
         ) : guides.length === 0 ? (
-          <div className="py-12 text-center text-slate-500">
+          <div className="py-12 text-center text-navy-400">
             No guides yet. Click &quot;Add Guide&quot; to create one.
           </div>
         ) : (
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-slate-200 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide">
+              <tr className="border-b border-border text-left text-xs font-semibold text-navy-400 uppercase tracking-wide">
                 <th className="px-4 py-3">Title</th>
                 <th className="px-4 py-3">Category</th>
                 <th className="px-4 py-3">Price</th>
@@ -339,13 +339,13 @@ export default function AdminGuidesPage() {
               {guides.map((guide) => (
                 <tr
                   key={guide.id}
-                  className="border-b border-slate-100 hover:bg-slate-50/80 transition-colors"
+                  className="border-b border-border hover:bg-soft/80 transition-colors"
                 >
-                  <td className="px-4 py-3 font-medium text-slate-900">{guide.title}</td>
-                  <td className="px-4 py-3 text-slate-600">
+                  <td className="px-4 py-3 font-medium text-navy-800">{guide.title}</td>
+                  <td className="px-4 py-3 text-navy-400">
                     {categories.find((c) => c.id === guide.categoryId)?.name || 'N/A'}
                   </td>
-                  <td className="px-4 py-3 font-semibold text-blue-600">
+                  <td className="px-4 py-3 font-semibold text-primary-600">
                     ${guide.price.toFixed(2)}
                   </td>
                   <td className="px-4 py-3">
@@ -353,7 +353,7 @@ export default function AdminGuidesPage() {
                       <button
                         type="button"
                         onClick={() => setPreviewGuide(guide)}
-                        className="inline-flex items-center gap-1.5 text-blue-600 hover:text-blue-700 text-xs font-semibold"
+                        className="inline-flex items-center gap-1.5 text-primary-600 hover:text-primary-700 text-xs font-semibold"
                       >
                         <ExternalLink size={14} />
                         Preview
@@ -373,7 +373,7 @@ export default function AdminGuidesPage() {
                           }
                         }}
                         disabled={isDownloadingId === guide.id}
-                        className="inline-flex items-center gap-1.5 text-slate-600 hover:text-slate-900 text-xs font-semibold disabled:opacity-60"
+                        className="inline-flex items-center gap-1.5 text-navy-400 hover:text-navy-800 text-xs font-semibold disabled:opacity-60"
                       >
                         <Download size={14} />
                         {isDownloadingId === guide.id ? 'Downloading...' : 'Download'}
@@ -385,7 +385,7 @@ export default function AdminGuidesPage() {
                       <button
                         type="button"
                         onClick={() => openEditModal(guide)}
-                        className="text-blue-600 hover:text-blue-700 hover:bg-blue-50 p-2 rounded-lg transition"
+                        className="text-primary-600 hover:text-primary-700 hover:bg-primary-50 p-2 rounded-lg transition"
                         aria-label={`Edit ${guide.title}`}
                       >
                         <Edit2 size={18} />
@@ -422,42 +422,42 @@ export default function AdminGuidesPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="md:col-span-2">
-              <label className="block text-sm font-semibold text-slate-700 mb-1">Title</label>
+              <label className="block text-sm font-semibold text-navy-700 mb-1">Title</label>
               <input
                 value={form.title}
                 onChange={handleFieldChange('title')}
-                className="w-full border border-slate-300 rounded-xl px-3 py-2.5 text-sm"
+                className="w-full border border-border rounded-xl px-3 py-2.5 text-sm"
                 required
               />
             </div>
             <div className="md:col-span-2">
-              <label className="block text-sm font-semibold text-slate-700 mb-1">
+              <label className="block text-sm font-semibold text-navy-700 mb-1">
                 Slug (optional)
               </label>
               <input
                 value={form.slug}
                 onChange={handleFieldChange('slug')}
-                className="w-full border border-slate-300 rounded-xl px-3 py-2.5 text-sm"
+                className="w-full border border-border rounded-xl px-3 py-2.5 text-sm"
                 placeholder="auto from title"
               />
-              <p className="text-xs text-slate-500 mt-1">
+              <p className="text-xs text-navy-400 mt-1">
                 Public URL: /guides/your-slug. Leave blank to generate from title.
               </p>
             </div>
             <div className="md:col-span-2">
-              <label className="block text-sm font-semibold text-slate-700 mb-1">Description</label>
+              <label className="block text-sm font-semibold text-navy-700 mb-1">Description</label>
               <textarea
                 value={form.description}
                 onChange={handleFieldChange('description')}
-                className="w-full border border-slate-300 rounded-xl px-3 py-2.5 text-sm min-h-24"
+                className="w-full border border-border rounded-xl px-3 py-2.5 text-sm min-h-24"
               />
             </div>
             <div>
-              <label className="block text-sm font-semibold text-slate-700 mb-1">Category</label>
+              <label className="block text-sm font-semibold text-navy-700 mb-1">Category</label>
               <select
                 value={form.categoryId}
                 onChange={handleFieldChange('categoryId')}
-                className="w-full border border-slate-300 rounded-xl px-3 py-2.5 text-sm"
+                className="w-full border border-border rounded-xl px-3 py-2.5 text-sm"
                 required
               >
                 <option value="">Select category</option>
@@ -469,21 +469,21 @@ export default function AdminGuidesPage() {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-semibold text-slate-700 mb-1">Price (USD)</label>
+              <label className="block text-sm font-semibold text-navy-700 mb-1">Price (USD)</label>
               <input
                 type="number"
                 min="0.01"
                 step="0.01"
                 value={form.price}
                 onChange={handleFieldChange('price')}
-                className="w-full border border-slate-300 rounded-xl px-3 py-2.5 text-sm"
+                className="w-full border border-border rounded-xl px-3 py-2.5 text-sm"
                 required
               />
             </div>
           </div>
 
-          <div className="border border-slate-200 rounded-xl p-4 space-y-3">
-            <p className="text-sm font-semibold text-slate-800">PDF File</p>
+          <div className="border border-border rounded-xl p-4 space-y-3">
+            <p className="text-sm font-semibold text-navy-800">PDF File</p>
             <div className="flex flex-wrap gap-4 text-sm">
               <label className="flex items-center gap-2">
                 <input
@@ -507,7 +507,7 @@ export default function AdminGuidesPage() {
                 type="url"
                 value={form.pdfUrl}
                 onChange={handleFieldChange('pdfUrl')}
-                className="w-full border border-slate-300 rounded-xl px-3 py-2.5 text-sm"
+                className="w-full border border-border rounded-xl px-3 py-2.5 text-sm"
                 placeholder="https://example.com/guide.pdf"
               />
             ) : (
@@ -515,13 +515,13 @@ export default function AdminGuidesPage() {
                 type="file"
                 accept="application/pdf,.pdf"
                 onChange={(e) => setPdfFile(e.target.files?.[0] || null)}
-                className="w-full border border-slate-300 rounded-xl px-3 py-2.5 text-sm"
+                className="w-full border border-border rounded-xl px-3 py-2.5 text-sm"
               />
             )}
           </div>
 
-          <div className="border border-slate-200 rounded-xl p-4 space-y-3">
-            <p className="text-sm font-semibold text-slate-800">Thumbnail</p>
+          <div className="border border-border rounded-xl p-4 space-y-3">
+            <p className="text-sm font-semibold text-navy-800">Thumbnail</p>
             <div className="flex flex-wrap gap-4 text-sm">
               <label className="flex items-center gap-2">
                 <input
@@ -545,21 +545,21 @@ export default function AdminGuidesPage() {
                 type="url"
                 value={form.thumbnailUrl}
                 onChange={handleFieldChange('thumbnailUrl')}
-                className="w-full border border-slate-300 rounded-xl px-3 py-2.5 text-sm"
+                className="w-full border border-border rounded-xl px-3 py-2.5 text-sm"
               />
             ) : (
               <input
                 type="file"
                 accept="image/*"
                 onChange={(e) => setThumbnailFile(e.target.files?.[0] || null)}
-                className="w-full border border-slate-300 rounded-xl px-3 py-2.5 text-sm"
+                className="w-full border border-border rounded-xl px-3 py-2.5 text-sm"
               />
             )}
             {(thumbnailPreview || (thumbnailMode === 'url' && form.thumbnailUrl.trim())) && (
               <img
                 src={thumbnailPreview || form.thumbnailUrl.trim()}
                 alt="Thumbnail preview"
-                className="h-32 w-32 object-cover rounded-lg border border-slate-200"
+                className="h-32 w-32 object-cover rounded-lg border border-border"
               />
             )}
           </div>
@@ -568,7 +568,7 @@ export default function AdminGuidesPage() {
             <button
               type="button"
               onClick={closeModal}
-              className="px-4 py-2.5 rounded-xl border border-slate-300 text-slate-700 font-semibold text-sm"
+              className="px-4 py-2.5 rounded-xl border border-border text-navy-700 font-semibold text-sm"
               disabled={isSaving}
             >
               Cancel
@@ -576,7 +576,7 @@ export default function AdminGuidesPage() {
             <button
               type="submit"
               disabled={isSaving}
-              className="px-4 py-2.5 rounded-xl bg-blue-600 text-white font-semibold text-sm hover:bg-blue-700 disabled:opacity-60"
+              className="px-4 py-2.5 rounded-full bg-accent-500 text-white font-display font-semibold text-sm hover:bg-accent-600 disabled:opacity-60"
             >
               {isSaving ? 'Saving...' : editingGuideId ? 'Update Guide' : 'Create Guide'}
             </button>
@@ -594,7 +594,7 @@ export default function AdminGuidesPage() {
           <iframe
             src={previewGuide.pdfUrl}
             title={`${previewGuide.title} PDF preview`}
-            className="w-full h-[70vh] rounded-xl border border-slate-200"
+            className="w-full h-[70vh] rounded-xl border border-border"
           />
         )}
       </Modal>

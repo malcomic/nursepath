@@ -53,9 +53,9 @@ export function ToastProvider({ children }: ToastProviderProps) {
   }, []);
 
   const variantStyles: Record<ToastVariant, string> = {
-    success: 'bg-emerald-600',
+    success: 'bg-primary-700',
     error: 'bg-rose-600',
-    info: 'bg-slate-900',
+    info: 'bg-navy-800',
   };
 
   return (

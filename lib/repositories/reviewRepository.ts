@@ -24,6 +24,7 @@ export class ReviewRepository {
     rating: number;
     message: string;
     verification_type?: string | null;
+    screenshot_url?: string | null;
   }) {
     return prisma.review.create({
       data: {
@@ -33,6 +34,7 @@ export class ReviewRepository {
         rating: data.rating,
         message: data.message,
         verification_type: data.verification_type ?? null,
+        screenshot_url: data.screenshot_url ?? null,
         status: ReviewStatus.pending,
       },
     });

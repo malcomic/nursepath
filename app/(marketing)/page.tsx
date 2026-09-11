@@ -12,7 +12,6 @@ import {
 } from 'lucide-react';
 import { guideService } from '@/lib/services/guideService';
 import { categoryService } from '@/lib/services/categoryService';
-import { slugify } from '@/lib/slugify';
 import { toPublicGuide } from '@/lib/controllers/guideController';
 import Hero from '@/components/sections/Hero';
 import Features from '@/components/sections/Features';
@@ -108,7 +107,7 @@ export default async function HomePage() {
                 return (
                   <Link
                     key={cat.id}
-                    href={`/categories/${slugify(cat.name)}`}
+                    href={`/categories/${cat.slug}`}
                     className="flex items-center gap-4 rounded-2xl border border-border bg-white p-6 transition-all hover:border-primary-500 hover:shadow-soft"
                   >
                     <div className="flex size-14 shrink-0 items-center justify-center rounded-2xl bg-primary-50">

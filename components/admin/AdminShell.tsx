@@ -56,15 +56,15 @@ export default function AdminShell({ children }: AdminShellProps) {
 
   return (
     <ToastProvider>
-      <div className="min-h-screen bg-slate-50 flex">
-        <aside className="hidden md:flex w-64 flex-col border-r border-slate-200 bg-white">
-          <div className="h-16 flex items-center gap-2.5 px-5 border-b border-slate-200">
+      <div className="min-h-screen bg-soft flex">
+        <aside className="hidden md:flex w-64 flex-col border-r border-border bg-white">
+          <div className="h-16 flex items-center gap-2.5 px-5 border-b border-border">
             <Logo href="/admin/dashboard" mark size={40} />
             <div className="flex flex-col min-w-0">
-              <span className="text-sm font-black text-slate-900 tracking-tight truncate">
+              <span className="font-display text-sm font-bold text-navy-800 tracking-tight truncate">
                 NursePath
               </span>
-              <span className="text-[11px] font-semibold uppercase tracking-widest text-slate-400">
+              <span className="text-[11px] font-semibold uppercase tracking-widest text-primary-600">
                 Admin
               </span>
             </div>
@@ -80,8 +80,8 @@ export default function AdminShell({ children }: AdminShellProps) {
                   href={item.href}
                   className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-colors ${
                     isActive
-                      ? 'bg-blue-50 text-blue-700'
-                      : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
+                      ? 'bg-primary-50 text-primary-700'
+                      : 'text-navy-400 hover:bg-primary-50/60 hover:text-navy-800'
                   }`}
                 >
                   <Icon className="w-4 h-4" />
@@ -91,11 +91,11 @@ export default function AdminShell({ children }: AdminShellProps) {
             })}
           </nav>
 
-          <div className="p-3 border-t border-slate-200">
+          <div className="p-3 border-t border-border">
             <button
               type="button"
               onClick={handleLogout}
-              className="w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-500 hover:text-red-600 hover:bg-red-50 transition-colors"
+              className="w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl text-sm font-semibold text-navy-400 hover:text-red-600 hover:bg-red-50 transition-colors"
             >
               <LogOut className="w-4 h-4" />
               <span>Logout</span>
@@ -104,23 +104,43 @@ export default function AdminShell({ children }: AdminShellProps) {
         </aside>
 
         <div className="flex-1 flex flex-col min-w-0">
-          <header className="h-16 border-b border-slate-200 bg-white flex items-center justify-between px-4 md:px-8">
+          <header className="h-16 border-b border-border bg-white flex items-center justify-between px-4 md:px-8">
             <div>
-              <h1 className="text-lg md:text-xl font-black text-slate-900">{title}</h1>
-              <p className="text-xs md:text-sm text-slate-500">
+              <h1 className="font-display text-lg md:text-xl font-bold text-navy-800">{title}</h1>
+              <p className="text-xs md:text-sm text-navy-400">
                 Secure admin tools for NursePath.
               </p>
             </div>
             <div className="flex items-center gap-3">
               <div className="hidden md:flex flex-col items-end">
-                <span className="text-xs font-semibold text-slate-700">Admin</span>
-                <span className="text-[11px] text-slate-400">Signed in</span>
+                <span className="text-xs font-semibold text-navy-700">Admin</span>
+                <span className="text-[11px] text-navy-300">Signed in</span>
               </div>
-              <div className="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center text-xs font-bold">
+              <div className="w-8 h-8 rounded-full bg-primary-600 text-white flex items-center justify-center text-xs font-bold font-display">
                 A
               </div>
             </div>
           </header>
+
+          {/* Mobile nav */}
+          <nav className="md:hidden flex gap-1 overflow-x-auto border-b border-border bg-white px-3 py-2">
+            {navItems.map((item) => {
+              const isActive = pathname === item.href;
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={`shrink-0 rounded-full px-3 py-1.5 text-xs font-semibold transition-colors ${
+                    isActive
+                      ? 'bg-primary-600 text-white'
+                      : 'bg-soft text-navy-400 hover:text-navy-800'
+                  }`}
+                >
+                  {item.label}
+                </Link>
+              );
+            })}
+          </nav>
 
           <main className="flex-1 px-4 md:px-8 py-6 md:py-10">
             <div className="max-w-6xl mx-auto">{children}</div>

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { MessageCircle } from 'lucide-react';
 import StarRatingInput from './StarRatingInput';
 import Button from '@/components/ui/Button';
@@ -8,6 +8,8 @@ import Input from '@/components/ui/Input';
 
 const examOptions = ['ATI', 'NCLEX', 'HESI', 'TEAS', 'Other'];
 const verificationOptions = ['None', 'WhatsApp Verified', 'Message Verified', 'Exam Verified'];
+const ALLOWED_SCREENSHOT_TYPES = new Set(['image/png', 'image/jpeg', 'image/webp']);
+const MAX_SCREENSHOT_SIZE = 5 * 1024 * 1024;
 
 interface FormState {
   name: string;
@@ -29,7 +31,11 @@ const initialFormState: FormState = {
 
 export default function ReviewSubmitForm() {
   const [formState, setFormState] = useState<FormState>(initialFormState);
-  const [formErrors, setFormErrors] = useState<Partial<Record<keyof FormState, string>>>({});
+  const [formErrors, setFormErrors] = useState<
+    Partial<Record<keyof FormState | 'screenshot', string>>
+  >({});
+  const [screenshotFile, setScreenshotFile] = useState<File | null>(null);
+  const screenshotInputRef = useRef<HTMLInputElement>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState<string | null>(null);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -42,8 +48,40 @@ export default function ReviewSubmitForm() {
     setFormErrors((prev) => ({ ...prev, [name]: undefined }));
   };
 
+  const handleScreenshotChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] ?? null;
+    setFormErrors((prev) => ({ ...prev, screenshot: undefined }));
+
+    if (!file) {
+      setScreenshotFile(null);
+      return;
+    }
+
+    if (!ALLOWED_SCREENSHOT_TYPES.has(file.type)) {
+      setScreenshotFile(null);
+      if (screenshotInputRef.current) screenshotInputRef.current.value = '';
+      setFormErrors((prev) => ({
+        ...prev,
+        screenshot: 'Screenshot must be PNG, JPEG, or WebP.',
+      }));
+      return;
+    }
+
+    if (file.size > MAX_SCREENSHOT_SIZE) {
+      setScreenshotFile(null);
+      if (screenshotInputRef.current) screenshotInputRef.current.value = '';
+      setFormErrors((prev) => ({
+        ...prev,
+        screenshot: 'Screenshot must be 5MB or smaller.',
+      }));
+      return;
+    }
+
+    setScreenshotFile(file);
+  };
+
   const validateForm = (): boolean => {
-    const errors: Partial<Record<keyof FormState, string>> = {};
+    const errors: Partial<Record<keyof FormState | 'screenshot', string>> = {};
 
     if (!formState.name.trim()) {
       errors.name = 'Full name is required.';
@@ -61,6 +99,20 @@ export default function ReviewSubmitForm() {
     return Object.keys(errors).length === 0;
   };
 
+  const uploadScreenshot = async (file: File): Promise<string> => {
+    const formData = new FormData();
+    formData.append('screenshot', file);
+    const res = await fetch('/api/reviews/upload-screenshot', {
+      method: 'POST',
+      body: formData,
+    });
+    const json = await res.json();
+    if (!res.ok || !json.success) {
+      throw new Error(json.error || 'Could not upload screenshot. Please try again.');
+    }
+    return json.data.screenshotUrl as string;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitMessage(null);
@@ -70,6 +122,12 @@ export default function ReviewSubmitForm() {
 
     try {
       setIsSubmitting(true);
+
+      let screenshotUrl: string | null = null;
+      if (screenshotFile) {
+        screenshotUrl = await uploadScreenshot(screenshotFile);
+      }
+
       const body = {
         name: formState.name.trim(),
         school: formState.school.trim() || null,
@@ -80,6 +138,7 @@ export default function ReviewSubmitForm() {
           formState.verificationType && formState.verificationType !== 'None'
             ? formState.verificationType
             : null,
+        screenshot_url: screenshotUrl,
       };
 
       const res = await fetch('/api/reviews', {
@@ -95,6 +154,8 @@ export default function ReviewSubmitForm() {
 
       setFormState(initialFormState);
       setFormErrors({});
+      setScreenshotFile(null);
+      if (screenshotInputRef.current) screenshotInputRef.current.value = '';
       setIsSuccess(true);
       setSubmitMessage('Thank you! Your review will appear after moderation.');
     } catch (err) {
@@ -232,6 +293,28 @@ export default function ReviewSubmitForm() {
               </option>
             ))}
           </select>
+        </div>
+
+        <div>
+          <label htmlFor="screenshot" className="block text-sm font-medium text-gray-700 mb-2">
+            Screenshot (optional)
+          </label>
+          <input
+            ref={screenshotInputRef}
+            id="screenshot"
+            name="screenshot"
+            type="file"
+            accept="image/png,image/jpeg,image/webp"
+            onChange={handleScreenshotChange}
+            className="block w-full text-sm text-slate-600 file:mr-4 file:rounded-lg file:border-0 file:bg-primary-50 file:px-4 file:py-2 file:text-sm file:font-medium file:text-primary-700 hover:file:bg-primary-100"
+          />
+          <p className="mt-1 text-xs text-slate-500">PNG, JPEG, or WebP up to 5MB. Visible to admins only.</p>
+          {screenshotFile && (
+            <p className="mt-1 text-xs text-slate-600 truncate">Selected: {screenshotFile.name}</p>
+          )}
+          {formErrors.screenshot && (
+            <p className="mt-1 text-sm text-red-600">{formErrors.screenshot}</p>
+          )}
         </div>
 
         {submitMessage && (

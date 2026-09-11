@@ -48,6 +48,7 @@ export class ReviewService {
     rating: number;
     message: string;
     verification_type?: string | null;
+    screenshot_url?: string | null;
   }) {
     const review = await reviewRepository.create(data);
     return mapReview(review);

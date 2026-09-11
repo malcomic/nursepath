@@ -1,11 +1,11 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { notFound } from 'next/navigation';
+import { notFound, permanentRedirect } from 'next/navigation';
 import { categoryService } from '@/lib/services/categoryService';
 import { guideService } from '@/lib/services/guideService';
 import { toPublicGuide } from '@/lib/controllers/guideController';
 import { getCategorySeo } from '@/lib/seo/category-keywords';
-import { slugify } from '@/lib/slugify';
+import { ApiError } from '@/lib/errors/api-error';
 import GuideGrid from '@/components/guides/GuideGrid';
 import CTA from '@/components/sections/CTA';
 
@@ -15,36 +15,50 @@ interface CategoryPageProps {
 
 export async function generateStaticParams() {
   const categories = await categoryService.getAllCategories();
-  return categories.map((c) => ({ slug: slugify(c.name) }));
+  return categories.map((c) => ({ slug: c.slug }));
 }
 
 export async function generateMetadata({ params }: CategoryPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const seo = getCategorySeo(slug);
-  const categories = await categoryService.getAllCategories();
-  const category = categories.find((c) => slugify(c.name) === slug);
-
-  return {
-    title: category ? `${category.name} Study Guides` : seo.title,
-    description: category?.description ?? seo.description,
-    openGraph: {
-      title: category ? `${category.name} Study Guides | NursePath` : seo.title,
-      description: category?.description ?? seo.description,
-    },
-  };
+  try {
+    const category = await categoryService.getCategoryByParam(slug);
+    const seo = getCategorySeo(category.slug);
+    return {
+      title: `${category.name} Study Guides`,
+      description: category.description ?? seo.description,
+      openGraph: {
+        title: `${category.name} Study Guides | NursePath`,
+        description: category.description ?? seo.description,
+      },
+    };
+  } catch (err) {
+    if (err instanceof ApiError && err.statusCode === 404) {
+      const seo = getCategorySeo(slug);
+      return { title: seo.title, description: seo.description };
+    }
+    throw err;
+  }
 }
 
 export default async function CategoryPage({ params }: CategoryPageProps) {
-  const { slug } = await params;
-  const categories = await categoryService.getAllCategories();
-  const category = categories.find((c) => slugify(c.name) === slug);
+  const { slug: param } = await params;
 
-  if (!category) {
-    notFound();
+  let category;
+  try {
+    category = await categoryService.getCategoryByParam(param);
+  } catch (err) {
+    if (err instanceof ApiError && err.statusCode === 404) {
+      notFound();
+    }
+    throw err;
+  }
+
+  if (param === category.id) {
+    permanentRedirect(`/categories/${category.slug}`);
   }
 
   const guides = (await guideService.getGuidesByCategory(category.id)).map(toPublicGuide);
-  const seo = getCategorySeo(slug);
+  const seo = getCategorySeo(category.slug);
 
   return (
     <main>

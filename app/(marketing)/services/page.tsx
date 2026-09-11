@@ -2,7 +2,6 @@ import type { Metadata } from 'next';
 import { categoryService } from '@/lib/services/categoryService';
 import { getFilteredGuides } from '@/lib/guides/get-filtered-guides';
 import { getCategorySeo } from '@/lib/seo/category-keywords';
-import { slugify } from '@/lib/slugify';
 import GuideGrid from '@/components/guides/GuideGrid';
 import ServicesFilters from '@/components/services/ServicesFilters';
 
@@ -22,8 +21,7 @@ export async function generateMetadata({ searchParams }: ServicesPageProps): Pro
     const categories = await categoryService.getAllCategories();
     const category = categories.find((c) => c.id === params.category);
     if (category) {
-      const slug = slugify(category.name);
-      const seo = getCategorySeo(slug);
+      const seo = getCategorySeo(category.slug);
       return {
         title: seo.title,
         description: seo.description,

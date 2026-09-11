@@ -139,6 +139,35 @@ class EmailService {
       throw new Error('Failed to send contact email');
     }
   }
+
+  async sendMagicLinkEmail(payload: { to: string; magicUrl: string }) {
+    const subject = 'Your NursePath sign-in link';
+    const html = `
+      <p>Hi,</p>
+      <p>Use this secure link to view your NursePath purchases and downloads. It expires in <strong>30 minutes</strong> and can only be used once.</p>
+      <p><a href="${escapeHtml(payload.magicUrl)}">Sign in to My Purchases</a></p>
+      <p>If you did not request this, you can ignore this email.</p>
+      <p>— NursePath</p>
+    `;
+
+    const client = this.getClient();
+    if (!client) {
+      logger.info(`[email stub] Magic link to ${payload.to}: ${payload.magicUrl}`);
+      return;
+    }
+
+    const { error } = await client.emails.send({
+      from: config.contactFromEmail,
+      to: payload.to,
+      subject,
+      html,
+    });
+
+    if (error) {
+      logger.error('Failed to send magic link email:', error);
+      throw new Error('Failed to send sign-in email');
+    }
+  }
 }
 
 function escapeHtml(text: string): string {

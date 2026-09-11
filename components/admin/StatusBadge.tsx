@@ -5,10 +5,10 @@ interface StatusBadgeProps {
 
 export function StatusBadge({ label, variant }: StatusBadgeProps) {
   const styles: Record<StatusBadgeProps['variant'], string> = {
-    success: 'bg-emerald-50 text-emerald-700 border-emerald-100',
+    success: 'bg-primary-50 text-primary-800 border-primary-100',
     warning: 'bg-amber-50 text-amber-700 border-amber-100',
     danger: 'bg-rose-50 text-rose-700 border-rose-100',
-    neutral: 'bg-slate-50 text-slate-700 border-slate-200',
+    neutral: 'bg-soft text-navy-700 border-border',
   };
 
   return (

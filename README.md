@@ -93,7 +93,7 @@ Add to `.env.local` (see `.env.example`):
 
 - `JWT_SECRET` — secret for admin JWT cookies (required)
 - `JWT_EXPIRY` — token lifetime, e.g. `24h` (default: `24h`)
-- `BLOB_READ_WRITE_TOKEN` — Vercel Blob token for PDF/thumbnail uploads (optional; URL mode works without it)
+- `BLOB_READ_WRITE_TOKEN` — Vercel Blob token for PDF/thumbnail uploads and review screenshots (optional; guide URL mode works without it; review screenshot upload requires it)
 
 Admin auth uses an **httpOnly `admin_token` cookie** set on `POST /api/admin/login`. Middleware protects all `/admin/*` routes except `/admin/login`. The public header checks `GET /api/admin/me` to show Dashboard / Logout when signed in.
 
@@ -176,3 +176,103 @@ After adding or editing a post, redeploy — posts are statically generated at b
 | `npm run build` | Passes |
 | `main` | No `nursepath/` or `backend/` |
 | `archive/legacy-vite-express` | Contains legacy trees |
+
+## Phase 9: Review screenshot uploads
+
+Optional screenshots on `/reviews` submit upload to Vercel Blob, then save as `Review.screenshot_url`. Public review cards stay text-only; admins view images in the reviews lightbox.
+
+Requires `BLOB_READ_WRITE_TOKEN` (same as guide PDF/thumbnail uploads). Flow: `POST /api/reviews/upload-screenshot` → `POST /api/reviews` with `screenshot_url`.
+
+### Phase 9 smoke checklist
+
+| Test | Expected |
+|------|----------|
+| Submit review, no file | 201 pending; `screenshot_url` null |
+| Submit with PNG/JPEG/WebP | Blob URL stored; admin lightbox works |
+| Wrong type / >5MB | 400 from upload route |
+| Missing Blob token | 503 |
+| Rate limit spam upload | 429 |
+| `npm run build` | Passes |
+
+## Phase 10: Persisted category slugs
+
+- Canonical public path: `/categories/{slug}` (persisted unique `Category.slug`)
+- `/categories/{cuid}` **301 redirects** to the slug URL
+- Admin categories form includes optional **Slug** (auto from name when blank)
+- Changing the name auto-refreshes the slug unless you set an explicit slug
+- Sitemap, homepage, and services SEO use DB slugs
+
+### Phase 10 smoke checklist
+
+| Test | Expected |
+|------|----------|
+| `/categories/{slug}` | 200 |
+| `/categories/{cuid}` | 301 → `/categories/{slug}` |
+| Homepage / sitemap | Links use DB slug |
+| Admin create without slug | Auto slug from name |
+| Admin edit slug | Unique; collision handled |
+| Rename with blank slug | Slug regenerates from new name |
+| `npm run build` | Passes |
+
+## Phase 11: Blog content push
+
+Ten new detailed MDX posts were added under `content/blog/` (ATI vs NCLEX, NGN clinical judgment, pharmacology, HESI A2, TEAS, SATA, prioritization/delegation, fluids/electrolytes, maternity, mental health). Each includes frontmatter, multi-section depth, optional `<Callout>` tips, and CTAs to `/services` or category pages.
+
+Redeploy after adding posts — blog pages are generated at build time and included in `sitemap.xml`.
+
+### Phase 11 smoke checklist
+
+| Test | Expected |
+|------|----------|
+| `/blog` | Lists new posts with older ones |
+| `/blog/[slug]` for each new post | Renders headings, Callouts, internal links |
+| `/sitemap.xml` | Includes all new blog slugs |
+| `npm run build` | Passes |
+
+## Phase 12: Admin UI brand alignment
+
+Admin uses the same teal / navy / coral system and Outfit/Figtree fonts as the marketing site:
+
+- Shell + login: navy panel, teal active nav, coral primary CTAs
+- Soft page background (`bg-soft`), `border-border`, navy text
+- Shared Modal / ConfirmModal / StatusBadge / toasts updated
+- Behavior and APIs unchanged — visual only
+
+### Phase 12 smoke checklist
+
+| Test | Expected |
+|------|----------|
+| `/admin/login` | Brand login; successful sign-in |
+| Sidebar + mobile nav | Teal active state |
+| Guides / categories create CTAs | Coral primary buttons |
+| Orders / reviews / settings | On-brand forms and tables |
+| `npm run build` | Passes |
+
+## Phase 13: Magic-link buyer recovery
+
+Buyers reclaim downloads without passwords:
+
+1. Enter checkout email on `/dashboard`
+2. Receive a one-time Resend magic link (30 minutes)
+3. Link sets an httpOnly `buyer_token` session (~7 days)
+4. Dashboard lists PAID orders and download links for that email
+
+APIs: `POST /api/dashboard/request-link`, `GET /api/dashboard/verify`, `GET /api/dashboard/me`, `GET /api/dashboard/orders`, `POST /api/dashboard/logout`. Public email lookup without a session is no longer allowed (`/api/orders/by-email` requires a matching buyer session).
+
+Without `RESEND_API_KEY`, magic links are logged to the server console (dev stub).
+
+### Phase 13 smoke checklist
+
+| Test | Expected |
+|------|----------|
+| Request link for paid email | Generic success; email (or console stub) with link |
+| Open magic link | Cookie set; redirect `/dashboard` with orders |
+| Expired / reused link | Error; must request again |
+| Sign out | Cookie cleared; request form shown |
+| `/api/orders/by-email` without session | 401 |
+| Rate-limit spam request-link | 429 |
+| `npm run build` | Passes |
+
+
+
+

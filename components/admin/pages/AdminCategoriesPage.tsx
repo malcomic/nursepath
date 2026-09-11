@@ -8,12 +8,14 @@ import { adminJson } from '@/lib/admin/api-client';
 interface Category {
   id: string;
   name: string;
+  slug: string;
   description?: string;
   icon?: string | null;
 }
 
 interface CategoryFormState {
   name: string;
+  slug: string;
   description: string;
   icon: string;
 }
@@ -31,6 +33,7 @@ export default function AdminCategoriesPage() {
   } | null>(null);
   const [form, setForm] = useState<CategoryFormState>({
     name: '',
+    slug: '',
     description: '',
     icon: '',
   });
@@ -54,7 +57,7 @@ export default function AdminCategoriesPage() {
   }, []);
 
   const resetForm = () => {
-    setForm({ name: '', description: '', icon: '' });
+    setForm({ name: '', slug: '', description: '', icon: '' });
     setEditingCategoryId(null);
     setFormError(null);
   };
@@ -81,6 +84,7 @@ export default function AdminCategoriesPage() {
 
     const payload = {
       name: form.name.trim(),
+      slug: form.slug.trim() || undefined,
       description: form.description.trim() || undefined,
       icon: form.icon.trim() || undefined,
     };
@@ -133,11 +137,11 @@ export default function AdminCategoriesPage() {
   };
 
   return (
-    <div className="bg-white border border-slate-200 rounded-2xl shadow-sm">
-      <div className="px-6 py-5 border-b border-slate-200 flex items-center justify-between">
+    <div className="bg-white border border-border rounded-2xl shadow-soft">
+      <div className="px-6 py-5 border-b border-border flex items-center justify-between">
         <div>
-          <h2 className="text-lg font-bold text-slate-900">Categories</h2>
-          <p className="text-sm text-slate-500">Organize your guides into clear categories.</p>
+          <h2 className="text-lg font-bold text-navy-800">Categories</h2>
+          <p className="text-sm text-navy-400">Organize your guides into clear categories.</p>
         </div>
         <button
           type="button"
@@ -145,7 +149,7 @@ export default function AdminCategoriesPage() {
             resetForm();
             setShowModal(true);
           }}
-          className="bg-blue-600 text-white px-4 py-2.5 rounded-xl font-semibold text-sm flex items-center gap-2 hover:bg-blue-700 transition shadow-sm"
+          className="bg-accent-500 text-white px-4 py-2.5 rounded-full font-display font-semibold text-sm flex items-center gap-2 hover:bg-accent-600 transition shadow-soft"
         >
           <Plus size={18} />
           Add Category
@@ -166,19 +170,22 @@ export default function AdminCategoriesPage() {
         )}
 
         {loading ? (
-          <div className="py-12 text-center text-slate-500">Loading categories...</div>
+          <div className="py-12 text-center text-navy-400">Loading categories...</div>
         ) : categories.length === 0 ? (
-          <div className="py-12 text-center text-slate-500">No categories yet.</div>
+          <div className="py-12 text-center text-navy-400">No categories yet.</div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {categories.map((category) => (
               <div
                 key={category.id}
-                className="bg-white border border-slate-200 rounded-2xl p-5 hover:border-blue-500 hover:shadow-md transition-all"
+                className="bg-white border border-border rounded-2xl p-5 hover:border-primary-500 hover:shadow-md transition-all"
               >
                 {category.icon && <div className="text-xl mb-2">{category.icon}</div>}
-                <h3 className="text-base font-semibold text-slate-900 mb-1">{category.name}</h3>
-                <p className="text-sm text-slate-500 mb-4">
+                <h3 className="text-base font-semibold text-navy-800 mb-1">{category.name}</h3>
+                {category.slug && (
+                  <p className="text-xs text-navy-300 mb-1">/{category.slug}</p>
+                )}
+                <p className="text-sm text-navy-400 mb-4">
                   {category.description || 'No description provided.'}
                 </p>
                 <div className="flex gap-2">
@@ -188,12 +195,13 @@ export default function AdminCategoriesPage() {
                       setEditingCategoryId(category.id);
                       setForm({
                         name: category.name,
+                        slug: category.slug || '',
                         description: category.description || '',
                         icon: category.icon || '',
                       });
                       setShowModal(true);
                     }}
-                    className="flex-1 bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white py-2 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 transition"
+                    className="flex-1 bg-primary-50 text-primary-600 hover:bg-primary-600 hover:text-white py-2 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 transition"
                   >
                     <Edit2 size={16} />
                     Edit
@@ -225,37 +233,51 @@ export default function AdminCategoriesPage() {
             </div>
           )}
           <div>
-            <label className="block text-sm font-semibold text-slate-700 mb-1">Category Name</label>
+            <label className="block text-sm font-semibold text-navy-700 mb-1">Category Name</label>
             <input
               value={form.name}
               onChange={handleFieldChange('name')}
-              className="w-full border border-slate-300 rounded-xl px-3 py-2.5 text-sm"
+              className="w-full border border-border rounded-xl px-3 py-2.5 text-sm"
               required
             />
           </div>
           <div>
-            <label className="block text-sm font-semibold text-slate-700 mb-1">Icon (optional)</label>
+            <label className="block text-sm font-semibold text-navy-700 mb-1">
+              Slug (optional)
+            </label>
+            <input
+              value={form.slug}
+              onChange={handleFieldChange('slug')}
+              placeholder="auto from name"
+              className="w-full border border-border rounded-xl px-3 py-2.5 text-sm"
+            />
+            <p className="mt-1 text-xs text-navy-400">
+              Public URL: /categories/your-slug. Leave blank to generate from name.
+            </p>
+          </div>
+          <div>
+            <label className="block text-sm font-semibold text-navy-700 mb-1">Icon (optional)</label>
             <input
               value={form.icon}
               onChange={handleFieldChange('icon')}
-              className="w-full border border-slate-300 rounded-xl px-3 py-2.5 text-sm"
+              className="w-full border border-border rounded-xl px-3 py-2.5 text-sm"
             />
           </div>
           <div>
-            <label className="block text-sm font-semibold text-slate-700 mb-1">
+            <label className="block text-sm font-semibold text-navy-700 mb-1">
               Description (optional)
             </label>
             <textarea
               value={form.description}
               onChange={handleFieldChange('description')}
-              className="w-full border border-slate-300 rounded-xl px-3 py-2.5 text-sm min-h-24"
+              className="w-full border border-border rounded-xl px-3 py-2.5 text-sm min-h-24"
             />
           </div>
           <div className="flex items-center justify-end gap-3 pt-2">
             <button
               type="button"
               onClick={closeModal}
-              className="px-4 py-2.5 rounded-xl border border-slate-300 text-slate-700 font-semibold text-sm"
+              className="px-4 py-2.5 rounded-xl border border-border text-navy-700 font-semibold text-sm"
               disabled={isSaving}
             >
               Cancel
@@ -263,7 +285,7 @@ export default function AdminCategoriesPage() {
             <button
               type="submit"
               disabled={isSaving}
-              className="px-4 py-2.5 rounded-xl bg-blue-600 text-white font-semibold text-sm hover:bg-blue-700 disabled:opacity-60"
+              className="px-4 py-2.5 rounded-full bg-accent-500 text-white font-display font-semibold text-sm hover:bg-accent-600 disabled:opacity-60"
             >
               {isSaving ? 'Saving...' : editingCategoryId ? 'Update Category' : 'Create Category'}
             </button>
