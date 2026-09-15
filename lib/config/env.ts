@@ -4,11 +4,15 @@ export const config = {
   jwtExpiry: process.env.JWT_EXPIRY || '24h',
   nodeEnv: process.env.NODE_ENV || 'development',
   publicAppUrl: process.env.PUBLIC_APP_URL,
+  authSecret: process.env.AUTH_SECRET,
+  authGoogleId: process.env.AUTH_GOOGLE_ID,
+  authGoogleSecret: process.env.AUTH_GOOGLE_SECRET,
   paystackSecretKey: process.env.PAYSTACK_SECRET_KEY,
   paystackWebhookSecret: process.env.PAYSTACK_WEBHOOK_SECRET,
   resendApiKey: process.env.RESEND_API_KEY,
   contactFromEmail: process.env.CONTACT_FROM_EMAIL || 'NursePath <onboarding@resend.dev>',
   contactToEmail: process.env.CONTACT_TO_EMAIL || 'support@nursepath.com',
+  cronSecret: process.env.CRON_SECRET,
 };
 
 export function validateConfig() {

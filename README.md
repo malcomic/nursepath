@@ -93,7 +93,8 @@ Add to `.env.local` (see `.env.example`):
 
 - `JWT_SECRET` — secret for admin JWT cookies (required)
 - `JWT_EXPIRY` — token lifetime, e.g. `24h` (default: `24h`)
-- `BLOB_READ_WRITE_TOKEN` — Vercel Blob token for PDF/thumbnail uploads and review screenshots (optional; guide URL mode works without it; review screenshot upload requires it)
+- `BLOB_READ_WRITE_TOKEN` — Vercel Blob token for public PDF/thumbnail uploads and review screenshots (optional; guide URL mode works without it; review screenshot upload requires it)
+- `BLOB_LIBRARY_READ_WRITE_TOKEN` — Private Blob store token for library full PDFs (required for library PDF upload/view after Phase 6)
 
 Admin auth uses an **httpOnly `admin_token` cookie** set on `POST /api/admin/login`. Middleware protects all `/admin/*` routes except `/admin/login`. The public header checks `GET /api/admin/me` to show Dashboard / Logout when signed in.
 

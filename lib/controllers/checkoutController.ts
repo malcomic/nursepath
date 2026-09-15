@@ -7,6 +7,7 @@ import { orderService } from '@/lib/services/orderService';
 import { ApiError } from '@/lib/errors/api-error';
 import { PaymentStatus } from '@/lib/generated/prisma/enums';
 import { config } from '@/lib/config/env';
+import { getUserSession } from '@/lib/auth/verify-user';
 
 const freeCheckoutSchema = z
   .object({
@@ -46,6 +47,7 @@ export async function createFreeCheckout(body: unknown, ipAddress?: string) {
     now.getTime() + settings.downloadExpiryHours * 60 * 60 * 1000
   );
   const paymentReference = `free_${crypto.randomUUID()}`;
+  const sessionUser = await getUserSession();
 
   const orders = [];
   for (const guide of validGuides) {
@@ -61,6 +63,7 @@ export async function createFreeCheckout(body: unknown, ipAddress?: string) {
       paymentProvider: 'free',
       paymentReference,
       ipAddress,
+      ...(sessionUser?.id ? { userId: sessionUser.id } : {}),
     });
     orders.push(order);
   }

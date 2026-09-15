@@ -12,6 +12,9 @@ import { ApiError } from '@/lib/errors/api-error';
 import { PaymentStatus } from '@/lib/generated/prisma/enums';
 import { config } from '@/lib/config/env';
 import { orderService } from '@/lib/services/orderService';
+import { subscriptionService } from '@/lib/services/subscriptionService';
+import { subscriptionRepository } from '@/lib/repositories/subscriptionRepository';
+import { getUserSession } from '@/lib/auth/verify-user';
 
 const initializePaymentSchema = z
   .object({
@@ -62,6 +65,7 @@ export async function initializePayment(body: unknown, ipAddress?: string) {
   );
 
   const allGuidesForOrders = [...paidGuides, ...freeGuides];
+  const sessionUser = await getUserSession();
   const orders = [];
   for (const guide of allGuidesForOrders) {
     const order = await orderRepository.create({
@@ -75,6 +79,7 @@ export async function initializePayment(body: unknown, ipAddress?: string) {
       maxDownloads: settings.maxDownloads,
       paymentProvider: Number(guide.price) === 0 ? 'free' : 'paystack',
       ipAddress,
+      ...(sessionUser?.id ? { userId: sessionUser.id } : {}),
     });
     orders.push(order);
   }
@@ -173,6 +178,29 @@ export async function handlePaystackWebhook(rawBody: string, signature: string |
       return { received: true };
     }
 
+    const meta = verified.metadata as
+      | { type?: string; orderId?: string; subscriptionId?: string }
+      | undefined;
+
+    const isLibrarySub =
+      meta?.type === 'library_subscription' || reference.startsWith('np_sub_');
+
+    if (isLibrarySub) {
+      let sub = await subscriptionRepository.findByPaymentReference(reference);
+      if (!sub && meta?.subscriptionId) {
+        sub = await subscriptionRepository.findById(meta.subscriptionId);
+        if (sub && !sub.paymentReference) {
+          await subscriptionService.setPaymentReference(sub.id, reference);
+        }
+      }
+      if (sub) {
+        await subscriptionService.activateFromPayment(reference).catch((err) => {
+          console.error('Failed to activate library subscription:', err);
+        });
+      }
+      return { received: true };
+    }
+
     const baseUrl = config.publicAppUrl || 'http://localhost:3000';
     const byRef = await orderRepository.findByPaymentReference(reference);
 
@@ -197,7 +225,6 @@ export async function handlePaystackWebhook(rawBody: string, signature: string |
     }
 
     // Legacy metadata fallback (single order)
-    const meta = verified.metadata as { orderId?: string } | undefined;
     const orderId = meta?.orderId;
     if (!orderId) {
       throw new ApiError(400, 'Missing orderId for payment reference');

@@ -2,113 +2,124 @@ import { Check } from 'lucide-react';
 import Link from 'next/link';
 import Card from '../ui/Card';
 import Button from '../ui/Button';
+import { auth } from '@/lib/auth';
+import { planService } from '@/lib/services/planService';
 
-const plans = [
-  {
-    name: 'Basic',
-    price: 29,
-    description: 'Perfect for individual exam preparation',
-    features: [
-      '1 Study Guide',
-      'PDF Download',
-      'Lifetime Access',
-      'Email Support',
-      'Mobile Friendly',
-    ],
-    popular: false,
-  },
-  {
-    name: 'Professional',
-    price: 79,
-    description: 'Best for comprehensive exam coverage',
-    features: [
-      '5 Study Guides',
-      'PDF Downloads',
-      'Lifetime Access',
-      'Priority Support',
-      'Mobile Friendly',
-      'Practice Questions',
-      'Study Planner',
-    ],
-    popular: true,
-  },
-  {
-    name: 'Premium',
-    price: 149,
-    description: 'Complete package for serious students',
-    features: [
-      'Unlimited Study Guides',
-      'PDF Downloads',
-      'Lifetime Access',
-      '24/7 Priority Support',
-      'Mobile Friendly',
-      'Practice Questions',
-      'Study Planner',
-      'Video Tutorials',
-      'Exam Simulator',
-    ],
-    popular: false,
-  },
-];
+function formatDuration(days: number) {
+  if (days === 1) return '1 day';
+  if (days === 7) return '1 week';
+  if (days === 30) return '1 month';
+  return `${days} days`;
+}
 
-export default function Pricing() {
+export default async function Pricing() {
+  const session = await auth();
+  const plans = await planService.listActive();
+  const isLoggedIn = !!session?.user;
+
+  const featuresByCode: Record<string, string[]> = {
+    'day-1': [
+      'Full study docs + Q&A library',
+      'View online in your browser',
+      'Up to 3 unique downloads',
+      'Access for 24 hours',
+    ],
+    'week-1': [
+      'Full study docs + Q&A library',
+      'View online in your browser',
+      'Up to 3 unique downloads',
+      'Access for 7 days',
+      'Best for exam week',
+    ],
+    'month-1': [
+      'Full study docs + Q&A library',
+      'View online in your browser',
+      'Up to 3 unique downloads',
+      'Access for 30 days',
+      'Best value for long prep',
+    ],
+  };
+
   return (
     <section id="pricing" className="bg-white py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-16 text-center">
           <h2 className="mb-4 font-display text-3xl font-extrabold text-navy-800 sm:text-4xl lg:text-5xl">
-            Simple, Transparent Pricing
+            Library access passes
           </h2>
           <p className="mx-auto max-w-2xl text-xl text-navy-400">
-            Choose the plan that works best for you. All plans include our money-back guarantee.
+            Prepaid access to study documents and questions with answers. No auto-renew — buy
+            another pass anytime.
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-6">
-          {plans.map((plan, index) => (
-            <Card
-              key={index}
-              className={`relative ${plan.popular ? 'ring-2 ring-primary-600 scale-105' : ''}`}
-              hover
-            >
-              {plan.popular && (
-                <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                  <span className="bg-primary-600 text-white px-4 py-1 rounded-full text-sm font-semibold">
-                    Most Popular
-                  </span>
+          {plans.map((plan) => {
+            const popular = plan.code === 'week-1';
+            const checkoutPath = `/checkout/library?plan=${encodeURIComponent(plan.code)}`;
+            const href = isLoggedIn
+              ? checkoutPath
+              : `/login?callbackUrl=${encodeURIComponent(checkoutPath)}`;
+            const features =
+              featuresByCode[plan.code] ??
+              [
+                'Full library access',
+                `Access for ${formatDuration(plan.durationDays)}`,
+                'Up to 3 unique downloads',
+              ];
+
+            return (
+              <Card
+                key={plan.id}
+                className={`relative ${popular ? 'ring-2 ring-primary-600 scale-105' : ''}`}
+                hover
+              >
+                {popular && (
+                  <div className="absolute -top-4 left-1/2 -translate-x-1/2 transform">
+                    <span className="rounded-full bg-primary-600 px-4 py-1 text-sm font-semibold text-white">
+                      Most Popular
+                    </span>
+                  </div>
+                )}
+
+                <div className="mb-8 text-center">
+                  <h3 className="mb-2 text-2xl font-bold text-navy-800">{plan.name}</h3>
+                  <p className="mb-6 text-navy-400">
+                    {plan.description || `Prepaid access for ${formatDuration(plan.durationDays)}`}
+                  </p>
+                  <div className="mb-2">
+                    <span className="text-5xl font-black text-navy-800">
+                      ${plan.priceUsd.toFixed(0)}
+                    </span>
+                    <span className="text-navy-400"> / {formatDuration(plan.durationDays)}</span>
+                  </div>
                 </div>
-              )}
 
-              <div className="text-center mb-8">
-                <h3 className="text-2xl font-bold text-gray-900 mb-2">{plan.name}</h3>
-                <p className="text-gray-600 mb-6">{plan.description}</p>
-                <div className="mb-6">
-                  <span className="text-5xl font-black text-gray-900">${plan.price}</span>
-                  <span className="text-gray-600">/one-time</span>
-                </div>
-              </div>
+                <ul className="mb-8 space-y-4">
+                  {features.map((feature) => (
+                    <li key={feature} className="flex items-start gap-3">
+                      <Check className="mt-0.5 h-5 w-5 flex-shrink-0 text-secondary-600" />
+                      <span className="text-navy-700">{feature}</span>
+                    </li>
+                  ))}
+                </ul>
 
-              <ul className="space-y-4 mb-8">
-                {plan.features.map((feature, featureIndex) => (
-                  <li key={featureIndex} className="flex items-start gap-3">
-                    <Check className="w-5 h-5 text-secondary-600 flex-shrink-0 mt-0.5" />
-                    <span className="text-gray-700">{feature}</span>
-                  </li>
-                ))}
-              </ul>
-
-              <Link href="/services">
-                <Button variant={plan.popular ? 'primary' : 'outline'} fullWidth size="lg">
-                  Get Started
-                </Button>
-              </Link>
-            </Card>
-          ))}
+                <Link href={href}>
+                  <Button variant={popular ? 'primary' : 'outline'} fullWidth size="lg">
+                    Get access
+                  </Button>
+                </Link>
+              </Card>
+            );
+          })}
         </div>
 
-        <div className="text-center mt-12">
-          <p className="text-gray-600">
-            All plans include a 30-day money-back guarantee. No questions asked.
+        <div className="mt-12 text-center">
+          <p className="text-navy-400">
+            One-time study guides remain available separately.{' '}
+            <Link href="/services" className="font-semibold text-primary-600 hover:text-primary-700">
+              Browse guides
+            </Link>
           </p>
         </div>
       </div>

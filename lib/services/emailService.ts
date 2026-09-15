@@ -140,19 +140,35 @@ class EmailService {
     }
   }
 
-  async sendMagicLinkEmail(payload: { to: string; magicUrl: string }) {
-    const subject = 'Your NursePath sign-in link';
+  async sendLibraryPassActivatedEmail(payload: {
+    to: string;
+    name?: string | null;
+    planName: string;
+    endsAt: Date;
+    libraryUrl: string;
+  }) {
+    const endsLabel = payload.endsAt.toLocaleString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+      hour: 'numeric',
+      minute: '2-digit',
+    });
+    const greeting = payload.name?.trim() || 'there';
+    const subject = `Your NursePath library pass is active: ${payload.planName}`;
     const html = `
-      <p>Hi,</p>
-      <p>Use this secure link to view your NursePath purchases and downloads. It expires in <strong>30 minutes</strong> and can only be used once.</p>
-      <p><a href="${escapeHtml(payload.magicUrl)}">Sign in to My Purchases</a></p>
-      <p>If you did not request this, you can ignore this email.</p>
+      <p>Hi ${escapeHtml(greeting)},</p>
+      <p>Your <strong>${escapeHtml(payload.planName)}</strong> library pass is active until <strong>${escapeHtml(endsLabel)}</strong>.</p>
+      <p><a href="${escapeHtml(payload.libraryUrl)}">Open your library</a></p>
+      <p>You can view documents online anytime during your pass, and download up to 3 unique files.</p>
       <p>— NursePath</p>
     `;
 
     const client = this.getClient();
     if (!client) {
-      logger.info(`[email stub] Magic link to ${payload.to}: ${payload.magicUrl}`);
+      logger.info(
+        `[email stub] Library activated to ${payload.to}: ${payload.planName} until ${endsLabel} → ${payload.libraryUrl}`
+      );
       return;
     }
 
@@ -164,10 +180,56 @@ class EmailService {
     });
 
     if (error) {
-      logger.error('Failed to send magic link email:', error);
-      throw new Error('Failed to send sign-in email');
+      logger.error('Failed to send library activated email:', error);
+      throw new Error('Failed to send library activated email');
     }
   }
+
+  async sendLibraryPassExpiringEmail(payload: {
+    to: string;
+    name?: string | null;
+    planName: string;
+    endsAt: Date;
+    pricingUrl: string;
+  }) {
+    const endsLabel = payload.endsAt.toLocaleString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+      hour: 'numeric',
+      minute: '2-digit',
+    });
+    const greeting = payload.name?.trim() || 'there';
+    const subject = `Your NursePath library pass expires soon`;
+    const html = `
+      <p>Hi ${escapeHtml(greeting)},</p>
+      <p>Your <strong>${escapeHtml(payload.planName)}</strong> access ends on <strong>${escapeHtml(endsLabel)}</strong>.</p>
+      <p>Extend your pass anytime:</p>
+      <p><a href="${escapeHtml(payload.pricingUrl)}">Renew library access</a></p>
+      <p>— NursePath</p>
+    `;
+
+    const client = this.getClient();
+    if (!client) {
+      logger.info(
+        `[email stub] Library expiring to ${payload.to}: ${payload.planName} ends ${endsLabel} → ${payload.pricingUrl}`
+      );
+      return;
+    }
+
+    const { error } = await client.emails.send({
+      from: config.contactFromEmail,
+      to: payload.to,
+      subject,
+      html,
+    });
+
+    if (error) {
+      logger.error('Failed to send library expiring email:', error);
+      throw new Error('Failed to send library expiring email');
+    }
+  }
+
 }
 
 function escapeHtml(text: string): string {

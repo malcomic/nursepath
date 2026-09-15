@@ -6,7 +6,7 @@ import CTA from '@/components/sections/CTA';
 export const metadata: Metadata = {
   title: 'Pricing',
   description:
-    'Simple, transparent pricing for NCLEX-RN study guides and nursing exam prep. All plans include a 30-day money-back guarantee.',
+    'Prepaid library access for study documents and Q&A — 1 day, 1 week, or 1 month. Study guides sold separately.',
 };
 
 export default function PricingPage() {
@@ -18,7 +18,7 @@ export default function PricingPage() {
             Pricing
           </h1>
           <p className="mx-auto max-w-2xl text-xl text-navy-200">
-            Choose the plan that works best for your nursing exam preparation journey.
+            Prepaid library passes for study docs and Q&amp;A. One-time study guides sold separately.
           </p>
         </div>
       </section>

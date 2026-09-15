@@ -30,6 +30,22 @@ export interface Guide {
   updatedAt: Date;
 }
 
+export type ContentType = 'STUDY_DOC' | 'QA_DOC';
+
+export interface ContentDocument {
+  id: string;
+  type: ContentType;
+  title: string;
+  slug: string;
+  description: string | null;
+  categoryId: string;
+  fileUrl: string;
+  previewPdfUrl: string | null;
+  thumbnailUrl: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 export interface Purchase {
   id: string;
   guideId: string;

@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Outfit, Figtree } from 'next/font/google';
+import AuthProvider from '@/components/providers/AuthProvider';
 import './globals.css';
 
 const outfit = Outfit({
@@ -49,7 +50,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${outfit.variable} ${figtree.variable} font-sans antialiased`}>
-        {children}
+        <AuthProvider>{children}</AuthProvider>
       </body>
     </html>
   );

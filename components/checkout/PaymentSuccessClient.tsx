@@ -182,7 +182,7 @@ export default function PaymentSuccessClient() {
             Downloads are enabled once payment is confirmed. A copy of your download link has also
             been sent to your email. You can reclaim purchases anytime on{' '}
             <Link href="/dashboard" className="text-primary-600 hover:underline">
-              My Purchases
+              My Dashboard
             </Link>{' '}
             by requesting a one-time sign-in link to the same email you used at checkout.
           </p>

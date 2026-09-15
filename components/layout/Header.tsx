@@ -1,12 +1,12 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useSession, signOut } from 'next-auth/react';
 import { MessageCircle, Phone, MessageSquare, X, Menu, ShoppingCart } from 'lucide-react';
 import MobileMenu from './MobileMenu';
 import Logo from './Logo';
-import { adminFetch } from '@/lib/admin/api-client';
 import { useCart } from '@/components/cart/CartProvider';
 
 const PHONE_NUMBER = '+12135744133';
@@ -14,28 +14,13 @@ const PHONE_NUMBER = '+12135744133';
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [showHelpModal, setShowHelpModal] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false);
   const pathname = usePathname();
   const { count, hydrated } = useCart();
+  const { data: session, status } = useSession();
+  const isLoggedIn = status === 'authenticated' && !!session?.user;
 
-  useEffect(() => {
-    let cancelled = false;
-    adminFetch('/api/admin/me')
-      .then((res) => {
-        if (!cancelled) setIsAdmin(res.ok);
-      })
-      .catch(() => {
-        if (!cancelled) setIsAdmin(false);
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, [pathname]);
-
-  const handleLogout = async () => {
-    await adminFetch('/api/admin/logout', { method: 'POST' });
-    setIsAdmin(false);
-    window.location.href = '/';
+  const handleUserLogout = async () => {
+    await signOut({ callbackUrl: '/' });
   };
 
   const navLinks = [
@@ -86,25 +71,25 @@ export default function Header() {
                 )}
               </Link>
 
-              {isAdmin ? (
+              {isLoggedIn ? (
                 <>
                   <Link
-                    href="/admin/dashboard"
+                    href="/dashboard"
                     className="font-display text-[15px] font-semibold text-primary-600 hover:text-primary-700"
                   >
                     Dashboard
                   </Link>
                   <button
                     type="button"
-                    onClick={handleLogout}
+                    onClick={() => void handleUserLogout()}
                     className="font-display text-[15px] font-semibold text-navy-400 hover:text-navy-800"
                   >
-                    Logout
+                    Sign out
                   </button>
                 </>
               ) : (
                 <Link
-                  href="/admin/login"
+                  href="/login"
                   className="font-display text-[15px] font-semibold text-primary-600 hover:text-primary-700"
                 >
                   Log In
@@ -150,8 +135,8 @@ export default function Header() {
           navLinks={navLinks}
           isActive={isActive}
           onHelpClick={() => setShowHelpModal(true)}
-          isAdmin={isAdmin}
-          onLogout={handleLogout}
+          isLoggedIn={isLoggedIn}
+          onLogout={handleUserLogout}
         />
       </header>
 

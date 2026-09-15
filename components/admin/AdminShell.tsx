@@ -6,11 +6,14 @@ import { usePathname, useRouter } from 'next/navigation';
 import {
   LayoutDashboard,
   BookOpen,
+  Library,
   Tags,
   FileText,
   MessageSquare,
   Settings,
   LogOut,
+  CreditCard,
+  CalendarClock,
 } from 'lucide-react';
 import { ToastProvider } from '@/components/admin/ToastProvider';
 import { adminFetch } from '@/lib/admin/api-client';
@@ -19,6 +22,9 @@ import Logo from '@/components/layout/Logo';
 const PAGE_TITLES: Record<string, string> = {
   '/admin/dashboard': 'Dashboard',
   '/admin/guides': 'Study Guides',
+  '/admin/library': 'Library',
+  '/admin/plans': 'Plans',
+  '/admin/subscriptions': 'Subscriptions',
   '/admin/categories': 'Categories',
   '/admin/orders': 'Orders',
   '/admin/reviews': 'Review Moderation',
@@ -48,6 +54,9 @@ export default function AdminShell({ children }: AdminShellProps) {
   const navItems = [
     { href: '/admin/dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { href: '/admin/guides', label: 'Guides', icon: BookOpen },
+    { href: '/admin/library', label: 'Library', icon: Library },
+    { href: '/admin/plans', label: 'Plans', icon: CreditCard },
+    { href: '/admin/subscriptions', label: 'Subscriptions', icon: CalendarClock },
     { href: '/admin/categories', label: 'Categories', icon: Tags },
     { href: '/admin/orders', label: 'Orders', icon: FileText },
     { href: '/admin/reviews', label: 'Reviews', icon: MessageSquare },

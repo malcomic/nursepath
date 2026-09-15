@@ -10,7 +10,7 @@ interface MobileMenuProps {
   navLinks: Array<{ path: string; label: string }>;
   isActive: (path: string) => boolean;
   onHelpClick: () => void;
-  isAdmin?: boolean;
+  isLoggedIn?: boolean;
   onLogout?: () => void;
 }
 
@@ -20,7 +20,7 @@ export default function MobileMenu({
   navLinks,
   isActive,
   onHelpClick,
-  isAdmin = false,
+  isLoggedIn = false,
   onLogout,
 }: MobileMenuProps) {
   const { count, hydrated } = useCart();
@@ -70,10 +70,10 @@ export default function MobileMenu({
 
           <div className="my-6 border-t border-border" />
 
-          {isAdmin ? (
+          {isLoggedIn ? (
             <div className="space-y-3">
               <Link
-                href="/admin/dashboard"
+                href="/dashboard"
                 onClick={onClose}
                 className="flex items-center justify-center rounded-full border border-border px-4 py-3 font-display text-base font-semibold text-navy-700 transition-colors hover:bg-soft"
               >
@@ -87,12 +87,12 @@ export default function MobileMenu({
                 }}
                 className="flex w-full items-center justify-center rounded-full bg-navy-800 px-4 py-3 font-display text-base font-semibold text-white transition-colors hover:bg-navy-700"
               >
-                Logout
+                Sign out
               </button>
             </div>
           ) : (
             <Link
-              href="/admin/login"
+              href="/login"
               onClick={onClose}
               className="flex items-center justify-center rounded-full px-4 py-3 font-display text-base font-semibold text-primary-600 transition-colors hover:bg-primary-50"
             >

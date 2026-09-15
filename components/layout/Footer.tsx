@@ -22,7 +22,7 @@ export default function Footer() {
     ],
     support: [
       { label: 'FAQ Help Center', path: '/help' },
-      { label: 'My Purchases', path: '/dashboard' },
+      { label: 'My Dashboard', path: '/dashboard' },
       { label: 'Exam Prep Guide', path: '/blog' },
       { label: 'Sitemap', path: '/sitemap.xml' },
     ],
