@@ -25,6 +25,7 @@ export default function Footer() {
       { label: 'My Dashboard', path: '/dashboard' },
       { label: 'Exam Prep Guide', path: '/blog' },
       { label: 'Sitemap', path: '/sitemap.xml' },
+      { label: 'Admin', path: '/admin/login' },
     ],
   };
 

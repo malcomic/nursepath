@@ -88,12 +88,20 @@ export default function Header() {
                   </button>
                 </>
               ) : (
-                <Link
-                  href="/login"
-                  className="font-display text-[15px] font-semibold text-primary-600 hover:text-primary-700"
-                >
-                  Log In
-                </Link>
+                <>
+                  <Link
+                    href="/register"
+                    className="font-display text-[15px] font-semibold text-navy-400 hover:text-navy-800"
+                  >
+                    Register
+                  </Link>
+                  <Link
+                    href="/login"
+                    className="font-display text-[15px] font-semibold text-primary-600 hover:text-primary-700"
+                  >
+                    Log In
+                  </Link>
+                </>
               )}
 
               <button

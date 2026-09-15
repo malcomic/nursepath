@@ -91,13 +91,22 @@ export default function MobileMenu({
               </button>
             </div>
           ) : (
-            <Link
-              href="/login"
-              onClick={onClose}
-              className="flex items-center justify-center rounded-full px-4 py-3 font-display text-base font-semibold text-primary-600 transition-colors hover:bg-primary-50"
-            >
-              Log In
-            </Link>
+            <div className="space-y-3">
+              <Link
+                href="/register"
+                onClick={onClose}
+                className="flex items-center justify-center rounded-full border border-border px-4 py-3 font-display text-base font-semibold text-navy-700 transition-colors hover:bg-soft"
+              >
+                Register
+              </Link>
+              <Link
+                href="/login"
+                onClick={onClose}
+                className="flex items-center justify-center rounded-full bg-primary-600 px-4 py-3 font-display text-base font-semibold text-white transition-colors hover:bg-primary-700"
+              >
+                Log In
+              </Link>
+            </div>
           )}
 
           <div className="mt-6">
