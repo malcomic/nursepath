@@ -8,7 +8,7 @@ Next.js application for NCLEX-RN study guides and nursing exam prep.
 - **Prisma + PostgreSQL** — migrations only under root `prisma/`
 - **Paystack** checkout (card USD + M-Pesa KES), **Resend** email, **Vercel Blob** uploads
 
-### Legacy archive
+### Legacy archives
 
 The pre-migration Vite frontend (`nursepath/`) and Express API (`backend/`) were removed from `main` after cutover. They are preserved on:
 
