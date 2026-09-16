@@ -556,6 +556,7 @@ export default function AdminGuidesPage() {
               />
             )}
             {(thumbnailPreview || (thumbnailMode === 'url' && form.thumbnailUrl.trim())) && (
+              // eslint-disable-next-line @next/next/no-img-element -- src may be a blob: object URL, which next/image cannot load
               <img
                 src={thumbnailPreview || form.thumbnailUrl.trim()}
                 alt="Thumbnail preview"

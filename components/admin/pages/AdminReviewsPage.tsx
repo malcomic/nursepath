@@ -328,6 +328,7 @@ export default function AdminReviewsPage() {
                     <ZoomIn className="w-3.5 h-3.5" />
                     View screenshot
                   </button>
+                  {/* eslint-disable-next-line @next/next/no-img-element -- admin-only preview of an upload with unknown intrinsic dimensions */}
                   <img
                     src={selectedReview.screenshot_url}
                     alt="Review screenshot"
@@ -361,6 +362,7 @@ export default function AdminReviewsPage() {
           className="fixed inset-0 z-50 flex items-center justify-center bg-navy-900/80 p-4"
           onClick={() => setScreenshotLightbox(null)}
         >
+          {/* eslint-disable-next-line @next/next/no-img-element -- admin-only preview of an upload with unknown intrinsic dimensions */}
           <img
             src={screenshotLightbox}
             alt="Screenshot"
