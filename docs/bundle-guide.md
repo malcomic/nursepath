@@ -6,7 +6,7 @@ The homepage **Special Bundle Offer** section links to a real Guide with slug:
 
 ## Create / update the product
 
-### Option A — Seed scripts
+### Option A — Seed script
 
 ```bash
 npx tsx scripts/seed-bundle-guide.ts
