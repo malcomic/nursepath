@@ -14,22 +14,34 @@ import {
   LogOut,
   CreditCard,
   CalendarClock,
+  Users,
 } from 'lucide-react';
 import { ToastProvider } from '@/components/admin/ToastProvider';
 import { adminFetch } from '@/lib/admin/api-client';
 import Logo from '@/components/layout/Logo';
 
-const PAGE_TITLES: Record<string, string> = {
-  '/admin/dashboard': 'Dashboard',
-  '/admin/guides': 'Study Guides',
-  '/admin/library': 'Library',
-  '/admin/plans': 'Plans',
-  '/admin/subscriptions': 'Subscriptions',
-  '/admin/categories': 'Categories',
-  '/admin/orders': 'Orders',
-  '/admin/reviews': 'Review Moderation',
-  '/admin/settings': 'Settings',
-};
+const PAGE_TITLES: { prefix: string; title: string }[] = [
+  { prefix: '/admin/dashboard', title: 'Dashboard' },
+  { prefix: '/admin/guides', title: 'Study Guides' },
+  { prefix: '/admin/library', title: 'Library' },
+  { prefix: '/admin/plans', title: 'Plans' },
+  { prefix: '/admin/subscriptions', title: 'Subscriptions' },
+  { prefix: '/admin/users', title: 'Users' },
+  { prefix: '/admin/categories', title: 'Categories' },
+  { prefix: '/admin/orders', title: 'Orders' },
+  { prefix: '/admin/reviews', title: 'Review Moderation' },
+  { prefix: '/admin/settings', title: 'Settings' },
+];
+
+function resolvePageTitle(pathname: string) {
+  if (pathname.startsWith('/admin/users/') && pathname !== '/admin/users') {
+    return 'User detail';
+  }
+  const match = PAGE_TITLES.find(
+    (entry) => pathname === entry.prefix || pathname.startsWith(`${entry.prefix}/`)
+  );
+  return match?.title ?? 'Admin';
+}
 
 interface AdminShellProps {
   children: ReactNode;
@@ -43,7 +55,7 @@ export default function AdminShell({ children }: AdminShellProps) {
     return <>{children}</>;
   }
 
-  const title = PAGE_TITLES[pathname] || 'Admin';
+  const title = resolvePageTitle(pathname);
 
   const handleLogout = async () => {
     await adminFetch('/api/admin/logout', { method: 'POST' });
@@ -57,6 +69,7 @@ export default function AdminShell({ children }: AdminShellProps) {
     { href: '/admin/library', label: 'Library', icon: Library },
     { href: '/admin/plans', label: 'Plans', icon: CreditCard },
     { href: '/admin/subscriptions', label: 'Subscriptions', icon: CalendarClock },
+    { href: '/admin/users', label: 'Users', icon: Users },
     { href: '/admin/categories', label: 'Categories', icon: Tags },
     { href: '/admin/orders', label: 'Orders', icon: FileText },
     { href: '/admin/reviews', label: 'Reviews', icon: MessageSquare },
@@ -82,7 +95,8 @@ export default function AdminShell({ children }: AdminShellProps) {
           <nav className="flex-1 px-3 py-4 space-y-1">
             {navItems.map((item) => {
               const Icon = item.icon;
-              const isActive = pathname === item.href;
+              const isActive =
+                pathname === item.href || pathname.startsWith(`${item.href}/`);
               return (
                 <Link
                   key={item.href}
@@ -134,7 +148,8 @@ export default function AdminShell({ children }: AdminShellProps) {
           {/* Mobile nav */}
           <nav className="md:hidden flex gap-1 overflow-x-auto border-b border-border bg-white px-3 py-2">
             {navItems.map((item) => {
-              const isActive = pathname === item.href;
+              const isActive =
+                pathname === item.href || pathname.startsWith(`${item.href}/`);
               return (
                 <Link
                   key={item.href}

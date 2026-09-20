@@ -81,7 +81,18 @@ export class OrderRepository {
       prisma.order.count({ where }),
     ]);
 
-    return { items, total, page, limit };
+    return {
+      items: items.map((order) => ({
+        ...order,
+        price: Number(order.price),
+        guide: order.guide
+          ? { ...order.guide, price: Number(order.guide.price) }
+          : order.guide,
+      })),
+      total,
+      page,
+      limit,
+    };
   }
 
   async create(data: Parameters<typeof prisma.order.create>[0]['data']) {

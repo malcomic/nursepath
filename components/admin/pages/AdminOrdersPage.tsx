@@ -269,7 +269,7 @@ export default function AdminOrdersPage() {
                       <div className="text-xs text-navy-400">{order.customerEmail}</div>
                     </td>
                     <td className="px-4 py-3">{order.guide?.title || 'Guide'}</td>
-                    <td className="px-4 py-3 text-right font-semibold">${order.price.toFixed(2)}</td>
+                    <td className="px-4 py-3 text-right font-semibold">${Number(order.price).toFixed(2)}</td>
                     <td className="px-4 py-3">
                       <StatusBadge
                         label={order.paymentStatus}
