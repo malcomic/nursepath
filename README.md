@@ -127,7 +127,7 @@ publishedAt: "2026-03-01"
 keywords: ["keyword1", "keyword2"]
 ```
 
-After adding or editing a post, redeploy — posts are statically generated at build time. Optional `<Callout>` component is available in MDX for tip/CTA boxes.
+After adding or editing a post, redeploy — posts are statically generated at build time. Optional MDX components: `<Callout>` (tips) and `<Figure src alt caption />` (diagrams). Diagram SVGs live in `public/blog/`.
 
 ### Production SEO
 
@@ -226,7 +226,7 @@ Redeploy after adding posts — blog pages are generated at build time and inclu
 | Test | Expected |
 |------|----------|
 | `/blog` | Lists new posts with older ones |
-| `/blog/[slug]` for each new post | Renders headings, Callouts, internal links |
+| `/blog/[slug]` for each new post | Renders headings, Callouts, Figures, internal links |
 | `/sitemap.xml` | Includes all new blog slugs |
 | `npm run build` | Passes |
 

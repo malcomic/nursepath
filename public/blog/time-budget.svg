@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" role="img" aria-labelledby="timeTitle">
+  <title id="timeTitle">NCLEX exam day time budget</title>
+  <rect width="800" height="420" fill="#faf9f6"/>
+  <text x="400" y="36" text-anchor="middle" font-family="system-ui,sans-serif" font-size="18" font-weight="700" fill="#0b1b3d">Exam-Day Time Budget (RN CAT)</text>
+  <text x="400" y="58" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" fill="#52607a">Pace for the full window  not for a fixed item count</text>
+
+  <!-- Pie-ish segments as arcs using paths - simplified as stacked bars for clarity -->
+  <text x="80" y="100" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="#0b1b3d">Suggested pacing mindset</text>
+
+  <rect x="80" y="120" width="520" height="44" rx="8" fill="#107c85"/>
+  <text x="100" y="147" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="#fff">~12 min per standard item (most of the exam)</text>
+
+  <rect x="80" y="180" width="400" height="44" rx="8" fill="#1e9ba5"/>
+  <text x="100" y="207" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="#fff">Extra time bank for NGN case studies</text>
+
+  <rect x="80" y="240" width="280" height="44" rx="8" fill="#0b1b3d"/>
+  <text x="100" y="267" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="#fff">Short breaks / reset breaths</text>
+
+  <rect x="80" y="300" width="200" height="44" rx="8" fill="#e76f51"/>
+  <text x="100" y="327" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="#fff">Hard-item cap (~23 min)</text>
+
+  <rect x="480" y="180" width="240" height="164" rx="12" fill="#fff" stroke="#e6e9ee"/>
+  <text x="600" y="220" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" font-weight="700" fill="#0b1b3d">If stuck:</text>
+  <text x="600" y="248" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" fill="#52607a">1. Eliminate 2</text>
+  <text x="600" y="272" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" fill="#52607a">2. Pick best left</text>
+  <text x="600" y="296" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" fill="#52607a">3. Flag &amp; move on</text>
+  <text x="600" y="320" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" fill="#52607a">(no spiral)</text>
+</svg>

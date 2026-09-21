@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 520" role="img" aria-labelledby="cjmmTitle">
+  <title id="cjmmTitle">Clinical Judgment Measurement Model  six layers</title>
+  <rect width="800" height="520" fill="#faf9f6"/>
+  <text x="400" y="36" text-anchor="middle" font-family="system-ui,sans-serif" font-size="18" font-weight="700" fill="#0b1b3d">Clinical Judgment Measurement Model (CJMM)</text>
+  <text x="400" y="58" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" fill="#52607a">NCSBN layers used on Next Generation NCLEX</text>
+
+  <!-- Layer boxes -->
+  <g font-family="system-ui,sans-serif">
+    <rect x="120" y="80" width="560" height="56" rx="10" fill="#107c85"/>
+    <text x="400" y="105" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">1. Recognize Cues</text>
+    <text x="400" y="124" text-anchor="middle" font-size="11" fill="#e8f5f6">Filter relevant vs irrelevant data</text>
+
+    <path d="M400 136 v12" stroke="#107c85" stroke-width="2"/>
+    <polygon points="400,156 394,146 406,146" fill="#107c85"/>
+
+    <rect x="120" y="156" width="560" height="56" rx="10" fill="#1e9ba5"/>
+    <text x="400" y="181" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">2. Analyze Cues</text>
+    <text x="400" y="200" text-anchor="middle" font-size="11" fill="#e8f5f6">Link findings to pathophysiology / context</text>
+
+    <path d="M400 212 v12" stroke="#107c85" stroke-width="2"/>
+    <polygon points="400,232 394,222 406,222" fill="#107c85"/>
+
+    <rect x="120" y="232" width="560" height="56" rx="10" fill="#0d636a"/>
+    <text x="400" y="257" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">3. Prioritize Hypotheses</text>
+    <text x="400" y="276" text-anchor="middle" font-size="11" fill="#e8f5f6">Rank likely and most dangerous problems</text>
+
+    <path d="M400 288 v12" stroke="#107c85" stroke-width="2"/>
+    <polygon points="400,308 394,298 406,298" fill="#107c85"/>
+
+    <rect x="120" y="308" width="560" height="56" rx="10" fill="#0a4a50"/>
+    <text x="400" y="333" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">4. Generate Solutions</text>
+    <text x="400" y="352" text-anchor="middle" font-size="11" fill="#e8f5f6">Identify possible interventions / actions</text>
+
+    <path d="M400 364 v12" stroke="#107c85" stroke-width="2"/>
+    <polygon points="400,384 394,374 406,374" fill="#107c85"/>
+
+    <rect x="120" y="384" width="560" height="56" rx="10" fill="#e76f51"/>
+    <text x="400" y="409" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">5. Take Action</text>
+    <text x="400" y="428" text-anchor="middle" font-size="11" fill="#fef4f1">Choose the safest, highest-priority action</text>
+
+    <path d="M400 440 v12" stroke="#e76f51" stroke-width="2"/>
+    <polygon points="400,460 394,450 406,450" fill="#e76f51"/>
+
+    <rect x="120" y="460" width="560" height="44" rx="10" fill="#0b1b3d"/>
+    <text x="400" y="487" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">6. Evaluate Outcomes  Did it work? What next?</text>
+  </g>
+</svg>

@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 440" role="img" aria-labelledby="emrTitle">
+  <title id="emrTitle">Extended multiple response decision flow</title>
+  <rect width="800" height="440" fill="#faf9f6"/>
+  <text x="400" y="36" text-anchor="middle" font-family="system-ui,sans-serif" font-size="18" font-weight="700" fill="#0b1b3d">Extended Multiple Response Flow</text>
+  <text x="400" y="58" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" fill="#52607a">Same muscle as SATA  inside a clinical judgment scenario</text>
+
+  <rect x="250" y="80" width="300" height="50" rx="10" fill="#0b1b3d"/>
+  <text x="400" y="110" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" font-weight="700" fill="#fff">Read scenario + stem verb</text>
+
+  <path d="M400 130 v20" stroke="#107c85" stroke-width="2"/>
+  <polygon points="400,158 394,148 406,148" fill="#107c85"/>
+
+  <rect x="250" y="158" width="300" height="50" rx="10" fill="#107c85"/>
+  <text x="400" y="188" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" font-weight="700" fill="#fff">True/false each option alone</text>
+
+  <path d="M400 208 v20" stroke="#107c85" stroke-width="2"/>
+  <polygon points="400,236 394,226 406,226" fill="#107c85"/>
+
+  <rect x="250" y="236" width="300" height="50" rx="10" fill="#1e9ba5"/>
+  <text x="400" y="266" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" font-weight="700" fill="#fff">Tie every YES to this client</text>
+
+  <path d="M400 286 v20" stroke="#107c85" stroke-width="2"/>
+  <polygon points="400,314 394,304 406,304" fill="#107c85"/>
+
+  <rect x="250" y="314" width="300" height="50" rx="10" fill="#e76f51"/>
+  <text x="400" y="344" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" font-weight="700" fill="#fff">Drop nice but irrelevant</text>
+
+  <text x="400" y="400" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" fill="#52607a">Select all remaining YES options  no magic number</text>
+</svg>

@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 360" role="img" aria-labelledby="clozeTitle">
+  <title id="clozeTitle">Cloze drop-down sentence strategy</title>
+  <rect width="800" height="360" fill="#faf9f6"/>
+  <text x="400" y="36" text-anchor="middle" font-family="system-ui,sans-serif" font-size="18" font-weight="700" fill="#0b1b3d">Cloze / Drop-Down Strategy</text>
+  <text x="400" y="58" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" fill="#52607a">Read the full sentence with each option inserted before choosing</text>
+
+  <!-- Sentence -->
+  <rect x="60" y="90" width="680" height="70" rx="10" fill="#fff" stroke="#e6e9ee"/>
+  <text x="90" y="132" font-family="system-ui,sans-serif" font-size="15" fill="#0b1b3d">The nurse should first</text>
+  <rect x="275" y="108" width="160" height="36" rx="6" fill="#d1ebed" stroke="#107c85" stroke-width="2"/>
+  <text x="355" y="132" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" font-weight="700" fill="#107c85">º assess</text>
+  <text x="450" y="132" font-family="system-ui,sans-serif" font-size="15" fill="#0b1b3d">the clients airway.</text>
+
+  <!-- Options panel -->
+  <rect x="200" y="190" width="400" height="140" rx="10" fill="#0b1b3d"/>
+  <text x="400" y="220" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" font-weight="700" fill="#c5cedd">DROP-DOWN OPTIONS</text>
+  <text x="400" y="250" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" fill="#fff">document findings</text>
+  <text x="400" y="278" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" font-weight="700" fill="#47afb7">assess  ê best fit</text>
+  <text x="400" y="306" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" fill="#fff">notify the provider</text>
+</svg>

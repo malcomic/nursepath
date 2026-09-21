@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 460" role="img" aria-labelledby="matrixTitle">
+  <title id="matrixTitle">Sample matrix grid strategy</title>
+  <rect width="800" height="460" fill="#faf9f6"/>
+  <text x="400" y="36" text-anchor="middle" font-family="system-ui,sans-serif" font-size="18" font-weight="700" fill="#0b1b3d">Matrix / Grid  Cell-by-Cell Method</text>
+  <text x="400" y="58" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" fill="#52607a">Evaluate every cell independently against the scenario</text>
+
+  <!-- Header row -->
+  <rect x="80" y="90" width="220" height="50" fill="#0b1b3d"/>
+  <text x="190" y="120" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="#fff">Nursing Action</text>
+  <rect x="300" y="90" width="200" height="50" fill="#107c85"/>
+  <text x="400" y="120" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="#fff">Indicated</text>
+  <rect x="500" y="90" width="200" height="50" fill="#e76f51"/>
+  <text x="600" y="120" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="#fff">Contraindicated</text>
+
+  <!-- Row 1 -->
+  <rect x="80" y="140" width="220" height="55" fill="#fff" stroke="#e6e9ee"/>
+  <text x="190" y="173" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" fill="#0b1b3d">Elevate HOB for dyspnea</text>
+  <rect x="300" y="140" width="200" height="55" fill="#d1ebed" stroke="#e6e9ee"/>
+  <text x="400" y="173" text-anchor="middle" font-family="system-ui,sans-serif" font-size="20" fill="#107c85"></text>
+  <rect x="500" y="140" width="200" height="55" fill="#fff" stroke="#e6e9ee"/>
+  <text x="600" y="173" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" fill="#8a9bb8"></text>
+
+  <!-- Row 2 -->
+  <rect x="80" y="195" width="220" height="55" fill="#fff" stroke="#e6e9ee"/>
+  <text x="190" y="228" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" fill="#0b1b3d">Give PO meds if NPO</text>
+  <rect x="300" y="195" width="200" height="55" fill="#fff" stroke="#e6e9ee"/>
+  <text x="400" y="228" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" fill="#8a9bb8"></text>
+  <rect x="500" y="195" width="200" height="55" fill="#fde8e2" stroke="#e6e9ee"/>
+  <text x="600" y="228" text-anchor="middle" font-family="system-ui,sans-serif" font-size="20" fill="#e76f51"></text>
+
+  <!-- Row 3 -->
+  <rect x="80" y="250" width="220" height="55" fill="#fff" stroke="#e6e9ee"/>
+  <text x="190" y="283" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" fill="#0b1b3d">Apply O‚ per protocol</text>
+  <rect x="300" y="250" width="200" height="55" fill="#d1ebed" stroke="#e6e9ee"/>
+  <text x="400" y="283" text-anchor="middle" font-family="system-ui,sans-serif" font-size="20" fill="#107c85"></text>
+  <rect x="500" y="250" width="200" height="55" fill="#fff" stroke="#e6e9ee"/>
+  <text x="600" y="283" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" fill="#8a9bb8"></text>
+
+  <!-- Callout -->
+  <rect x="80" y="340" width="620" height="80" rx="10" fill="#fff" stroke="#107c85" stroke-width="2"/>
+  <text x="400" y="372" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" font-weight="700" fill="#0b1b3d">Strategy: treat each row like its own mini question</text>
+  <text x="400" y="396" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" fill="#52607a">Do not pattern-match across rows. Safety and orders beat nice nurse actions.</text>
+</svg>
