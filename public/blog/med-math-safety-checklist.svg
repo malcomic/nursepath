@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 460" role="img" aria-labelledby="checkTitle">
+  <title id="checkTitle">Medication math safety checklist</title>
+  <rect width="800" height="460" fill="#faf9f6"/>
+  <text x="400" y="36" text-anchor="middle" font-family="system-ui,sans-serif" font-size="18" font-weight="700" fill="#0b1b3d">Six-Point Med Math Safety Check</text>
+  <text x="400" y="58" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" fill="#52607a">Run this before every answer, on the exam and on the unit</text>
+
+  <g font-family="system-ui,sans-serif">
+    <rect x="50" y="85" width="340" height="100" rx="12" fill="#fff" stroke="#e6e9ee"/>
+    <circle cx="90" cy="135" r="22" fill="#107c85"/>
+    <text x="90" y="141" text-anchor="middle" font-size="16" font-weight="700" fill="#fff">1</text>
+    <text x="125" y="128" font-size="14" font-weight="700" fill="#0b1b3d">Decimal check</text>
+    <text x="125" y="150" font-size="12" fill="#52607a">Leading zero: 0.5, never .5</text>
+
+    <rect x="410" y="85" width="340" height="100" rx="12" fill="#fff" stroke="#e6e9ee"/>
+    <circle cx="450" cy="135" r="22" fill="#107c85"/>
+    <text x="450" y="141" text-anchor="middle" font-size="16" font-weight="700" fill="#fff">2</text>
+    <text x="485" y="128" font-size="14" font-weight="700" fill="#0b1b3d">Units match</text>
+    <text x="485" y="150" font-size="12" fill="#52607a">mg vs mcg, mL vs L, units</text>
+
+    <rect x="50" y="200" width="340" height="100" rx="12" fill="#fff" stroke="#e6e9ee"/>
+    <circle cx="90" cy="250" r="22" fill="#107c85"/>
+    <text x="90" y="256" text-anchor="middle" font-size="16" font-weight="700" fill="#fff">3</text>
+    <text x="125" y="243" font-size="14" font-weight="700" fill="#0b1b3d">Convert first</text>
+    <text x="125" y="265" font-size="12" fill="#52607a">lb � kg, hr � min, own step</text>
+
+    <rect x="410" y="200" width="340" height="100" rx="12" fill="#fff" stroke="#e6e9ee"/>
+    <circle cx="450" cy="250" r="22" fill="#107c85"/>
+    <text x="450" y="256" text-anchor="middle" font-size="16" font-weight="700" fill="#fff">4</text>
+    <text x="485" y="243" font-size="14" font-weight="700" fill="#0b1b3d">Round last</text>
+    <text x="485" y="265" font-size="12" fill="#52607a">Full precision until the end</text>
+
+    <rect x="50" y="315" width="340" height="100" rx="12" fill="#fff" stroke="#e6e9ee"/>
+    <circle cx="90" cy="365" r="22" fill="#e76f51"/>
+    <text x="90" y="371" text-anchor="middle" font-size="16" font-weight="700" fill="#fff">5</text>
+    <text x="125" y="358" font-size="14" font-weight="700" fill="#0b1b3d">Sanity check</text>
+    <text x="125" y="380" font-size="12" fill="#52607a">Is this a dose you could give?</text>
+
+    <rect x="410" y="315" width="340" height="100" rx="12" fill="#fff" stroke="#e6e9ee"/>
+    <circle cx="450" cy="365" r="22" fill="#e76f51"/>
+    <text x="450" y="371" text-anchor="middle" font-size="16" font-weight="700" fill="#fff">6</text>
+    <text x="485" y="358" font-size="14" font-weight="700" fill="#0b1b3d">High-alert? Double-check</text>
+    <text x="485" y="380" font-size="12" fill="#52607a">Insulin, heparin, opioids&</text>
+  </g>
+</svg>

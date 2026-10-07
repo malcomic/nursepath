@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 480" role="img" aria-labelledby="hepTitle">
+  <title id="hepTitle">Heparin drip titration cycle</title>
+  <rect width="800" height="480" fill="#faf9f6"/>
+  <text x="400" y="36" text-anchor="middle" font-family="system-ui,sans-serif" font-size="18" font-weight="700" fill="#0b1b3d">The Heparin Drip Titration Cycle</text>
+  <text x="400" y="58" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" fill="#52607a">Every adjustment is a new calculation, so every adjustment needs a double-check</text>
+
+  <g font-family="system-ui,sans-serif">
+    <rect x="290" y="80" width="220" height="70" rx="12" fill="#0b1b3d"/>
+    <text x="400" y="110" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">1. Start drip</text>
+    <text x="400" y="132" text-anchor="middle" font-size="11" fill="#c5cedd">units/kg/hr � current weight</text>
+
+    <rect x="540" y="200" width="220" height="70" rx="12" fill="#107c85"/>
+    <text x="650" y="230" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">2. Draw lab on schedule</text>
+    <text x="650" y="252" text-anchor="middle" font-size="11" fill="#e8f5f6">e.g., aPTT or anti-Xa per protocol</text>
+
+    <rect x="290" y="320" width="220" height="70" rx="12" fill="#1e9ba5"/>
+    <text x="400" y="350" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">3. Read facility protocol</text>
+    <text x="400" y="372" text-anchor="middle" font-size="11" fill="#e8f5f6">below / within / above range</text>
+
+    <rect x="40" y="200" width="220" height="70" rx="12" fill="#e76f51"/>
+    <text x="150" y="230" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">4. Recalculate rate</text>
+    <text x="150" y="252" text-anchor="middle" font-size="11" fill="#fef4f1">units/hr � mL/hr, double-check</text>
+
+    <path d="M510 125 Q620 140 640 195" fill="none" stroke="#0b1b3d" stroke-width="3"/>
+    <polygon points="642,200 634,189 648,188" fill="#0b1b3d"/>
+    <path d="M640 270 Q620 330 515 350" fill="none" stroke="#0b1b3d" stroke-width="3"/>
+    <polygon points="510,352 520,343 522,357" fill="#0b1b3d"/>
+    <path d="M290 355 Q180 340 160 275" fill="none" stroke="#0b1b3d" stroke-width="3"/>
+    <polygon points="158,270 152,282 166,281" fill="#0b1b3d"/>
+    <path d="M160 200 Q180 140 285 120" fill="none" stroke="#0b1b3d" stroke-width="3"/>
+    <polygon points="290,118 279,113 281,127" fill="#0b1b3d"/>
+  </g>
+
+  <rect x="80" y="410" width="640" height="50" rx="10" fill="#fde8e2"/>
+  <text x="400" y="440" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" fill="#0b1b3d">Adjustment amounts come from the protocol, not from the nurses own judgment</text>
+</svg>

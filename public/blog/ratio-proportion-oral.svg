@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" role="img" aria-labelledby="ratioTitle">
+  <title id="ratioTitle">Ratio-proportion setup for an oral liquid medication</title>
+  <rect width="800" height="420" fill="#faf9f6"/>
+  <text x="400" y="36" text-anchor="middle" font-family="system-ui,sans-serif" font-size="18" font-weight="700" fill="#0b1b3d">Ratio-Proportion: Keep Units Lined Up</text>
+  <text x="400" y="58" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" fill="#52607a">Order: 375 mg � On hand: 125 mg per 5 mL</text>
+
+  <g font-family="system-ui,sans-serif">
+    <text x="230" y="105" text-anchor="middle" font-size="13" font-weight="700" fill="#52607a">HAVE</text>
+    <text x="570" y="105" text-anchor="middle" font-size="13" font-weight="700" fill="#52607a">DESIRED</text>
+
+    <rect x="140" y="120" width="180" height="56" rx="10" fill="#107c85"/>
+    <text x="230" y="155" text-anchor="middle" font-size="22" font-weight="700" fill="#fff">125 mg</text>
+    <line x1="140" y1="192" x2="320" y2="192" stroke="#0b1b3d" stroke-width="3"/>
+    <rect x="140" y="208" width="180" height="56" rx="10" fill="#0b1b3d"/>
+    <text x="230" y="243" text-anchor="middle" font-size="22" font-weight="700" fill="#fff">5 mL</text>
+
+    <text x="400" y="200" text-anchor="middle" font-size="30" font-weight="700" fill="#0b1b3d">=</text>
+
+    <rect x="480" y="120" width="180" height="56" rx="10" fill="#107c85"/>
+    <text x="570" y="155" text-anchor="middle" font-size="22" font-weight="700" fill="#fff">375 mg</text>
+    <line x1="480" y1="192" x2="660" y2="192" stroke="#0b1b3d" stroke-width="3"/>
+    <rect x="480" y="208" width="180" height="56" rx="10" fill="#e76f51"/>
+    <text x="570" y="243" text-anchor="middle" font-size="22" font-weight="700" fill="#fff">x mL</text>
+
+    <text x="700" y="155" font-size="12" fill="#107c85" font-weight="700">mg on top</text>
+    <text x="700" y="243" font-size="12" fill="#0b1b3d" font-weight="700">mL on bottom</text>
+  </g>
+
+  <rect x="80" y="295" width="640" height="100" rx="10" fill="#fff" stroke="#e6e9ee"/>
+  <text x="400" y="325" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" fill="#0b1b3d">Cross-multiply: 125 � x = 375 � 5 � 125x = 1,875</text>
+  <text x="400" y="352" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" fill="#0b1b3d">x = 1,875 � 125</text>
+  <text x="400" y="380" text-anchor="middle" font-family="system-ui,sans-serif" font-size="16" font-weight="700" fill="#107c85">x = 15 mL</text>
+</svg>

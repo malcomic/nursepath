@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 380" role="img" aria-labelledby="pushTitle">
+  <title id="pushTitle">IV push timing: 4 mL over 2 minutes</title>
+  <rect width="800" height="380" fill="#faf9f6"/>
+  <text x="400" y="36" text-anchor="middle" font-family="system-ui,sans-serif" font-size="18" font-weight="700" fill="#0b1b3d">IV Push Pacing: 4 mL over 2 minutes</text>
+  <text x="400" y="58" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" fill="#52607a">4 mL � 2 min = 2 mL/min � 1 mL every 30 seconds</text>
+
+  <g font-family="system-ui,sans-serif">
+    <line x1="100" y1="200" x2="700" y2="200" stroke="#0b1b3d" stroke-width="4"/>
+
+    <circle cx="100" cy="200" r="10" fill="#0b1b3d"/>
+    <circle cx="250" cy="200" r="10" fill="#107c85"/>
+    <circle cx="400" cy="200" r="10" fill="#107c85"/>
+    <circle cx="550" cy="200" r="10" fill="#107c85"/>
+    <circle cx="700" cy="200" r="10" fill="#e76f51"/>
+
+    <text x="100" y="240" text-anchor="middle" font-size="13" font-weight="700" fill="#0b1b3d">0:00</text>
+    <text x="250" y="240" text-anchor="middle" font-size="13" font-weight="700" fill="#0b1b3d">0:30</text>
+    <text x="400" y="240" text-anchor="middle" font-size="13" font-weight="700" fill="#0b1b3d">1:00</text>
+    <text x="550" y="240" text-anchor="middle" font-size="13" font-weight="700" fill="#0b1b3d">1:30</text>
+    <text x="700" y="240" text-anchor="middle" font-size="13" font-weight="700" fill="#0b1b3d">2:00</text>
+
+    <rect x="135" y="120" width="80" height="44" rx="8" fill="#d1ebed"/>
+    <text x="175" y="148" text-anchor="middle" font-size="14" font-weight="700" fill="#107c85">1 mL</text>
+    <rect x="285" y="120" width="80" height="44" rx="8" fill="#d1ebed"/>
+    <text x="325" y="148" text-anchor="middle" font-size="14" font-weight="700" fill="#107c85">1 mL</text>
+    <rect x="435" y="120" width="80" height="44" rx="8" fill="#d1ebed"/>
+    <text x="475" y="148" text-anchor="middle" font-size="14" font-weight="700" fill="#107c85">1 mL</text>
+    <rect x="585" y="120" width="80" height="44" rx="8" fill="#d1ebed"/>
+    <text x="625" y="148" text-anchor="middle" font-size="14" font-weight="700" fill="#107c85">1 mL</text>
+  </g>
+
+  <rect x="100" y="285" width="600" height="64" rx="10" fill="#fff" stroke="#e6e9ee"/>
+  <text x="400" y="312" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" font-weight="700" fill="#0b1b3d">Seconds per mL = 60 � (mL per minute)</text>
+  <text x="400" y="334" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" fill="#52607a">Watch a clock with a second hand; never speed up because it feels slow</text>
+</svg>

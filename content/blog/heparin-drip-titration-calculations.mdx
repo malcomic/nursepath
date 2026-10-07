@@ -1,0 +1,69 @@
+---
+title: "Heparin Drip Calculations and Titration Practice"
+description: "A guide to heparin drip rate calculations and titration logic — one of the most tested high-alert medication math topics in nursing school."
+publishedAt: "2026-10-01"
+keywords: ["heparin drip", "titration", "high-alert medications", "dosage calculation", "NCLEX"]
+---
+
+Heparin is on the Institute for Safe Medication Practices' (ISMP) list of high-alert medications — a recognition that calculation accuracy with this drug genuinely matters. It's also one of the most frequently tested medications in nursing school and on the NCLEX, precisely because it combines a weight-based calculation with an ongoing titration process.
+
+## Why heparin dosing is more involved than a single calculation
+
+Unlike a one-time IV medication, a continuous heparin drip is typically:
+
+1. Started at a weight-based initial rate (often after a weight-based bolus)
+2. Monitored via lab values — commonly aPTT, though many facilities use anti-Xa levels — at regular intervals
+3. **Titrated** — adjusted up or down — based on those lab results, following a facility-specific titration protocol
+
+Specific protocols vary by institution. Learn the logic here, and always follow the protocol you're given.
+
+<Figure
+  src="/blog/heparin-titration-cycle.svg"
+  alt="Cycle: start drip, draw lab on schedule, read facility protocol, recalculate rate, and repeat"
+  caption="Each lap around the cycle is a new calculation and a new chance for error."
+  width={800}
+  height={480}
+/>
+
+## The weight-based starting calculation
+
+Heparin drips are typically started using a weight-based formula, then converted to a pump rate using the bag concentration:
+
+```
+Dose (units/hr) = Ordered units/kg/hr × Patient weight in kg
+Rate (mL/hr)    = Dose (units/hr) ÷ Concentration (units/mL)
+```
+
+## Worked example
+
+*Order: Start heparin at 18 units/kg/hr. Patient weighs 80 kg. The bag contains 25,000 units in 500 mL.*
+
+**Step 1:** Calculate the hourly dose — 18 units/kg/hr × 80 kg = 1,440 units/hr
+**Step 2:** Find the concentration — 25,000 units ÷ 500 mL = 50 units/mL
+**Step 3:** Calculate the pump rate — 1,440 units/hr ÷ 50 units/mL = **28.8 mL/hr**
+
+These numbers are for practicing the math. Real starting rates come from the provider's order and your facility's protocol.
+
+## What titration actually means in practice
+
+If a patient's lab result comes back below the therapeutic range, the drip rate is typically increased, following the facility's titration protocol. If it comes back above range, the rate is typically decreased or temporarily held. The nurse's job is to correctly read the protocol and recalculate the new rate — not to make an independent clinical judgment about the adjustment amount, which is why institutional titration charts exist in the first place.
+
+**Titration example:** If the protocol says to increase by 2 units/kg/hr for the same 80 kg patient, the new dose is 20 units/kg/hr × 80 kg = 1,600 units/hr, and the new rate is 1,600 ÷ 50 = **32 mL/hr**.
+
+## Why double-checks and pump safety features matter here
+
+Because heparin is both weight-based and adjusted repeatedly over a patient's course of treatment, there are multiple points where an error could occur — not just at the initial calculation. This is part of why heparin administration is closely associated with independent double-check policies and smart-pump dose-range safety features in real clinical settings.
+
+## Common mistakes to avoid
+
+- Using an outdated patient weight for the initial calculation
+- Misreading or miscalculating a titration adjustment from the facility protocol
+- Confusing heparin's units-based dose with the volume-based (mL/hr) pump rate — they're two separate numbers
+
+<Callout title="Build up to it">
+Heparin combines [weight-based dosing](/blog/weight-based-dosage-calculations) with a [pump rate calculation](/blog/iv-drip-rate-calculations). If either step feels shaky, practice it on its own first.
+</Callout>
+
+---
+
+Heparin is one of the most detailed topics covered in the **[Complete Dosage Calculation Practice Workbook](/guides/complete-dosage-calculation-practice-workbook)**, alongside the broader high-alert medication context in **[Pharmacology: High-Alert Medications](/guides/pharmacology-high-alert-medications)**.

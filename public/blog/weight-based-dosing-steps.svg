@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-labelledby="weightTitle">
+  <title id="weightTitle">Weight-based dosing in three steps</title>
+  <rect width="800" height="400" fill="#faf9f6"/>
+  <text x="400" y="36" text-anchor="middle" font-family="system-ui,sans-serif" font-size="18" font-weight="700" fill="#0b1b3d">Weight-Based Dosing: Three Steps</text>
+  <text x="400" y="58" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" fill="#52607a">Pediatric example: 10 mg/kg/day, divided into 2 doses, child weighs 33 lb</text>
+
+  <g font-family="system-ui,sans-serif">
+    <rect x="40" y="90" width="220" height="170" rx="12" fill="#0b1b3d"/>
+    <text x="150" y="122" text-anchor="middle" font-size="12" font-weight="700" fill="#c5cedd">1 � WEIGHT IN KG</text>
+    <text x="150" y="165" text-anchor="middle" font-size="17" font-weight="700" fill="#fff">33 lb � 2.2</text>
+    <text x="150" y="195" text-anchor="middle" font-size="20" font-weight="700" fill="#47afb7">= 15 kg</text>
+    <text x="150" y="235" text-anchor="middle" font-size="11" fill="#c5cedd">Skip only if already in kg</text>
+
+    <path d="M260 175 h30" stroke="#107c85" stroke-width="3"/>
+    <polygon points="298,175 288,169 288,181" fill="#107c85"/>
+
+    <rect x="300" y="90" width="220" height="170" rx="12" fill="#107c85"/>
+    <text x="410" y="122" text-anchor="middle" font-size="12" font-weight="700" fill="#e8f5f6">2 � TOTAL DOSE</text>
+    <text x="410" y="165" text-anchor="middle" font-size="17" font-weight="700" fill="#fff">10 mg/kg � 15 kg</text>
+    <text x="410" y="195" text-anchor="middle" font-size="20" font-weight="700" fill="#fff">= 150 mg/day</text>
+    <text x="410" y="235" text-anchor="middle" font-size="11" fill="#e8f5f6">kg cancels, mg remains</text>
+
+    <path d="M520 175 h30" stroke="#107c85" stroke-width="3"/>
+    <polygon points="558,175 548,169 548,181" fill="#107c85"/>
+
+    <rect x="560" y="90" width="200" height="170" rx="12" fill="#e76f51"/>
+    <text x="660" y="122" text-anchor="middle" font-size="12" font-weight="700" fill="#fef4f1">3 � PER DOSE</text>
+    <text x="660" y="165" text-anchor="middle" font-size="17" font-weight="700" fill="#fff">150 mg � 2</text>
+    <text x="660" y="195" text-anchor="middle" font-size="20" font-weight="700" fill="#fff">= 75 mg</text>
+    <text x="660" y="235" text-anchor="middle" font-size="11" fill="#fef4f1">Only if the order is divided</text>
+  </g>
+
+  <rect x="40" y="290" width="720" height="80" rx="10" fill="#fff" stroke="#e6e9ee"/>
+  <text x="400" y="320" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" font-weight="700" fill="#0b1b3d">Read the orders time unit: per dose and per day are different questions</text>
+  <text x="400" y="345" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" fill="#52607a">Giving the full 150 mg/day as each dose would double the daily amount</text>
+</svg>

@@ -1,0 +1,65 @@
+---
+title: "Pediatric Medication Dosing by Body Surface Area"
+description: "Understanding body surface area (BSA) dosing for pediatric medications, including how BSA is calculated and why it's used instead of weight alone."
+publishedAt: "2026-09-21"
+keywords: ["body surface area", "BSA dosing", "Mosteller formula", "pediatric dosage", "nursing math"]
+---
+
+Most medication dosing you'll learn is weight-based — but some medications, particularly many chemotherapy agents and a handful of other high-precision drugs, are dosed based on **body surface area (BSA)** instead. This shows up less often than straightforward mg/kg dosing, but when it does, it's worth understanding why.
+
+## Why BSA instead of weight alone?
+
+Body surface area tends to track physiological processes like metabolic rate and drug clearance more closely than weight alone, because it accounts for both height and weight. That matters most for drugs with a narrow gap between an effective dose and a toxic one — which is why BSA dosing is most strongly associated with oncology.
+
+## Calculating BSA
+
+The most commonly taught method is the **Mosteller formula**, which uses both height and weight (unlike mg/kg dosing, which uses weight only):
+
+```
+BSA (m²) = √( Height in cm × Weight in kg ÷ 3,600 )
+```
+
+Facilities may also use a BSA nomogram or a different validated formula. On an exam, use whatever formula the question provides; in practice, follow your facility's policy.
+
+Once BSA is calculated (in m²), it's used in place of weight in the dosing formula:
+
+```
+Total dose = Dose ordered per m² × Patient's BSA in m²
+```
+
+## Worked example
+
+*Order: 50 mg/m². Child's height is 100 cm and weight is 16 kg.*
+
+<Figure
+  src="/blog/bsa-dosing-steps.svg"
+  alt="Mosteller formula steps: 100 times 16 divided by 3,600, square root 0.6667 square meters, times 50 mg per square meter equals 33.3 mg"
+  caption="Carry the full BSA value into the dose step. Rounding early changes the answer."
+  width={800}
+  height={440}
+/>
+
+**Step 1:** Multiply height by weight and divide — 100 × 16 = 1,600 → 1,600 ÷ 3,600 = 0.4444
+**Step 2:** Take the square root — √0.4444 = 0.6667 m²
+**Step 3:** Multiply by the ordered dose — 50 mg/m² × 0.6667 m² = **33.3 mg**
+
+If you round BSA to 0.67 before step 3, you get 33.5 mg. Small differences like this matter for narrow-margin drugs, which is why you round only the final answer.
+
+## Why this calculation carries extra weight in pediatrics
+
+BSA dosing is used specifically in situations where the margin between an effective dose and a harmful one is especially narrow — which is exactly the kind of high-precision calculation where a nursing student needs to be completely comfortable with the method, not just vaguely familiar with it.
+
+## Common mistakes to avoid
+
+- Using a weight-based (mg/kg) formula when the order actually specifies BSA-based dosing
+- Calculation errors in the BSA formula itself, which compound into the final dose
+- Using height in inches or weight in pounds in a formula built for cm and kg
+- Using an outdated height or weight measurement for the BSA calculation
+
+<Callout title="Start with the basics">
+If mg/kg dosing still feels slow, practice [weight-based dosage calculations](/blog/weight-based-dosage-calculations) first. BSA adds one extra step on top of the same logic.
+</Callout>
+
+---
+
+Pediatric BSA dosing is covered as part of the pediatric medication math section in the **[Complete Dosage Calculation Practice Workbook](/guides/complete-dosage-calculation-practice-workbook)**, alongside standard weight-based pediatric dosing and every other calculation category nursing students need.

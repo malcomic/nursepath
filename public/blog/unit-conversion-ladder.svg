@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" role="img" aria-labelledby="ladderTitle">
+  <title id="ladderTitle">Metric conversion ladder: grams, milligrams, micrograms</title>
+  <rect width="800" height="420" fill="#faf9f6"/>
+  <text x="400" y="36" text-anchor="middle" font-family="system-ui,sans-serif" font-size="18" font-weight="700" fill="#0b1b3d">The Metric Conversion Ladder</text>
+  <text x="400" y="58" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" fill="#52607a">Each step is a factor of 1,000: move the decimal three places</text>
+
+  <g font-family="system-ui,sans-serif">
+    <rect x="90" y="90" width="180" height="70" rx="12" fill="#0b1b3d"/>
+    <text x="180" y="122" text-anchor="middle" font-size="22" font-weight="700" fill="#fff">g</text>
+    <text x="180" y="145" text-anchor="middle" font-size="12" fill="#c5cedd">gram</text>
+
+    <rect x="310" y="170" width="180" height="70" rx="12" fill="#107c85"/>
+    <text x="400" y="202" text-anchor="middle" font-size="22" font-weight="700" fill="#fff">mg</text>
+    <text x="400" y="225" text-anchor="middle" font-size="12" fill="#e8f5f6">milligram</text>
+
+    <rect x="530" y="250" width="180" height="70" rx="12" fill="#e76f51"/>
+    <text x="620" y="282" text-anchor="middle" font-size="22" font-weight="700" fill="#fff">mcg</text>
+    <text x="620" y="305" text-anchor="middle" font-size="12" fill="#fef4f1">microgram</text>
+
+    <path d="M270 140 Q300 150 310 190" fill="none" stroke="#107c85" stroke-width="3"/>
+    <text x="250" y="200" text-anchor="middle" font-size="13" font-weight="700" fill="#107c85">� 1,000</text>
+    <path d="M490 220 Q520 230 530 270" fill="none" stroke="#107c85" stroke-width="3"/>
+    <text x="470" y="280" text-anchor="middle" font-size="13" font-weight="700" fill="#107c85">� 1,000</text>
+
+    <text x="320" y="120" text-anchor="middle" font-size="13" font-weight="700" fill="#e76f51">� 1,000 going up</text>
+    <text x="320" y="138" text-anchor="middle" font-size="11" fill="#52607a">(larger unit � smaller number)</text>
+  </g>
+
+  <rect x="90" y="345" width="620" height="52" rx="10" fill="#fff" stroke="#e6e9ee"/>
+  <text x="400" y="368" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" fill="#0b1b3d">Down the ladder (to a smaller unit): multiply. Up the ladder: divide.</text>
+  <text x="400" y="387" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" fill="#52607a">Same pattern for L � mL. Units (insulin, heparin) are NOT on this ladder.</text>
+</svg>
